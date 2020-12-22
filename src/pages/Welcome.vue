@@ -1,14 +1,7 @@
 <template>
   <div>
-    <Header></Header>
     <h1>欢迎访问SSMBlog</h1>
-    <!-- 直接跳转 -->
-    <router-link to='/TestMessage'>
-      <button>测试页面</button>
-    </router-link>
-    <router-link to='/Login'>
-      <button>登录</button>
-    </router-link>
+    <Header></Header>
   </div>
 </template>
 

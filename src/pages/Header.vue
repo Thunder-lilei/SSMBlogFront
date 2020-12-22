@@ -1,7 +1,25 @@
 <template>
   <div>
-    <h1>{{ name }}</h1>
-    <el-button v-show="logoutShow" @click="logout" type="danger" round>登出</el-button>
+    <div v-show="logoutShow" class="demo-fit" style="display: flex;margin-left: 10%">
+      <div class="block">
+          <el-avatar shape="square" :size="100" :src="userInfo.userProfilePhoto"></el-avatar>
+      </div>
+      <div v-show="logoutShow" style="width: 30%">
+        <h2 style="font-size: 20px;margin-left: 5%;color: black">当前用户：</h2>
+        <h2 style="font-size: 20px;margin-left: 5%;color: #42b983">{{ userInfo.userNickname }}</h2>
+      </div>
+      <div style="width: 5%;margin: auto;">
+        <el-button v-show="logoutShow" @click="logout" type="danger" round>登出</el-button>
+      </div>
+    </div>
+    <div v-show="!logoutShow">
+      <router-link to='/Login'>
+        <el-button type="primary" round>登录</el-button>
+      </router-link>
+      <router-link to='/Register'>
+        <el-button type="primary" round>注册</el-button>
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -10,20 +28,21 @@ export default {
   name: 'Header',
   data() {
     return {
-      name: '',
+      userInfo: {
+        userNickname: '',
+        userProfilePhoto: '',
+      },
       logoutShow: false,
     }
   },
   mounted () {
     const that = this
     this.$axios.post('/user/getLoginUser').then(response => {
-      if (response.data.message == 'success') {
-        that.name = '当前用户：'+response.data.loginUser.userName
+      if (response.data.message === 'success') {
+        that.userInfo.userNickname = response.data.loginUser.userNickname
+        that.userInfo.userProfilePhoto = response.data.loginUser.userProfilePhoto
         that.logoutShow = true
-      } else {
-        that.name = response.data.message
       }
-      console.log()
     }).catch(
       function (error) {
         that.$message({
@@ -38,9 +57,9 @@ export default {
     logout:function () {
       const that = this
       this.$axios.post('/user/logout').then(response => {
-        if (response.data.message == 'success') {
+        if (response.data.message === 'success') {
           that.logoutShow = false
-          that.name = ''
+          that.userInfo = ''
         } else {
           that.$message({
             showClose: true,
