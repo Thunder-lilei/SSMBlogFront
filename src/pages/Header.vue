@@ -8,8 +8,11 @@
         <h2 style="font-size: 20px;margin-left: 5%;color: black">当前用户：</h2>
         <h2 style="font-size: 20px;margin-left: 5%;color: #42b983">{{ userInfo.userNickname }}</h2>
       </div>
-      <div style="width: 5%;margin: auto;">
-        <el-button v-show="logoutShow" @click="logout" type="danger" round>登出</el-button>
+      <div v-show="logoutShow" style="margin: auto;">
+        <router-link to='/UpdateUser'>
+          <el-button type="primary" round>修改信息</el-button>
+        </router-link>
+        <el-button @click="logout" type="danger" round>登出</el-button>
       </div>
     </div>
     <div v-show="!logoutShow">
@@ -51,8 +54,7 @@ export default {
           type: 'warning'
         });
       })
-  }
-  ,
+  },
   methods: {
     logout:function () {
       const that = this

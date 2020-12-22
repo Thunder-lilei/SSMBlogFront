@@ -28,7 +28,7 @@
         <el-input type="tel" v-model="userForm.userTelephoneNumber"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">注册</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">确认修改</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -39,11 +39,12 @@
 <script>
 import Footer from '../pages/Footer'
 export default {
-  name: 'Register',
+  name: 'UpdateUser',
   components: {Footer},
   data() {
     return {
       userForm: {
+        userId: '',
         userName: '',
         userPassword: '',
         userPasswordConfirm: '',
@@ -70,23 +71,51 @@ export default {
       }
     }
   },
+  mounted () {
+    const that = this
+    this.$axios.post('/user/getLoginUser').then(response => {
+      if (response.data.message === 'success') {
+        that.userForm.userId = response.data.loginUser.userId
+        that.userForm.userNickname = response.data.loginUser.userNickname
+        that.userForm.userProfilePhoto = response.data.loginUser.userProfilePhoto
+        that.userForm.userName = response.data.loginUser.userName
+        that.userForm.userPassword = response.data.loginUser.userPassword
+        that.userForm.userPasswordConfirm = response.data.loginUser.userPassword
+        that.userForm.userBirthday = response.data.loginUser.userBirthday
+        that.userForm.userEmail = response.data.loginUser.userEmail
+        that.userForm.userTelephoneNumber = response.data.loginUser.userTelephoneNumber
+        that.logoutShow = true
+      }
+    }).catch(
+      function (error) {
+        that.$message({
+          showClose: true,
+          message: '请求失败！',
+          type: 'warning'
+        });
+      })
+  },
   methods: {
     submitForm(formName) {
       const that = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let data = new URLSearchParams();
+          data.append('userId', this.userForm.userId)
           data.append('userName', this.userForm.userName)
           data.append('userPassword', this.userForm.userPassword)
           data.append('userNickname', this.userForm.userNickname)
-          this.$axios.post('/user/registerUser', data).then(response => {
+          data.append('userBirthday', this.userForm.userBirthday)
+          data.append('userEmail', this.userForm.userEmail)
+          data.append('userTelephoneNumber', this.userForm.userTelephoneNumber)
+          data.append('userProfilePhoto', this.userForm.userProfilePhoto)
+          this.$axios.post('/user/updateUser', data).then(response => {
             if (response.data.message === 'success') {
               that.$message({
                 showClose: true,
-                message: '添加成功！',
+                message: '修改完成！',
                 type: 'success'
               });
-              that.$router.push('/Login');
             } else {
               that.$message({
                 showClose: true,

@@ -5,6 +5,7 @@ import TestMessage from '../components/TestMessage'
 import Welcome from '../pages/Welcome'
 import Login from '../user/Login'
 import Register from '../user/Register'
+import UpdateUser from '../user/UpdateUser'
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/Register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/UpdateUser',
+      name: 'UpdateUser',
+      component: UpdateUser
     },
   ]
 })

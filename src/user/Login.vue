@@ -8,16 +8,19 @@
         <el-input v-model="ruleForm.userPassword" show-password></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
+import Footer from '../pages/Footer'
 export default {
   name: 'Login',
+  components: {Footer},
   data() {
     return {
       ruleForm: {
