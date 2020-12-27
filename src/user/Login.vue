@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form style="width: 50%;margin: auto;" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="ruleForm.userName"></el-input>
       </el-form-item>
@@ -48,7 +48,7 @@ export default {
           data.append('userPassword',  this.ruleForm.userPassword)
           this.$axios.post('/user/toLoginByUserName', data).then(response => {
             if (response.data.message === 'success') {
-              that.$router.push('/');
+              that.$router.go(0)
             } else {
               that.$message({
                 showClose: true,
@@ -77,7 +77,17 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
-  }
+  },
+  beforeRouteEnter(to, from, next) {
+    // 添加背景色 margin:0;padding:0是为了解决vue四周有白边的问题
+    document.querySelector('body').setAttribute('style', 'margin:0;padding:0')
+    next()
+  },
+  beforeRouteLeave(to, from, next) {
+    // 去除背景色
+    document.querySelector('body').setAttribute('style', '')
+    next()
+  },
 }
 </script>
 
