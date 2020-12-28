@@ -1,31 +1,31 @@
 <template>
   <div>
-        <el-alert style="width: 50%;margin: auto;" v-show="userForm.userPassword !== userForm.userPasswordConfirm" title="两次密码不一致" type="error"></el-alert>
+        <el-alert v-show="loginUser.userPassword !== userPasswordConfirm" title="两次密码不一致" type="error"></el-alert>
 
-        <el-form style="width: 50%;margin: auto;" :model="userForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form :model="loginUser" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="头像链接" prop="userProfilePhoto">
-            <el-input type="url" v-model="userForm.userProfilePhoto"></el-input>
+            <el-input type="url" v-model="loginUser.userProfilePhoto"></el-input>
           </el-form-item>
           <el-form-item label="用户名" prop="userName">
-            <el-input v-model="userForm.userName"></el-input>
+            <el-input v-model="loginUser.userName"></el-input>
           </el-form-item>
           <el-form-item label="昵称" prop="userNickname">
-            <el-input v-model="userForm.userNickname"></el-input>
+            <el-input v-model="loginUser.userNickname"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="userPassword">
-            <el-input v-model="userForm.userPassword" show-password></el-input>
+            <el-input v-model="loginUser.userPassword" show-password></el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="userPassword">
-            <el-input v-model="userForm.userPasswordConfirm" show-password></el-input>
+            <el-input v-model="userPasswordConfirm" show-password></el-input>
           </el-form-item>
           <el-form-item label="生日" prop="userBirthday">
-            <el-input type="date" v-model="userForm.userBirthday"></el-input>
+            <el-input type="date" v-model="loginUser.userBirthday"></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="userEmail">
-            <el-input type="email" v-model="userForm.userEmail"></el-input>
+            <el-input type="email" v-model="loginUser.userEmail"></el-input>
           </el-form-item>
           <el-form-item label="电话" prop="userTelephoneNumber">
-            <el-input type="tel" v-model="userForm.userTelephoneNumber"></el-input>
+            <el-input type="tel" v-model="loginUser.userTelephoneNumber"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm('ruleForm')">确认修改</el-button>
@@ -46,17 +46,8 @@ export default {
   components: {Header, Footer ,NavMenu},
   data() {
     return {
-      userForm: {
-        userId: '',
-        userName: '',
-        userPassword: '',
-        userPasswordConfirm: '',
-        userProfilePhoto: '',
-        userNickname: '',
-        userBirthday: '',
-        userEmail: '',
-        userTelephoneNumber: '',
-      },
+      loginUser: [],
+      userPasswordConfirm: '',
       rules: {
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -82,15 +73,8 @@ export default {
       const that = this
       this.$axios.post('/user/getLoginUser').then(response => {
         if (response.data.message === 'success') {
-          that.userForm.userId = response.data.loginUser.userId
-          that.userForm.userNickname = response.data.loginUser.userNickname
-          that.userForm.userProfilePhoto = response.data.loginUser.userProfilePhoto
-          that.userForm.userName = response.data.loginUser.userName
-          that.userForm.userPassword = response.data.loginUser.userPassword
-          that.userForm.userPasswordConfirm = response.data.loginUser.userPassword
-          that.userForm.userBirthday = response.data.loginUser.userBirthday
-          that.userForm.userEmail = response.data.loginUser.userEmail
-          that.userForm.userTelephoneNumber = response.data.loginUser.userTelephoneNumber
+          that.loginUser = response.data.loginUser
+          that.userPasswordConfirm = response.data.loginUser.userPassword
           that.logoutShow = true
         }
       }).catch(
@@ -106,23 +90,14 @@ export default {
       const that = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let data = new URLSearchParams();
-          data.append('userId', this.userForm.userId)
-          data.append('userName', this.userForm.userName)
-          data.append('userPassword', this.userForm.userPassword)
-          data.append('userNickname', this.userForm.userNickname)
-          data.append('userBirthday', this.userForm.userBirthday)
-          data.append('userEmail', this.userForm.userEmail)
-          data.append('userTelephoneNumber', this.userForm.userTelephoneNumber)
-          data.append('userProfilePhoto', this.userForm.userProfilePhoto)
-          this.$axios.post('/user/updateUser', data).then(response => {
+          this.$axios.post('/user/updatseUser', this.loginUser).then(response => {
             if (response.data.message === 'success') {
               that.$message({
                 showClose: true,
                 message: '修改完成！',
                 type: 'success'
               });
-              bus .$emit('userForm',that.userForm)
+              bus .$emit('loginUser',that.loginUser)
             } else {
               that.$message({
                 showClose: true,

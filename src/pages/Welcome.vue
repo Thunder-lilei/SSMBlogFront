@@ -6,9 +6,11 @@
       </el-aside>
       <el-main>
         <h1 style="font-size: 50px">欢迎访问SSMBlog</h1>
-        <el-main>
-          <router-view/>
-        </el-main>
+        <div style="width: 50%;margin: auto;">
+          <el-main>
+            <router-view/>
+          </el-main>
+        </div>
       </el-main>
     </el-container>
   </div>

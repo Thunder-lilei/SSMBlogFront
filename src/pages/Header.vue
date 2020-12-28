@@ -56,7 +56,7 @@ export default {
           type: 'warning'
         });
       })
-    bus .$on("userForm",(message)=>{
+    bus .$on("loginUser",(message)=>{
       this.userInfo.userNickname = message.userNickname
       this.userInfo.userProfilePhoto = message.userProfilePhoto
     })
@@ -72,9 +72,10 @@ export default {
         } else {
           that.$message({
             showClose: true,
-            message: '登出失败！',
+            message: '请登录！',
             type: 'warning'
           });
+          that.$router.push('/Login');
         }
       }).catch(
         function (error) {

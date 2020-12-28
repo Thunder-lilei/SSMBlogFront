@@ -25,7 +25,12 @@
         </template>
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" circle></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle></el-button>
+          <el-popconfirm
+            title="确定删除吗？"
+            @confirm="deleteUser(scope.row.userId)"
+          >
+            <el-button slot="reference" type="danger" icon="el-icon-delete" circle></el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -42,14 +47,21 @@ export default {
     }
   },
   mounted () {
+    this.selectAllUserBaseInfo()
+  },
+  methods: {
+    deleteUser:function (userId) {
       const that = this
       let data = new URLSearchParams();
-      data.append("pageNow", "1")
-      data.append("pageSize", "10")
-      this.$axios.post('/user/selectAllUserBaseInfo', data).then(response => {
+      data.append("userId", userId)
+      this.$axios.post('/user/deleteUser', data).then(response => {
         if (response.data.message === 'success') {
-          that.userList = response.data.allUserPageInfo.list
-          console.log(that.userList)
+          that.$message({
+            showClose: true,
+            message: "成功移除",
+            type: 'success'
+          });
+          that.selectAllUserBaseInfo()
         } else {
           that.$message({
             showClose: true,
@@ -65,8 +77,31 @@ export default {
             type: 'warning'
           });
         })
-  },
-  methods: {
+    },
+    selectAllUserBaseInfo:function () {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("pageNow", "1")
+      data.append("pageSize", "10")
+      this.$axios.post('/user/selectAllUserBaseInfo', data).then(response => {
+        if (response.data.message === 'success') {
+          that.userList = response.data.allUserPageInfo.list
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     selectUserBaseInfoByKey:function () {
       const that = this
       let data = new URLSearchParams();

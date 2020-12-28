@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form style="width: 50%;margin: auto;" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="用户名" prop="userName">
         <el-input v-model="ruleForm.userName"></el-input>
       </el-form-item>
@@ -43,10 +43,7 @@ export default {
       const that = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let data = new URLSearchParams();
-          data.append('userName',  this.ruleForm.userName)
-          data.append('userPassword',  this.ruleForm.userPassword)
-          this.$axios.post('/user/toLoginByUserName', data).then(response => {
+          this.$axios.post('/user/toLoginByUserName', this.ruleForm ).then(response => {
             if (response.data.message === 'success') {
               that.$router.go(0)
             } else {

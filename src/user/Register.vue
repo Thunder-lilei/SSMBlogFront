@@ -1,8 +1,8 @@
 <template>
   <div>
-        <el-alert style="width: 50%;margin: auto;" v-show="userForm.userPassword !== userForm.userPasswordConfirm" title="两次密码不一致" type="error"></el-alert>
+        <el-alert v-show="userForm.userPassword !== userForm.userPasswordConfirm" title="两次密码不一致" type="error"></el-alert>
 
-        <el-form style="width: 50%;margin: auto;" :model="userForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form :model="userForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="头像链接" prop="userProfilePhoto">
             <el-input type="url" v-model="userForm.userProfilePhoto"></el-input>
           </el-form-item>
@@ -77,11 +77,7 @@ export default {
       const that = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let data = new URLSearchParams();
-          data.append('userName', this.userForm.userName)
-          data.append('userPassword', this.userForm.userPassword)
-          data.append('userNickname', this.userForm.userNickname)
-          this.$axios.post('/user/registerUser', data).then(response => {
+          this.$axios.post('/user/registerUser', this.userForm).then(response => {
             if (response.data.message === 'success') {
               that.$message({
                 showClose: true,
