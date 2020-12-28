@@ -56,7 +56,7 @@ export default {
           type: 'warning'
         });
       })
-    bus .$on("loginUser",(message)=>{
+    bus .$on("changeLoginUserInfo",(message)=>{
       this.userInfo.userNickname = message.userNickname
       this.userInfo.userProfilePhoto = message.userProfilePhoto
     })

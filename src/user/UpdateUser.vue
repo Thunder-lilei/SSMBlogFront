@@ -46,12 +46,14 @@ export default {
   components: {Header, Footer ,NavMenu},
   data() {
     return {
-      loginUser: [],
+      loginUser: {},
       userPasswordConfirm: '',
+      updateUserId: '',
+      isUpdateUser: false,
       rules: {
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
         ],
         userPassword: [
           { required: true, message: '请输入密码', trigger: 'blur' },
@@ -66,16 +68,18 @@ export default {
     }
   },
   mounted () {
-    this.getLoginUser()
+    this.getUpdateUser()
   },
   methods: {
-    getLoginUser() {
+    getUpdateUser:function () {
       const that = this
-      this.$axios.post('/user/getLoginUser').then(response => {
+      this.$axios.post('/user/getUpdateUser').then(response => {
         if (response.data.message === 'success') {
-          that.loginUser = response.data.loginUser
-          that.userPasswordConfirm = response.data.loginUser.userPassword
-          that.logoutShow = true
+          that.loginUser = response.data.updateUser
+          that.userPasswordConfirm = response.data.updateUser.userPassword
+          that.isUpdateUser = true
+        }else {
+          that.getLoginUser()
         }
       }).catch(
         function (error) {
@@ -86,18 +90,42 @@ export default {
           });
         })
     },
+    getLoginUser() {
+        const that = this
+        this.$axios.post('/user/getLoginUser').then(response => {
+          if (response.data.message === 'success') {
+            that.loginUser = response.data.loginUser
+            that.userPasswordConfirm = response.data.loginUser.userPassword
+          }else {
+            that.$message({
+              showClose: true,
+              message: response.data.message,
+              type: 'warning'
+            });
+          }
+        }).catch(
+          function (error) {
+            that.$message({
+              showClose: true,
+              message: error,
+              type: 'warning'
+            });
+          })
+    },
     submitForm(formName) {
       const that = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios.post('/user/updatseUser', this.loginUser).then(response => {
+          this.$axios.post('/user/updateUser', this.loginUser).then(response => {
             if (response.data.message === 'success') {
               that.$message({
                 showClose: true,
                 message: '修改完成！',
                 type: 'success'
               });
-              bus .$emit('loginUser',that.loginUser)
+              if (!that.isUpdateUser) {
+                bus .$emit('changeLoginUserInfo',that.loginUser)
+              }
             } else {
               that.$message({
                 showClose: true,

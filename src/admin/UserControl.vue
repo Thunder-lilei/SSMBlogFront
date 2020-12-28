@@ -24,7 +24,7 @@
             placeholder="输入关键字搜索"/>
         </template>
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" circle></el-button>
+          <el-button @click="toUpdateUser(scope.row.userId)" type="primary" icon="el-icon-edit" circle></el-button>
           <el-popconfirm
             title="确定删除吗？"
             @confirm="deleteUser(scope.row.userId)"
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+import bus from '../router/bus'
+
 export default {
   name: 'UserControl',
   data() {
@@ -50,6 +52,29 @@ export default {
     this.selectAllUserBaseInfo()
   },
   methods: {
+    toUpdateUser:function (userId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("updateUserId", userId)
+      this.$axios.post('/user/setUpdateUser', data).then(response => {
+        if (response.data.message === 'success') {
+          this.$router.push('/UpdateUser');
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     deleteUser:function (userId) {
       const that = this
       let data = new URLSearchParams();
