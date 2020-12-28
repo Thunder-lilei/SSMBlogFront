@@ -5,7 +5,7 @@
       :data="userList"
       style="width: 100%">
       <el-table-column
-        prop="userId"
+        type="index"
         label="序号"
         width="180">
       </el-table-column>
@@ -34,24 +34,44 @@
         </template>
       </el-table-column>
     </el-table>
+    <br/>
+    <el-pagination
+      @current-change="pageNowChange"
+      @size-change="pageSizeChange"
+      background
+      layout="total, sizes, prev, pager, next"
+      :page-sizes="[8, 5, 10, 20]"
+      :page-size=pageSize
+      :total=total>
+    </el-pagination>
   </div>
 </template>
 
 <script>
-import bus from '../router/bus'
-
 export default {
   name: 'UserControl',
   data() {
     return {
       userList: [],
       keyValue: '',
+      lastPage: '',
+      total: 0,
+      pageNow: 1,
+      pageSize: 8,
     }
   },
   mounted () {
-    this.selectAllUserBaseInfo()
+    this.selectAllUserBaseInfo(1, this.pageSize)
   },
   methods: {
+    pageSizeChange(pageSize) {
+      this.pageSize = pageSize
+      this.selectAllUserBaseInfo(1, pageSize)
+    },
+    pageNowChange:function(pageNow) {
+      this.pageNow = pageNow
+      this.selectAllUserBaseInfo(pageNow, this.pageSize)
+    },
     toUpdateUser:function (userId) {
       const that = this
       let data = new URLSearchParams();
@@ -103,14 +123,16 @@ export default {
           });
         })
     },
-    selectAllUserBaseInfo:function () {
+    selectAllUserBaseInfo:function (pageNow, pageSize) {
       const that = this
       let data = new URLSearchParams();
-      data.append("pageNow", "1")
-      data.append("pageSize", "10")
+      data.append("pageNow", pageNow)
+      data.append("pageSize", pageSize)
       this.$axios.post('/user/selectAllUserBaseInfo', data).then(response => {
         if (response.data.message === 'success') {
           that.userList = response.data.allUserPageInfo.list
+          that.lastPage = response.data.allUserPageInfo.lastPage
+          that.total = response.data.allUserPageInfo.total
         } else {
           that.$message({
             showClose: true,

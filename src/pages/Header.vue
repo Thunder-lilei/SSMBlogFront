@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-show="logoutShow" class="demo-fit" style="margin: 30% 65% 20px 0;width: 100%">
-      <div class="block">
+      <div @click="changeHeadImg"  class="block">
           <el-avatar shape="square" :size="100" :src="userInfo.userProfilePhoto"></el-avatar>
       </div>
       <div v-show="logoutShow">
@@ -41,27 +41,30 @@ export default {
     }
   },
   mounted () {
-    const that = this
-    this.$axios.post('/user/getLoginUser').then(response => {
-      if (response.data.message === 'success') {
-        that.userInfo.userNickname = response.data.loginUser.userNickname
-        that.userInfo.userProfilePhoto = response.data.loginUser.userProfilePhoto
-        that.logoutShow = true
-      }
-    }).catch(
-      function (error) {
-        that.$message({
-          showClose: true,
-          message: error,
-          type: 'warning'
-        });
-      })
+    this.getLoginUser()
     bus .$on("changeLoginUserInfo",(message)=>{
       this.userInfo.userNickname = message.userNickname
       this.userInfo.userProfilePhoto = message.userProfilePhoto
     })
   },
   methods: {
+    getLoginUser:function () {
+      const that = this
+      this.$axios.post('/user/getLoginUser').then(response => {
+        if (response.data.message === 'success') {
+          that.userInfo.userNickname = response.data.loginUser.userNickname
+          that.userInfo.userProfilePhoto = response.data.loginUser.userProfilePhoto
+          that.logoutShow = true
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     logout:function () {
       const that = this
       this.$axios.post('/user/logout').then(response => {
@@ -85,6 +88,44 @@ export default {
             type: 'warning'
           });
         })
+    },
+    changeHeadImg() {
+      this.$prompt('请输入新头像地址', '更换头像', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      }).then(({ value }) => {
+        const that = this
+        let data = new URLSearchParams();
+        data.append("imgUrl", value)
+        this.$axios.post('/user/changeHeadImg', data).then(response => {
+          if (response.data.message === 'success') {
+            that.$message({
+              showClose: true,
+              message: "变更成功",
+              type: 'success'
+            });
+            that.userInfo.userProfilePhoto = value
+          } else {
+            that.$message({
+              showClose: true,
+              message: response.data.message,
+              type: 'warning'
+            });
+          }
+        }).catch(
+          function (error) {
+            that.$message({
+              showClose: true,
+              message: error,
+              type: 'warning'
+            });
+          })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消输入'
+        });
+      });
     },
   },
   beforeRouteEnter(to, from, next) {

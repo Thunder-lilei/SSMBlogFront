@@ -8,6 +8,7 @@
         <el-input v-model="ruleForm.userPassword" show-password></el-input>
       </el-form-item>
       <el-form-item>
+        <el-button plain>忘记密码</el-button>
         <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
