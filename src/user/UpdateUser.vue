@@ -3,11 +3,15 @@
         <el-alert v-show="loginUser.userPassword !== userPasswordConfirm" title="两次密码不一致" type="error"></el-alert>
 
         <el-form :model="loginUser" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="用户ID" prop="userId">
+            <el-input v-model="loginUser.userId" readonly></el-input>
+          </el-form-item>
           <el-form-item label="头像链接" prop="userProfilePhoto">
             <el-input type="url" v-model="loginUser.userProfilePhoto"></el-input>
           </el-form-item>
           <el-form-item label="用户名" prop="userName">
-            <el-input v-model="loginUser.userName"></el-input>
+            <el-input v-model="loginUser.userName" @blur="checkUserName"></el-input>
+            <el-alert v-show="ifHaveSameUserName !== ''" title="" type="error">{{ ifHaveSameUserName }}</el-alert>
           </el-form-item>
           <el-form-item label="昵称" prop="userNickname">
             <el-input v-model="loginUser.userNickname"></el-input>
@@ -22,13 +26,15 @@
             <el-input type="date" v-model="loginUser.userBirthday"></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="userEmail">
-            <el-input type="email" v-model="loginUser.userEmail"></el-input>
+            <el-input type="email" v-model="loginUser.userEmail" @blur="checkEmail"></el-input>
+            <el-alert v-show="ifHaveSameEmail !== ''" title="" type="error">{{ ifHaveSameEmail }}</el-alert>
           </el-form-item>
           <el-form-item label="电话" prop="userTelephoneNumber">
-            <el-input type="tel" v-model="loginUser.userTelephoneNumber"></el-input>
+            <el-input type="tel" v-model="loginUser.userTelephoneNumber" @blur="checkTel"></el-input>
+            <el-alert v-show="ifHaveSameTel !== ''" title="" type="error">{{ ifHaveSameTel }}</el-alert>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')">确认修改</el-button>
+            <el-button v-show="ifHaveSameUserName === '' && ifHaveSameEmail === '' && ifHaveSameTel === ''" type="primary" @click="submitForm('ruleForm')">确认修改</el-button>
             <el-button @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
         </el-form>
@@ -50,6 +56,9 @@ export default {
       userPasswordConfirm: '',
       updateUserId: '',
       isUpdateUser: false,
+      ifHaveSameUserName: '',
+      ifHaveSameEmail: '',
+      ifHaveSameTel: '',
       rules: {
         userName: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -71,6 +80,59 @@ export default {
     this.getUpdateUser()
   },
   methods: {
+    checkUserName:function () {
+      let data = new URLSearchParams();
+      data.append("userName", this.loginUser.userName)
+      data.append("userId", this.loginUser.userId)
+      this.ifHaveSame(data , (callbackData) => {
+        if (callbackData === true) {
+          this.ifHaveSameUserName = "用户名重复，请更改用户名！"
+        } else {
+          this.ifHaveSameUserName = ''
+        }
+      })
+    },
+    checkEmail:function () {
+      let data = new URLSearchParams();
+      data.append("email", this.loginUser.userEmail)
+      data.append("userId", this.loginUser.userId)
+      this.ifHaveSame(data , (callbackData) => {
+        if (callbackData === true) {
+          this.ifHaveSameEmail = "邮箱重复绑定，请更换邮箱！"
+        } else {
+          this.ifHaveSameEmail = ''
+        }
+      })
+    },
+    checkTel:function () {
+      let data = new URLSearchParams();
+      data.append("tel", this.loginUser.userTelephoneNumber)
+      data.append("userId", this.loginUser.userId)
+      this.ifHaveSame(data , (callbackData) => {
+        if (callbackData === true) {
+          this.ifHaveSameTel = "电话重复绑定，请更换电话！"
+        } else {
+          this.ifHaveSameTel = ''
+        }
+      })
+    },
+    ifHaveSame(data, callback) {
+      const that = this
+      this.$axios.post('/user/ifHaveSame', data).then(response => {
+        if (response.data.message === true) {
+          callback(response.data.message)
+        } else {
+          callback(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     getUpdateUser:function () {
       const that = this
       this.$axios.post('/user/getUpdateUser').then(response => {

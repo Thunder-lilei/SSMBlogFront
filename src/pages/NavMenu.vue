@@ -5,12 +5,12 @@
     <el-button @click="labelControl" type="primary" icon="el-icon-menu" circle></el-button>
   </el-radio-group>
   <el-menu v-show="isCollapse" :style="menuStyle" default-active="1-4-1" class="el-menu-vertical-demo" :collapse="true">
-    <el-menu-item index="1">
-      <router-link to='/UserControl'>
-        <i class="el-icon-user"></i>
-      </router-link>
-      <span slot="title">用户管理</span>
-    </el-menu-item>
+    <router-link to='/UserControl'>
+      <el-menu-item index="1">
+          <i class="el-icon-user"></i>
+        <span slot="title">用户管理</span>
+      </el-menu-item>
+    </router-link>
     <el-menu-item index="2">
       <i class="el-icon-user-solid"></i>
       <span slot="title">好友</span>
