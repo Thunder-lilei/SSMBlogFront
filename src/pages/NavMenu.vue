@@ -15,10 +15,12 @@
       <i class="el-icon-user-solid"></i>
       <span slot="title">好友</span>
     </el-menu-item>
-    <el-menu-item index="3">
-      <i class="el-icon-tickets"></i>
-      <span slot="title">博文</span>
-    </el-menu-item>
+    <router-link to='/ArticleControl'>
+      <el-menu-item index="3">
+        <i class="el-icon-tickets"></i>
+        <span slot="title">博文</span>
+      </el-menu-item>
+    </router-link>
   </el-menu>
 </div>
 </template>

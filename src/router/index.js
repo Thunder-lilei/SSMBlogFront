@@ -9,6 +9,8 @@ import UpdateUser from '../user/UpdateUser'
 import NavMenu from '../pages/NavMenu'
 import Header from '../pages/Header'
 import UserControl from '../admin/UserControl'
+import ArticleControl from '../article/ArticleControl'
+import AddArticle from '../article/AddArticle'
 
 Vue.use(Router)
 
@@ -25,6 +27,11 @@ export default new Router({
           component: Login
         },
         {
+          path: '/UserControl',
+          name: 'UserControl',
+          component: UserControl
+        },
+        {
           path: '/Register',
           name: 'Register',
           component: Register
@@ -35,10 +42,15 @@ export default new Router({
           component: UpdateUser
         },
         {
-          path: '/UserControl',
-          name: 'UserControl',
-          component: UserControl
+          path: '/ArticleControl',
+          name: 'ArticleControl',
+          component: ArticleControl
         },
+        {
+          path: '/AddArticle',
+          name: 'AddArticle',
+          component: AddArticle,
+        }
       ]
     },
     {
@@ -60,6 +72,13 @@ export default new Router({
       path: '/UserControl',
       name: 'UserControl',
       component: UserControl
+    },
+    {
+      path: '/ArticleControl',
+      name: 'ArticleControl',
+      component: ArticleControl,
+      children: [
+      ]
     },
     {
       path: '/Header',

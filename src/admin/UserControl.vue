@@ -40,7 +40,7 @@
       @size-change="pageSizeChange"
       background
       layout="total, sizes, prev, pager, next"
-      :page-sizes="[8, 5, 10, 20]"
+      :page-sizes="[5, 10, 20, 30]"
       :page-size=pageSize
       :total=total>
     </el-pagination>
@@ -57,7 +57,7 @@ export default {
       lastPage: '',
       total: 0,
       pageNow: 1,
-      pageSize: 8,
+      pageSize: 10,
     }
   },
   mounted () {
