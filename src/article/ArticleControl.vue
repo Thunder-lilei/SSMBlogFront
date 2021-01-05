@@ -26,7 +26,7 @@
         align="right">
         <template slot="header" slot-scope="scope">
           <el-input
-            @keyup.enter.native=""
+            @keyup.enter.native="selectArticleBaseInfoByKey"
             v-model="keyValue"
             size="max"
             placeholder="输入关键字搜索"/>
@@ -61,7 +61,6 @@ export default {
     return {
       articleList: [],
       keyValue: '',
-      lastPage: '',
       total: 0,
       pageNow: 1,
       pageSize: 10,
@@ -87,8 +86,6 @@ export default {
       this.$axios.post('/article/selectAllArticleBaseInfo', data).then(response => {
         if (response.data.message === 'success') {
           that.articleList = response.data.articleWithUserPageInfo.list
-          that.lastPage = response.data.articleWithUserPageInfo.lastPage
-          that.total = response.data.articleWithUserPageInfo.total
         } else {
           that.$message({
             showClose: true,
@@ -140,6 +137,31 @@ export default {
       this.$axios.post('/article/setArticle', data).then(response => {
         if (response.data.message === 'success') {
           this.$router.push('/Article');
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    selectArticleBaseInfoByKey:function () {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("pageNow", "1")
+      data.append("pageSize", "10")
+      data.append("key", this.keyValue)
+      this.$axios.post('/article/selectArticleBaseInfoByKey', data).then(response => {
+        if (response.data.message === 'success') {
+          that.articleList = response.data.articleWithUserPageInfo.list
         } else {
           that.$message({
             showClose: true,

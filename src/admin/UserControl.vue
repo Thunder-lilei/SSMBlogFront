@@ -54,7 +54,6 @@ export default {
     return {
       userList: [],
       keyValue: '',
-      lastPage: '',
       total: 0,
       pageNow: 1,
       pageSize: 10,
@@ -131,8 +130,6 @@ export default {
       this.$axios.post('/user/selectAllUserBaseInfo', data).then(response => {
         if (response.data.message === 'success') {
           that.userList = response.data.allUserPageInfo.list
-          that.lastPage = response.data.allUserPageInfo.lastPage
-          that.total = response.data.allUserPageInfo.total
         } else {
           that.$message({
             showClose: true,
@@ -158,7 +155,6 @@ export default {
       this.$axios.post('/user/selectUserBaseInfoByKey', data).then(response => {
         if (response.data.message === 'success') {
           that.userList = response.data.userPageInfo.list
-          console.log(that.userList)
         } else {
           that.$message({
             showClose: true,
