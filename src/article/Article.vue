@@ -20,6 +20,7 @@
 
 <script>
 import Markdown from 'vue-meditor';
+import marked from 'marked'
 
 export default {
   name: 'AddArticle',

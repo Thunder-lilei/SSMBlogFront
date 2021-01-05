@@ -11,6 +11,7 @@ import Header from '../pages/Header'
 import UserControl from '../admin/UserControl'
 import ArticleControl from '../article/ArticleControl'
 import Article from '../article/Article'
+import ShowArticle from '../article/ShowArticle'
 
 Vue.use(Router)
 
@@ -50,6 +51,11 @@ export default new Router({
           path: '/Article',
           name: 'Article',
           component: Article,
+        },
+        {
+          path: '/ShowArticle',
+          name: 'ShowArticle',
+          component: ShowArticle,
         },
       ]
     },

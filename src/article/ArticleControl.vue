@@ -19,7 +19,7 @@
         width="180"
       >
         <template slot-scope="scope">
-          <el-link @click="toUpdateArticle(scope.row.articleId)">{{ scope.row.articleTitle }}<i class="el-icon-view el-icon--right"></i> </el-link>
+          <el-link @click="toShowArticle(scope.row.articleId)">{{ scope.row.articleTitle }}<i class="el-icon-view el-icon--right"></i> </el-link>
         </template>
       </el-table-column>
       <el-table-column
@@ -32,6 +32,7 @@
             placeholder="输入关键字搜索"/>
         </template>
         <template slot-scope="scope">
+          <el-button @click="toUpdateArticle(scope.row.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
           <el-popconfirm
             title="确定删除吗？"
             @confirm="deleteArticle(scope.row.articleId)"
@@ -131,12 +132,20 @@ export default {
         })
     },
     toUpdateArticle:function (articleId) {
+      this.setArticle(articleId)
+      this.$router.push('/Article');
+    },
+    toShowArticle:function (articleId) {
+      this.setArticle(articleId)
+      this.$router.push('/ShowArticle');
+    },
+    setArticle:function (articleId) {
       const that = this
       let data = new URLSearchParams();
       data.append("articleId", articleId)
       this.$axios.post('/article/setArticle', data).then(response => {
         if (response.data.message === 'success') {
-          this.$router.push('/Article');
+
         } else {
           that.$message({
             showClose: true,
