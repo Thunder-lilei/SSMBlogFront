@@ -1,7 +1,18 @@
 <template>
   <div>
     <h1>创建博文</h1>
-    <Markdown @on-save="handleOnSave"/>
+    <el-form :model="articleForm" :rules="rules" ref="ruleForm" label-width="" class="demo-ruleForm">
+      <el-form-item prop="articleTitle">
+        <el-input v-model="articleForm.articleTitle" placeholder="博文标题"></el-input>
+      </el-form-item>
+      <el-form-item prop="articleContent">
+        <Markdown @on-save="handleOnSave" v-model="articleForm.articleContent"/>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="addArticle('ruleForm')">提交</el-button>
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
@@ -13,9 +24,54 @@ export default {
   components: {
     Markdown
   },
+  data() {
+    return {
+      articleForm: {
+        articleContent: '',
+        articleTitle: '',
+      },
+      rules: {
+        articleTitle: [
+          { required: true, message: '请填写博文标题', trigger: 'blur' },
+        ],
+      }
+    }
+  },
   methods: {
+    addArticle:function (formName) {
+      const that = this
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$axios.post('/article/addArticle', this.articleForm).then(response => {
+            if (response.data.message === 'success') {
+              that.$message({
+                showClose: true,
+                message: '保存成功！',
+                type: 'success'
+              });
+            } else {
+              that.$message({
+                showClose: true,
+                message: response.data.message,
+                type: 'warning'
+              });
+            }
+          }).catch(
+            function (error) {
+              that.$message({
+                showClose: true,
+                message: error,
+                type: 'warning'
+              });
+            })
+        }
+      })
+    },
     handleOnSave({value, theme}){
-      console.log(value, theme);
+      this.articleForm.articleContent = value
+    },
+    resetForm (formName) {
+      this.$refs[formName].resetFields();
     }
   },
   beforeRouteEnter(to, from, next) {
