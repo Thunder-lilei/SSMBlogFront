@@ -10,7 +10,7 @@ import NavMenu from '../pages/NavMenu'
 import Header from '../pages/Header'
 import UserControl from '../admin/UserControl'
 import ArticleControl from '../article/ArticleControl'
-import AddArticle from '../article/AddArticle'
+import Article from '../article/Article'
 
 Vue.use(Router)
 
@@ -47,10 +47,10 @@ export default new Router({
           component: ArticleControl
         },
         {
-          path: '/AddArticle',
-          name: 'AddArticle',
-          component: AddArticle,
-        }
+          path: '/Article',
+          name: 'Article',
+          component: Article,
+        },
       ]
     },
     {

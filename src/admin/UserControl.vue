@@ -106,7 +106,7 @@ export default {
             message: "成功移除",
             type: 'success'
           });
-          that.selectAllUserBaseInfo()
+          that.selectAllUserBaseInfo(that.pageNow, that.pageSize)
         } else {
           that.$message({
             showClose: true,
