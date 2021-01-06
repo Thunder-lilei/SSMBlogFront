@@ -1,42 +1,68 @@
 <template>
 <div style="height: 925px;margin: 0 0 0 10%">
   <Header></Header>
-  <el-radio-group v-model="isCollapse" style="margin: 0 65% 20px 0">
-    <el-button @click="labelControl" type="primary" icon="el-icon-menu" circle></el-button>
-  </el-radio-group>
-  <el-menu v-show="isCollapse" :style="menuStyle" default-active="1-4-1" class="el-menu-vertical-demo" :collapse="true">
-    <router-link to='/UserControl'>
-      <el-menu-item index="1">
-          <i class="el-icon-user"></i>
-        <span slot="title">用户管理</span>
+  <div>
+    <el-radio-group v-model="isCollapse" :style="iconStyle">
+      <el-button @click="labelControl" type="primary" icon="el-icon-menu" circle></el-button>
+    </el-radio-group>
+    <el-menu v-show="isCollapse" :style="menuStyle" default-active="1-4-1" class="el-menu-vertical-demo" :collapse="true">
+      <router-link to='/UserControl'>
+        <el-menu-item index="1">
+            <i class="el-icon-user"></i>
+          <span slot="title">用户管理</span>
+        </el-menu-item>
+      </router-link>
+      <el-menu-item index="2">
+        <i class="el-icon-user-solid"></i>
+        <span slot="title">好友</span>
       </el-menu-item>
-    </router-link>
-    <el-menu-item index="2">
-      <i class="el-icon-user-solid"></i>
-      <span slot="title">好友</span>
-    </el-menu-item>
-    <router-link to='/ArticleControl'>
-      <el-menu-item index="3">
-        <i class="el-icon-tickets"></i>
-        <span slot="title">博文</span>
-      </el-menu-item>
-    </router-link>
-  </el-menu>
+      <router-link to='/ArticleControl'>
+        <el-menu-item index="3">
+          <i class="el-icon-tickets"></i>
+          <span slot="title">博文</span>
+        </el-menu-item>
+      </router-link>
+    </el-menu>
+  </div>
 </div>
 </template>
 
 <script>
 import Header from './Header'
+import bus from '../router/bus'
 export default {
   name: 'NavMenu',
   components: {Header},
   data() {
     return {
       isCollapse: false,
-      menuStyle: 'opacity:0.5;width: 35%',
+      menuStyle: 'width: 35%;',
+      iconStyle: 'margin: 0 60% 10% 0',
     };
   },
+  mounted () {
+    this.getLoginUser()
+  },
   methods: {
+    getLoginUser:function () {
+      const that = this
+      this.$axios.post('/user/getLoginUser').then(response => {
+        if (response.data.message === 'success') {
+          that.iconStyle = 'margin: 0 0 10% 0'
+          that.menuStyle = 'width: 40%;margin: 0 0 0 30%;'
+        } else {
+          that.iconStyle = 'margin: 0 60% 10% 0'
+          that.menuStyle = 'width: 40%;'
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     labelControl() {
       this.isCollapse = !this.isCollapse
     },

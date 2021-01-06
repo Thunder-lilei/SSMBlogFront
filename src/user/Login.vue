@@ -19,6 +19,7 @@
 
 <script>
 import Footer from '../pages/Footer'
+import bus from '../router/bus'
 export default {
   name: 'Login',
   components: {Footer},
@@ -47,6 +48,7 @@ export default {
           this.$axios.post('/user/toLoginByUserName', this.ruleForm ).then(response => {
             if (response.data.message === 'success') {
               that.$router.go(0)
+              bus.$emit('changeMenu',true)
             } else {
               that.$message({
                 showClose: true,

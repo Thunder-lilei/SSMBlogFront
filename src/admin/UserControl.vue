@@ -130,6 +130,7 @@ export default {
       this.$axios.post('/user/selectAllUserBaseInfo', data).then(response => {
         if (response.data.message === 'success') {
           that.userList = response.data.allUserPageInfo.list
+          that.total = response.data.allUserPageInfo.total
         } else {
           that.$message({
             showClose: true,
@@ -155,6 +156,7 @@ export default {
       this.$axios.post('/user/selectUserBaseInfoByKey', data).then(response => {
         if (response.data.message === 'success') {
           that.userList = response.data.userPageInfo.list
+          that.total = response.data.userPageInfo.total
         } else {
           that.$message({
             showClose: true,

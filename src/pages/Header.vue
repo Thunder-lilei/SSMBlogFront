@@ -12,7 +12,12 @@
         <router-link to='/UpdateUser'>
           <el-button type="primary" round>修改信息</el-button>
         </router-link>
+        <br/><br/>
         <el-button @click="logout" type="danger" round>登出</el-button>
+        <br/><br/>
+        <router-link to='/'>
+          <el-button round style="">主页</el-button>
+        </router-link>
       </div>
     </div>
     <div style="margin: 30% 65% 5% 0" v-show="!logoutShow">
@@ -22,6 +27,10 @@
       <br/><br/>
       <router-link to='/Register'>
         <el-button type="primary" round>注册</el-button>
+      </router-link>
+      <br/><br/>
+      <router-link to='/'>
+        <el-button round style="">主页</el-button>
       </router-link>
     </div>
   </div>
@@ -71,14 +80,14 @@ export default {
         if (response.data.message === 'success') {
           that.logoutShow = false
           that.userInfo = ''
-          that.$router.push('/');
+          that.$router.go(0)
         } else {
           that.$message({
             showClose: true,
             message: '请登录！',
             type: 'warning'
           });
-          that.$router.push('/Login');
+          that.$router.push('/');
         }
       }).catch(
         function (error) {
