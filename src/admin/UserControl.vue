@@ -150,8 +150,8 @@ export default {
     selectUserBaseInfoByKey:function () {
       const that = this
       let data = new URLSearchParams();
-      data.append("pageNow", "1")
-      data.append("pageSize", "10")
+      data.append("pageNow", this.pageNow)
+      data.append("pageSize", this.pageSize)
       data.append("key", this.keyValue)
       this.$axios.post('/user/selectUserBaseInfoByKey', data).then(response => {
         if (response.data.message === 'success') {

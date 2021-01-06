@@ -1,10 +1,16 @@
 <template>
   <div>
-    <div v-html="blog" class="markdown-body">
-
+    <div v-html="blog" class="markdown-body" style="background-color: white">
     </div>
     <br/>
-    <el-button @click="toUpdateArticle(articleId)" type="primary" icon="el-icon-edit" circle></el-button>
+    <el-button @click="toUpdateArticle(article.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
+    <el-badge style="margin: 0 0 0 3%" :value="article.articleCommentCount" :max="99" class="item">
+      <el-button size="small">评论</el-button>
+    </el-badge>
+    <el-badge style="margin: 0 0 0 3%" :value="article.articleLikeCount" :max="10" class="item">
+      <el-button size="small" icon="">点赞</el-button>
+    </el-badge>
+    <span style="color: white;margin: 0 0 0 5%;background-color: black;">{{ article.articleDate }}</span>
   </div>
 </template>
 
@@ -18,7 +24,7 @@ export default {
   data() {
     return {
       blog: '',
-      articleId: '',
+      article: {},
     }
   },
   mounted () {
@@ -30,7 +36,7 @@ export default {
       this.$axios.post('/article/getArticle').then(response => {
         if (response.data.message === 'success') {
           this.blog = marked(response.data.article.articleContent)
-          this.articleId = response.data.article.articleId
+          this.article = response.data.article
         } else {
           that.$message({
             showClose: true,
@@ -87,7 +93,12 @@ export default {
   },
 }
 </script>
-
+<style>
+.item {
+  margin-top: 10px;
+  margin-right: 40px;
+}
+</style>
 <style scoped>
 
 </style>

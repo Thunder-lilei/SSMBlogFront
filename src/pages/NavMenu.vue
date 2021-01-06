@@ -12,10 +12,50 @@
           <span slot="title">用户管理</span>
         </el-menu-item>
       </router-link>
-      <el-menu-item index="2">
-        <i class="el-icon-user-solid"></i>
-        <span slot="title">好友</span>
-      </el-menu-item>
+      <el-submenu index="2">
+        <template slot="title">
+          <i class="el-icon-user-solid"></i>
+          <span slot="title">好友</span>
+        </template>
+        <el-menu-item-group>
+          <el-button type="success" icon="el-icon-plus" circle></el-button>
+          <el-table
+            :data="userFriendList"
+            style="width: 100%">
+            <el-table-column
+              type="index"
+              label="序号"
+              width="90">
+            </el-table-column>
+            <el-table-column
+              prop="userNickname"
+              label="昵称"
+              width="90">
+            </el-table-column>
+            <el-table-column
+              align="right"
+              width="150"
+            >
+              <template slot="header" slot-scope="scope">
+                <el-input
+                  @keyup.enter.native=""
+                  v-model="keyValue"
+                  size="max"
+                  placeholder="输入关键字搜索"/>
+              </template>
+              <template slot-scope="scope">
+                <el-button @click="" type="primary" icon="el-icon-edit" circle></el-button>
+                <el-popconfirm
+                  title="确定删除吗？"
+                  @confirm=""
+                >
+                  <el-button slot="reference" type="danger" icon="el-icon-delete" circle></el-button>
+                </el-popconfirm>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-menu-item-group>
+      </el-submenu>
       <router-link to='/ArticleControl'>
         <el-menu-item index="3">
           <i class="el-icon-tickets"></i>
@@ -38,12 +78,42 @@ export default {
       isCollapse: false,
       menuStyle: 'width: 35%;',
       iconStyle: 'margin: 0 60% 10% 0',
+      userFriendList: [],
+      keyValue: '',
+      total: 0,
+      pageNow: 1,
+      pageSize: 10,
     };
   },
   mounted () {
     this.getLoginUser()
+    this.getUserFriend()
   },
   methods: {
+    getUserFriend:function () {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("pageNow", this.pageNow)
+      data.append("pageSize", this.pageSize)
+      this.$axios.post('/userFriend/getMyFriend', data).then(response => {
+        if (response.data.message === 'success') {
+          that.userFriendList = response.data.userPageInfo.list
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     getLoginUser:function () {
       const that = this
       this.$axios.post('/user/getLoginUser').then(response => {
