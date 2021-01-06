@@ -18,7 +18,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/Welcome',
+      path: '/',
       name: 'Welcome',
       component: Welcome,
       children: [
@@ -70,33 +70,9 @@ export default new Router({
       component: NavMenu
     },
     {
-      path: '/',
-      name: 'Welcome',
-      component: Welcome
-    },
-    {
-      path: '/UserControl',
-      name: 'UserControl',
-      component: UserControl
-    },
-    {
-      path: '/ArticleControl',
-      name: 'ArticleControl',
-      component: ArticleControl,
-      children: [
-      ]
-    },
-    {
       path: '/Header',
       name: 'Header',
       component: Header,
-      children: [
-        {
-          path: '/UpdateUser',
-          name: 'UpdateUser',
-          component: UpdateUser
-        },
-      ]
     },
   ]
 })
