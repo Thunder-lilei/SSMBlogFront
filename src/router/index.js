@@ -12,6 +12,7 @@ import UserControl from '../admin/UserControl'
 import ArticleControl from '../article/ArticleControl'
 import Article from '../article/Article'
 import ShowArticle from '../article/ShowArticle'
+import Friend from '../Friend/Friend'
 
 Vue.use(Router)
 
@@ -67,7 +68,14 @@ export default new Router({
     {
       path: '/NavMenu',
       name: 'NavMenu',
-      component: NavMenu
+      component: NavMenu,
+      children: [
+        {
+          path: '/Friend',
+          name: 'Friend',
+          component: Friend
+        },
+      ]
     },
     {
       path: '/Header',
