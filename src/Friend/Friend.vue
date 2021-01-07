@@ -1,10 +1,10 @@
 <template>
   <div>
-    <el-submenu index="2">
-      <template slot="title">
-        <i class="el-icon-user-solid"></i>
-      </template>
-      <el-menu-item-group>
+    <el-popover
+      placement="right"
+      width="300"
+      trigger="click">
+      <el-button slot="reference" icon="el-icon-user-solid"></el-button>
         <el-collapse>
           <el-collapse-item style="margin: 0 0 0 3%" title="添加好友" name="1">
             <el-input
@@ -15,7 +15,9 @@
               placeholder="输入关键字搜索"/>
             <el-table
               :data="addUserList"
-              style="width: 100%">
+              style="width: 100%"
+              max-height="300"
+            >
               <el-table-column
                 prop="userNickname"
                 label="昵称"
@@ -26,7 +28,7 @@
                 width="150"
               >
                 <template slot-scope="scope">
-                  <el-button @click="" type="primary" icon="el-icon-plus" circle></el-button>
+                  <el-button @click="addFriend(scope.row.userId)" type="primary" icon="el-icon-plus" circle></el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -34,7 +36,9 @@
         </el-collapse>
         <el-table
           :data="userFriendList"
-          style="width: 100%">
+          style="width: 100%"
+          max-height="500"
+        >
           <el-table-column
             prop="userNickname"
             label="昵称"
@@ -62,17 +66,7 @@
           </el-table-column>
         </el-table>
         <br/>
-        <el-pagination
-          @current-change=""
-          @size-change=""
-          background
-          layout="total, sizes, prev, pager, next"
-          :page-sizes="[5, 10, 20, 30]"
-          :page-size=pageSize
-          :total=total>
-        </el-pagination>
-      </el-menu-item-group>
-    </el-submenu>
+    </el-popover>
   </div>
 </template>
 
@@ -93,15 +87,43 @@ export default {
     this.getUserFriend()
   },
   methods: {
+    addFriend:function (userId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("userId", userId)
+      this.$axios.post('/userFriend/addFriend', data).then(response => {
+        if (response.data.message === 'success') {
+          that.$message({
+            showClose: true,
+            message: '添加成功！',
+            type: 'success'
+          });
+          that.getUserFriend()
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     selectUserBaseInfoByKey:function () {
       const that = this
       let data = new URLSearchParams();
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
       data.append("key", this.keyValue)
-      this.$axios.post('/user/selectUserBaseInfoByKeyWithoutMine', data).then(response => {
+      this.$axios.post('/user/selectUserBaseInfoByKeyWithoutMineList', data).then(response => {
         if (response.data.message === 'success') {
-          that.addUserList = response.data.userPageInfo.list
+          that.addUserList = response.data.userList
         } else {
           that.$message({
             showClose: true,
@@ -124,10 +146,10 @@ export default {
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
       data.append("key", this.keyValue)
-      this.$axios.post('/userFriend/getMyFriendByKey', data).then(response => {
+      this.$axios.post('/userFriend/getMyFriendByKeyList', data).then(response => {
         if (response.data.message === 'success') {
-          that.userFriendList = response.data.userPageInfo.list
-          that.total = response.data.userPageInfo.total
+          that.userFriendList = response.data.userList
+          that.total = response.data.userList
         } else {
           that.$message({
             showClose: true,
@@ -149,10 +171,10 @@ export default {
       let data = new URLSearchParams();
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
-      this.$axios.post('/userFriend/getMyFriend', data).then(response => {
+      this.$axios.post('/userFriend/getMyFriendList', data).then(response => {
         if (response.data.message === 'success') {
-          that.userFriendList = response.data.userPageInfo.list
-          that.total = response.data.userPageInfo.total
+          that.userFriendList = response.data.userList
+          that.total = response.data.userList
         } else {
           that.$message({
             showClose: true,
