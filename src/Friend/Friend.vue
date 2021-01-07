@@ -58,7 +58,7 @@
             <template slot-scope="scope">
               <el-popconfirm
                 title="确定删除吗？"
-                @confirm=""
+                @confirm="deleteFriend(scope.row.userId)"
               >
                 <el-button slot="reference" type="danger" icon="el-icon-delete" circle></el-button>
               </el-popconfirm>
@@ -87,6 +87,34 @@ export default {
     this.getUserFriend()
   },
   methods: {
+    deleteFriend:function (userId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("userFriendId", userId)
+      this.$axios.post('/userFriend/deleteFriend', data).then(response => {
+        if (response.data.message === 'success') {
+          that.$message({
+            showClose: true,
+            message: '移除成功！',
+            type: 'success'
+          });
+          that.getUserFriend()
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     addFriend:function (userId) {
       const that = this
       let data = new URLSearchParams();
@@ -191,6 +219,16 @@ export default {
           });
         })
     },
+  },
+  beforeRouteEnter(to, from, next) {
+    // 添加背景色 margin:0;padding:0是为了解决vue四周有白边的问题
+    document.querySelector('body').setAttribute('style', 'margin:0;padding:0')
+    next()
+  },
+  beforeRouteLeave(to, from, next) {
+    // 去除背景色
+    document.querySelector('body').setAttribute('style', '')
+    next()
   },
 }
 </script>
