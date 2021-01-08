@@ -19,9 +19,16 @@
               max-height="300"
             >
               <el-table-column
+                label="头像"
+                width="50">
+                <template slot-scope="scope">
+                  <el-avatar :src="scope.row.userProfilePhoto"></el-avatar>
+                </template>
+              </el-table-column>
+              <el-table-column
                 prop="userNickname"
                 label="昵称"
-                width="140">
+                width="90">
               </el-table-column>
               <el-table-column
                 align="right"
@@ -40,9 +47,16 @@
           max-height="500"
         >
           <el-table-column
+            label="头像"
+            width="50">
+            <template slot-scope="scope">
+              <el-avatar :src="scope.row.userProfilePhoto"></el-avatar>
+            </template>
+          </el-table-column>
+          <el-table-column
             prop="userNickname"
             label="昵称"
-            width="140">
+            width="90">
           </el-table-column>
           <el-table-column
             align="right"
@@ -177,7 +191,6 @@ export default {
       this.$axios.post('/userFriend/getMyFriendByKeyList', data).then(response => {
         if (response.data.message === 'success') {
           that.userFriendList = response.data.userList
-          that.total = response.data.userList
         } else {
           that.$message({
             showClose: true,
