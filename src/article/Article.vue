@@ -47,7 +47,7 @@ export default {
   methods: {
     getArticle:function () {
       const that = this
-      this.$axios.post('/article/getArticle').then(response => {
+      this.$axios.post('/article/getShowArticle').then(response => {
         if (response.data.message === 'success') {
           console.log(response.data.article)
           that.articleForm = response.data.article

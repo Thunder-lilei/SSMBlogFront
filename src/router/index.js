@@ -13,6 +13,8 @@ import ArticleControl from '../article/ArticleControl'
 import Article from '../article/Article'
 import ShowArticle from '../article/ShowArticle'
 import Friend from '../Friend/Friend'
+import Square from '../article/Square'
+import ShowUser from '../user/ShowUser'
 
 Vue.use(Router)
 
@@ -57,6 +59,16 @@ export default new Router({
           path: '/ShowArticle',
           name: 'ShowArticle',
           component: ShowArticle,
+        },
+        {
+          path: '/Square',
+          name: 'Square',
+          component: Square,
+        },
+        {
+          path: '/ShowUser',
+          name: 'ShowUser',
+          component: ShowUser,
         },
       ]
     },

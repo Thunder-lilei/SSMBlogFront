@@ -12,11 +12,17 @@
           <span slot="title">用户管理</span>
         </el-menu-item>
       </router-link>
-    <Friend></Friend>
+      <Friend></Friend>
       <router-link to='/ArticleControl'>
         <el-menu-item index="3">
           <i class="el-icon-tickets"></i>
           <span slot="title">博文</span>
+        </el-menu-item>
+      </router-link>
+      <router-link to='/Square'>
+        <el-menu-item index="4">
+          <i class="el-icon-orange"></i>
+          <span slot="title">广场</span>
         </el-menu-item>
       </router-link>
     </el-menu>
@@ -28,9 +34,10 @@
 import Header from './Header'
 import bus from '../router/bus'
 import Friend from '../Friend/Friend'
+import Square from '../article/Square'
 export default {
   name: 'NavMenu',
-  components: {Friend, Header},
+  components: {Square, Friend, Header},
   data() {
     return {
       isCollapse: false,

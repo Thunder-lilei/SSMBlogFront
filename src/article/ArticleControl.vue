@@ -144,7 +144,7 @@ export default {
       const that = this
       let data = new URLSearchParams();
       data.append("articleId", articleId)
-      this.$axios.post('/article/setArticle', data).then(response => {
+      this.$axios.post('/article/setShowArticle', data).then(response => {
         if (response.data.message === 'success') {
 
         } else {

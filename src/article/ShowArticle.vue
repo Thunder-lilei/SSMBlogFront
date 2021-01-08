@@ -33,7 +33,7 @@ export default {
   methods: {
     getArticle:function () {
       const that = this
-      this.$axios.post('/article/getArticle').then(response => {
+      this.$axios.post('/article/getShowArticle').then(response => {
         if (response.data.message === 'success') {
           this.blog = marked(response.data.article.articleContent)
           this.article = response.data.article
@@ -61,7 +61,7 @@ export default {
       const that = this
       let data = new URLSearchParams();
       data.append("articleId", articleId)
-      this.$axios.post('/article/setArticle', data).then(response => {
+      this.$axios.post('/article/setShowArticle', data).then(response => {
         if (response.data.message === 'success') {
 
         } else {
