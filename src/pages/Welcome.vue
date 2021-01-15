@@ -19,9 +19,10 @@
 <script>
 import Header from './Header'
 import NavMenu from './NavMenu'
+import GitTalk from '../components/gittalk/GitTalk'
 export default {
   name: 'index',
-  components: {NavMenu, Header},
+  components: {GitTalk, NavMenu, Header},
   data () {
     return {
     }

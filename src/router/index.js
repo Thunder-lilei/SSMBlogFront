@@ -15,6 +15,7 @@ import ShowArticle from '../article/ShowArticle'
 import Friend from '../Friend/Friend'
 import Square from '../article/Square'
 import ShowUser from '../user/ShowUser'
+import GitTalk from '../components/gittalk/GitTalk'
 
 Vue.use(Router)
 
@@ -93,6 +94,18 @@ export default new Router({
       path: '/Header',
       name: 'Header',
       component: Header,
+    },
+    {
+      path: '/ShowArticle',
+      name: 'ShowArticle',
+      component: ShowArticle,
+      children: [
+        {
+          path: '/GitTalk',
+          name: 'GitTalk',
+          component: GitTalk,
+        },
+      ]
     },
   ]
 })
