@@ -65,6 +65,7 @@ export default {
       total: 0,
       pageNow: 1,
       pageSize: 10,
+      ifOtherUser: false,
     }
   },
   mounted () {
@@ -86,8 +87,8 @@ export default {
       data.append("pageSize", pageSize)
       this.$axios.post('/article/selectAllArticleBaseInfo', data).then(response => {
         if (response.data.message === 'success') {
-          that.articleList = response.data.articleWithUserPageInfo.list
-          that.total = response.data.articleWithUserPageInfo.total
+          that.articleList = response.data.articlePageInfo.list
+          that.total = response.data.articlePageInfo.total
         } else {
           that.$message({
             showClose: true,
@@ -171,8 +172,8 @@ export default {
       data.append("key", this.keyValue)
       this.$axios.post('/article/selectArticleBaseInfoByKey', data).then(response => {
         if (response.data.message === 'success') {
-          that.articleList = response.data.articleWithUserPageInfo.list
-          that.total = response.data.articleWithUserPageInfo.total
+          that.articleList = response.data.articlePageInfo.list
+          that.total = response.data.articlePageInfo.total
         } else {
           that.$message({
             showClose: true,
