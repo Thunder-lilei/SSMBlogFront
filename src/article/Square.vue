@@ -64,7 +64,7 @@ export default {
     },
     toShowUser:function (userId) {
       this.setUser(userId)
-      this.$router.push('/ShowUser');
+      this.$router.push('/ArticleControl');
     },
     setUser:function (userId) {
       const that = this
