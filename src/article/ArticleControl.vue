@@ -82,6 +82,7 @@ import bus from '../router/bus'
 
 export default {
   name: 'ArticleControl',
+  components: {Comment},
   data() {
     return {
       user: {},

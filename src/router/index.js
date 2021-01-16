@@ -17,6 +17,7 @@ import Square from '../article/Square'
 import ShowUser from '../user/ShowUser'
 import GitTalk from '../components/gittalk/GitTalk'
 import White from '../pages/White'
+import Comment from '../article/Comment'
 
 Vue.use(Router)
 
@@ -76,6 +77,11 @@ export default new Router({
           path: '/White',
           name: 'White',
           component: White,
+        },
+        {
+          path: '/Comment',
+          name: 'Comment',
+          component: Comment,
         },
       ]
     },

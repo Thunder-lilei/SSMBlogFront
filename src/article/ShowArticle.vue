@@ -12,6 +12,7 @@
       <el-button v-show="ifHaveLikeResult" @click="removeLike(article.articleId)" size="small" icon="">取消点赞</el-button>
     </el-badge>
     <span style="color: white;margin: 0 0 0 5%;background-color: black;">{{ article.articleDate }}</span>
+    <Comment></Comment>
     <GitTalk></GitTalk>
   </div>
 </template>
@@ -20,11 +21,12 @@ import marked from 'marked'
 import 'github-markdown-css';
 import GitTalk from '../components/gittalk/GitTalk'
 import bus from '../router/bus'
+import Comment from './Comment'
 
 export default {
 
   name: 'ShowArticle',
-  components: {GitTalk},
+  components: {Comment, GitTalk},
   data() {
     return {
       blog: '',
@@ -126,6 +128,7 @@ export default {
           that.blog = marked(response.data.article.articleContent)
           that.article = response.data.article
           that.ifHaveLike(response.data.article.articleId)
+          bus.$emit('articleId',that.article.articleId)
         } else {
           that.$message({
             showClose: true,
