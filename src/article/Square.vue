@@ -7,7 +7,7 @@
       <div style="display: flex" v-for="item in recommendArticleList" class="text item">
         <div style="text-align: left;height: 30px;width: 40%;font-size: 25px">
           <span style="color: #42b983;font-size: 15px;">博文标题：</span>
-          <el-link @click="toShowArticle(item.articleId)">{{ item.articleTitle }}<i class="el-icon-view el-icon--right"></i> </el-link>
+          <el-link @click="toShowArticle(item.articleId, item.userId)">{{ item.articleTitle }}<i class="el-icon-view el-icon--right"></i> </el-link>
         </div>
         <div style="text-align: left;width: 40%;font-size: 25px">
           <span style="color: #42b983;font-size: 15px;">作者：</span>
@@ -35,8 +35,9 @@ export default {
     this.getRecommendArticle()
   },
   methods: {
-    toShowArticle:function (articleId) {
+    toShowArticle:function (articleId, userId) {
       this.setArticle(articleId)
+      this.setUser(userId)
       this.$router.push('/ShowArticle');
     },
     setArticle:function (articleId) {

@@ -33,7 +33,7 @@ export default {
         articleId: '',
       },
       ifHaveLikeResult: false,
-      ifOtherUser: false,
+      ifOtherUser: '',
     }
   },
   mounted () {
@@ -175,7 +175,7 @@ export default {
         if (response.data.message === 'success') {
           that.ifOtherUser = true
         } else {
-
+          that.ifOtherUser = false
         }
       }).catch(
         function (error) {
