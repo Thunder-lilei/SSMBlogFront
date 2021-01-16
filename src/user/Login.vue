@@ -47,7 +47,6 @@ export default {
         if (valid) {
           this.$axios.post('/user/toLoginByUserName', this.ruleForm ).then(response => {
             if (response.data.message === 'success') {
-              that.$router.go(0)
               bus.$emit('changeMenu',true)
             } else {
               that.$message({
@@ -56,6 +55,8 @@ export default {
                 type: 'warning'
               });
             }
+            that.$router.push('/');
+            that.$router.go(0)
           }).catch(
             function (error) {
               that.$message({

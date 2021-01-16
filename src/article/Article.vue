@@ -49,7 +49,6 @@ export default {
       const that = this
       this.$axios.post('/article/getShowArticle').then(response => {
         if (response.data.message === 'success') {
-          console.log(response.data.article)
           that.articleForm = response.data.article
           that.updateShow = true
         }

@@ -78,6 +78,8 @@
 </template>
 
 <script>
+import bus from '../router/bus'
+
 export default {
   name: 'ArticleControl',
   data() {
@@ -214,6 +216,9 @@ export default {
     },
     toShowArticle:function (articleId) {
       this.setArticle(articleId)
+      if (JSON.stringify(this.user) !== '{}') {
+        this.setUser(this.user.userId)
+      }
       this.$router.push('/ShowArticle');
     },
     setArticle:function (articleId) {
@@ -276,6 +281,29 @@ export default {
         if (response.data.message === 'success') {
           that.articleList = response.data.articlePageInfo.list
           that.total = response.data.articlePageInfo.total
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    setUser:function (userId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("userId", userId)
+      this.$axios.post('/user/setShowUser', data).then(response => {
+        if (response.data.message === 'success') {
+
         } else {
           that.$message({
             showClose: true,

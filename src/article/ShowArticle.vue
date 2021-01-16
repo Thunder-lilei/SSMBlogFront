@@ -3,7 +3,7 @@
     <div v-html="blog" class="markdown-body" style="background-color: white">
     </div>
     <br/>
-    <el-button @click="toUpdateArticle(article.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
+    <el-button v-show="!ifOtherUser" @click="toUpdateArticle(article.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
     <el-badge style="margin: 0 0 0 3%" :value="article.articleCommentCount" :max="99" class="item">
       <el-button size="small">评论</el-button>
     </el-badge>
@@ -19,6 +19,7 @@
 import marked from 'marked'
 import 'github-markdown-css';
 import GitTalk from '../components/gittalk/GitTalk'
+import bus from '../router/bus'
 
 export default {
 
@@ -32,10 +33,12 @@ export default {
         articleId: '',
       },
       ifHaveLikeResult: false,
+      ifOtherUser: false,
     }
   },
   mounted () {
     this.getArticle()
+    this.getUser()
   },
   methods: {
     ifHaveLike(articleId) {
@@ -156,6 +159,23 @@ export default {
             message: response.data.message,
             type: 'warning'
           });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    getUser:function () {
+      const that = this
+      this.$axios.post('/user/getShowUser').then(response => {
+        if (response.data.message === 'success') {
+          that.ifOtherUser = true
+        } else {
+
         }
       }).catch(
         function (error) {

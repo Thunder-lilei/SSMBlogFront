@@ -16,6 +16,7 @@ import Friend from '../Friend/Friend'
 import Square from '../article/Square'
 import ShowUser from '../user/ShowUser'
 import GitTalk from '../components/gittalk/GitTalk'
+import White from '../pages/White'
 
 Vue.use(Router)
 
@@ -70,6 +71,11 @@ export default new Router({
           path: '/ShowUser',
           name: 'ShowUser',
           component: ShowUser,
+        },
+        {
+          path: '/White',
+          name: 'White',
+          component: White,
         },
       ]
     },

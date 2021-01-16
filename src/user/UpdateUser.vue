@@ -186,7 +186,7 @@ export default {
                 type: 'success'
               });
               if (!that.isUpdateUser) {
-                bus .$emit('changeLoginUserInfo',that.loginUser)
+                bus.$emit('changeLoginUserInfo',that.loginUser)
               }
             } else {
               that.$message({

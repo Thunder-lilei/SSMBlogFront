@@ -15,7 +15,7 @@
         <br/><br/>
         <el-button @click="logout" type="danger" round>登出</el-button>
         <br/><br/>
-        <router-link to='/'>
+        <router-link to='/White'>
           <el-button round style="">主页</el-button>
         </router-link>
       </div>
@@ -29,7 +29,7 @@
         <el-button type="primary" round>注册</el-button>
       </router-link>
       <br/><br/>
-      <router-link to='/'>
+      <router-link to='/White'>
         <el-button round style="">主页</el-button>
       </router-link>
     </div>
@@ -51,7 +51,7 @@ export default {
   },
   mounted () {
     this.getLoginUser()
-    bus .$on("changeLoginUserInfo",(message)=>{
+    bus.$on("changeLoginUserInfo",(message)=>{
       this.userInfo.userNickname = message.userNickname
       this.userInfo.userProfilePhoto = message.userProfilePhoto
     })
@@ -80,15 +80,15 @@ export default {
         if (response.data.message === 'success') {
           that.logoutShow = false
           that.userInfo = ''
-          that.$router.go(0)
         } else {
           that.$message({
             showClose: true,
             message: '请登录！',
             type: 'warning'
           });
-          that.$router.push('/');
         }
+        that.$router.push('/');
+        that.$router.go(0)
       }).catch(
         function (error) {
           that.$message({
