@@ -5,15 +5,16 @@
     <br/>
     <el-button v-show="!ifOtherUser" @click="toUpdateArticle(article.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
     <el-badge style="margin: 0 0 0 3%" :value="article.articleCommentCount" :max="99" class="item">
-      <el-button size="small">评论</el-button>
+      <el-button @click="changeShowComment" size="small">评论</el-button>
     </el-badge>
     <el-badge style="margin: 0 0 0 3%" :value="article.articleLikeCount" :max="10" class="item">
       <el-button v-show="!ifHaveLikeResult" @click="addLike(article.articleId)" size="small" icon="">点赞</el-button>
       <el-button v-show="ifHaveLikeResult" @click="removeLike(article.articleId)" size="small" icon="">取消点赞</el-button>
     </el-badge>
     <span style="color: white;margin: 0 0 0 5%;background-color: black;">{{ article.articleDate }}</span>
-    <Comment></Comment>
-    <GitTalk></GitTalk>
+    <div v-show="showComment">
+      <Comment></Comment>
+    </div>
   </div>
 </template>
 <script>
@@ -36,6 +37,7 @@ export default {
       },
       ifHaveLikeResult: false,
       ifOtherUser: '',
+      showComment: false,
     }
   },
   mounted () {
@@ -43,6 +45,9 @@ export default {
     this.getUser()
   },
   methods: {
+    changeShowComment:function () {
+      this.showComment = !this.showComment
+    },
     ifHaveLike(articleId) {
       const that = this
       this.articleLike.articleId = articleId
