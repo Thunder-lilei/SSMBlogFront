@@ -12,7 +12,7 @@
           {{ ' 回复：'}}
         </strong>
         <strong style="color: #42b983;" v-if="item.parentCommentUserBaseInfo !== null">
-          <el-avatar :src="item.userBaseInfo.userProfilePhoto"></el-avatar>
+          <el-avatar :src="item.parentCommentUserBaseInfo.userProfilePhoto"></el-avatar>
           <el-link style="color: #42b983;font-size: 20px" @click="toShowUser(item.parentCommentUserBaseInfo.userId)">
             <strong>{{ item.parentCommentUserBaseInfo.userNickname}}</strong>
             <i class="el-icon-view el-icon--right"></i>
