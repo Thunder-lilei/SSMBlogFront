@@ -18,6 +18,8 @@ import ShowUser from '../user/ShowUser'
 import GitTalk from '../components/gittalk/GitTalk'
 import White from '../pages/White'
 import Comment from '../article/Comment'
+import TelLogin from '../user/TelLogin'
+import EmailLogin from '../user/EmailLogin'
 
 Vue.use(Router)
 
@@ -32,6 +34,16 @@ export default new Router({
           path: '/Login',
           name: 'Login',
           component: Login
+        },
+        {
+          path: '/EmailLogin',
+          name: 'EmailLogin',
+          component: EmailLogin
+        },
+        {
+          path: '/TelLogin',
+          name: 'TelLogin',
+          component: TelLogin
         },
         {
           path: '/UserControl',

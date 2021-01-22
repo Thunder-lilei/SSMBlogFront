@@ -1,28 +1,42 @@
 <template>
   <div>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="用户名" prop="userName">
-        <el-input v-model="ruleForm.userName"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="userPassword">
-        <el-input v-model="ruleForm.userPassword" show-password></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button plain>忘记密码</el-button>
-        <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
-      </el-form-item>
-    </el-form>
-    <Footer></Footer>
+    <div v-show="userNameLoginShow">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="ruleForm.userName"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="userPassword">
+          <el-input v-model="ruleForm.userPassword" show-password></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button plain>忘记密码</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    <div v-show="telLoginShow">
+      <TelLogin></TelLogin>
+    </div>
+    <div v-show="emailLoginShow">
+      <EmailLogin></EmailLogin>
+    </div>
+    <div>
+      <el-button @click="showUserNameLogin" v-show="!userNameLoginShow" type="primary" plain>账号登陆</el-button>
+      <el-button @click="showTelLogin" v-show="!telLoginShow" type="primary" plain>电话登陆</el-button>
+      <el-button @click="showEmailLogin" v-show="!emailLoginShow" type="primary" plain>邮箱登陆</el-button>
+    </div>
   </div>
 </template>
 
 <script>
 import Footer from '../pages/Footer'
 import bus from '../router/bus'
+import TelLogin from './TelLogin'
+import EmailLogin from './EmailLogin'
 export default {
   name: 'Login',
-  components: {Footer},
+  components: {EmailLogin, TelLogin, Footer},
   data() {
     return {
       ruleForm: {
@@ -36,10 +50,28 @@ export default {
         userPassword: [
           { required: true, message: '请输入密码', trigger: 'blur' },
         ]
-      }
+      },
+      userNameLoginShow: true,
+      telLoginShow: false,
+      emailLoginShow: false,
     }
   },
   methods: {
+    showTelLogin:function () {
+      this.telLoginShow = true
+      this.userNameLoginShow = false
+      this.emailLoginShow = false
+    },
+    showEmailLogin:function () {
+      this.emailLoginShow = true
+      this.telLoginShow = false
+      this.userNameLoginShow = false
+    },
+    showUserNameLogin:function () {
+      this.userNameLoginShow = true
+      this.telLoginShow = false
+      this.emailLoginShow = false
+    },
     submitForm(formName) {
       const that = this
       this.$refs[formName].validate((valid) => {
