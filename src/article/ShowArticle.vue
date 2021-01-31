@@ -1,5 +1,53 @@
 <template>
   <div>
+    <div style="display: flex;background-color: white;margin: 0 0 3% 0">
+      <div style="width: 50%;margin: 1% 0 1% 0">
+        <h3 style="margin: 0 0 1% 3%;text-align: left;">
+          分类：
+        </h3>
+        <el-tag
+          :key="sort.sortName"
+          v-for="sort in checkedSorts"
+          closable
+          :disable-transitions="false"
+          @close="removeArticleSort(sort.sortId)">
+          {{sort.sortName}}
+        </el-tag>
+        <el-input
+          class="input-new-tag"
+          v-if="newSortNameVisible"
+          v-model="newSort.sortName"
+          ref="saveTagInput"
+          size="small"
+          @blur="addArticleSort"
+        >
+        </el-input>
+        <el-button v-else class="button-new-tag" size="small" @click="showAddArticleSortInput">+ 添加分类</el-button>
+      </div>
+      <div style="width: 50%;margin: 1% 0 1% 0">
+        <h3 style="margin: 0 0 1% 3%;text-align: left;">
+          标签：
+        </h3>
+        <el-tag
+          :key="label.labelName"
+          v-for="label in checkedLabels"
+          closable
+          :disable-transitions="false"
+          @close="removeArticleLabel(label.labelId)">
+          {{label.labelName}}
+        </el-tag>
+        <el-input
+          class="input-new-tag"
+          v-if="newLabelNameVisible"
+          v-model="newLabel.labelName"
+          ref="saveTagInput"
+          size="small"
+          @blur="addArticleLabel"
+        >
+        </el-input>
+        <el-button v-else class="button-new-tag" size="small" @click="showAddArticleLabelInput">+ 添加标签</el-button>
+      </div>
+    </div>
     <div v-html="blog" class="markdown-body" style="background-color: white">
     </div>
     <br/>
@@ -32,12 +80,23 @@ export default {
     return {
       blog: '',
       article: {},
+      newLabel: {
+        labelName: '',
+      },
+      newSort: {
+        sortName: '',
+      },
       articleLike: {
         articleId: '',
       },
       ifHaveLikeResult: false,
       ifOtherUser: '',
       showComment: false,
+      articleId: '',
+      newLabelNameVisible: false,
+      newSortNameVisible: false,
+      checkedSorts: [],
+      checkedLabels: [],
     }
   },
   mounted () {
@@ -45,8 +104,166 @@ export default {
     this.getUser()
   },
   methods: {
+    removeArticleLabel(labelId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("articleId", this.article.articleId)
+      data.append("labelId", labelId)
+      this.$axios.post('/articleLabel/removeArticleLabel', data).then(response => {
+        if (response.data.message === 'success') {
+          that.getArticleLabel(this.article.articleId)
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    showAddArticleLabelInput() {
+      this.newLabelNameVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    addArticleLabel () {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("articleId", this.article.articleId)
+      data.append("labelName", this.newLabel.labelName)
+      this.$axios.post('/articleLabel/addArticleLabel', data).then(response => {
+        if (response.data.message === 'success') {
+          that.getArticleLabel(that.article.articleId)
+          this.newLabelNameVisible = false;
+          this.newLabel.labelName = '';
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    removeArticleSort(sortId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("articleId", this.article.articleId)
+      data.append("sortId", sortId)
+      this.$axios.post('/articleSort/removeArticleSort', data).then(response => {
+        if (response.data.message === 'success') {
+          that.getArticleSort(this.article.articleId)
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    showAddArticleSortInput() {
+      this.newSortNameVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    addArticleSort () {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("articleId", this.article.articleId)
+      data.append("sortName", this.newSort.sortName)
+      this.$axios.post('/articleSort/addArticleSort', data).then(response => {
+        if (response.data.message === 'success') {
+          that.getArticleSort(that.article.articleId)
+          this.newSortNameVisible = false;
+          this.newSort.sortName = '';
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     changeShowComment:function () {
       this.showComment = !this.showComment
+    },
+    getArticleLabel (articleId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("articleId", articleId)
+      this.$axios.post('/articleLabel/getArticleLabel', data).then(response => {
+        if (response.data.message === 'success') {
+          this.checkedLabels = response.data.labelList
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    getArticleSort (articleId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("articleId", articleId)
+      this.$axios.post('/articleSort/getArticleSort', data).then(response => {
+        if (response.data.message === 'success') {
+          this.checkedSorts = response.data.sortList
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
     },
     ifHaveLike(articleId) {
       const that = this
@@ -133,6 +350,8 @@ export default {
           that.blog = marked(response.data.article.articleContent)
           that.article = response.data.article
           that.ifHaveLike(response.data.article.articleId)
+          that.getArticleLabel(response.data.article.articleId)
+          that.getArticleSort(response.data.article.articleId)
           bus.$emit('articleId',that.article.articleId)
         } else {
           that.$message({
@@ -215,4 +434,22 @@ export default {
 </style>
 <style scoped>
 
+</style>
+
+<style>
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.input-new-tag {
+  width: 90px;
+  margin-left: 10px;
+  vertical-align: bottom;
+}
 </style>

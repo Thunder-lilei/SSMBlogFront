@@ -29,7 +29,7 @@
           </h3>
           <template>
             <el-checkbox-group
-              v-model="checkedSorts"
+              v-model="checkedLabels"
               :min="1"
               :max="5"
             >
