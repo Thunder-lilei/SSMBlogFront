@@ -10,32 +10,48 @@
         <div style="width: 50%;margin: 1% 0 1% 0">
           <h3 style="margin: 0 0 1% 3%;text-align: left;">
             分类：
-            <el-button icon="el-icon-plus" size="small" round>添加分类</el-button>
           </h3>
-          <template>
-            <el-checkbox-group
-              v-model="checkedSorts"
-              :min="1"
-              :max="5"
-            >
-              <el-checkbox v-for="sort in allSort" :label="sort.sortId" :key="sort.sortId">{{sort.sortName}}</el-checkbox>
-            </el-checkbox-group>
-          </template>
+          <el-tag
+            :key="sort.sortName"
+            v-for="sort in checkedSorts"
+            closable
+            :disable-transitions="false"
+            @close="removeArticleSort(sort)">
+            {{sort.sortName}}
+          </el-tag>
+          <el-input
+            class="input-new-tag"
+            v-if="newSortNameVisible"
+            v-model="newSort.sortName"
+            ref="saveTagInput"
+            size="small"
+            @blur="addCheckedSorts"
+          >
+          </el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showAddArticleSortInput">+ 添加分类</el-button>
         </div>
         <div style="width: 50%;margin: 1% 0 1% 0">
           <h3 style="margin: 0 0 1% 3%;text-align: left;">
             标签：
-            <el-button icon="el-icon-plus" size="small" round>添加标签</el-button>
           </h3>
-          <template>
-            <el-checkbox-group
-              v-model="checkedLabels"
-              :min="1"
-              :max="5"
-            >
-              <el-checkbox v-for="label in allLabel" :label="label.labelId" :key="label.labelId">{{label.labelName}}</el-checkbox>
-            </el-checkbox-group>
-          </template>
+          <el-tag
+            :key="label.labelName"
+            v-for="label in checkedLabels"
+            closable
+            :disable-transitions="false"
+            @close="removeArticleLabel(label)">
+            {{label.labelName}}
+          </el-tag>
+          <el-input
+            class="input-new-tag"
+            v-if="newLabelNameVisible"
+            v-model="newLabel.labelName"
+            ref="saveTagInput"
+            size="small"
+            @blur="addCheckedLabels"
+          >
+          </el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showAddArticleLabelInput">+ 添加标签</el-button>
         </div>
       </div>
       <el-form-item prop="articleContent">
@@ -70,47 +86,51 @@ export default {
         ],
       },
       updateShow: false,
-      allSort: [],
+      newLabel: {
+        labelName: '',
+      },
+      newSort: {
+        sortName: '',
+      },
+      newLabelNameVisible: false,
+      newSortNameVisible: false,
       checkedSorts: [],
-      allLabel: [],
-      checkedLabels: [ ],
+      checkedLabels: [],
     }
   },
   mounted () {
     this.getArticle()
-    this.getAllSort()
-    this.getAllLabel()
   },
   methods: {
-    getAllLabel:function() {
-      const that = this
-      this.$axios.post('/label/getAllLabel').then(response => {
-        if (response.data.message === 'success') {
-          that.allLabel = response.data.labelList
-        }
-      }).catch(
-        function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
-        })
+    removeArticleSort:function (sort) {
+      this.checkedSorts.splice(this.checkedSorts.indexOf(sort), 1);
     },
-    getAllSort:function() {
-      const that = this
-      this.$axios.post('/sort/getAllSort').then(response => {
-        if (response.data.message === 'success') {
-          that.allSort = response.data.sortList
-        }
-      }).catch(
-        function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
-        })
+    addCheckedSorts:function () {
+      if (JSON.stringify(this.checkedSorts).indexOf(JSON.stringify(this.newSort)) === -1) {
+        this.checkedSorts.push(this.newSort)
+      }
+      this.newSort = {}
+    },
+    showAddArticleSortInput() {
+      this.newSortNameVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
+    },
+    removeArticleLabel:function (label) {
+      this.checkedLabels.splice(this.checkedLabels.indexOf(label), 1);
+    },
+    addCheckedLabels:function () {
+      if (JSON.stringify(this.checkedLabels).indexOf(JSON.stringify(this.newLabel)) === -1) {
+        this.checkedLabels.push(this.newLabel)
+      }
+      this.newLabel = {}
+    },
+    showAddArticleLabelInput() {
+      this.newLabelNameVisible = true;
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus();
+      });
     },
     getArticle:function () {
       const that = this
