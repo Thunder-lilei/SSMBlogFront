@@ -209,7 +209,8 @@ export default {
       const that = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios.post('/article/addArticle', this.articleForm).then(response => {
+          this.$axios.post('/article/addArticle', {article:JSON.stringify(this.articleForm),
+            labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)}).then(response => {
             if (response.data.message === 'success') {
               that.$message({
                 showClose: true,
