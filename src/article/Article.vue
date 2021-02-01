@@ -107,9 +107,12 @@ export default {
       this.checkedSorts.splice(this.checkedSorts.indexOf(sort), 1);
     },
     addCheckedSorts:function () {
-      if (JSON.stringify(this.checkedSorts).indexOf(JSON.stringify(this.newSort)) === -1) {
+      if (this.checkedSorts.findIndex(item => item.sortName === this.newSort.sortName) === -1) {
         this.checkedSorts.push(this.newSort)
       }
+      // if (JSON.stringify(this.checkedSorts).indexOf(JSON.stringify(this.newSort)) === -1) {
+      //   this.checkedSorts.push(this.newSort)
+      // }
       this.newSortVisible = false
       this.newSort = {}
     },
@@ -123,9 +126,12 @@ export default {
       this.checkedLabels.splice(this.checkedLabels.indexOf(label), 1);
     },
     addCheckedLabels:function () {
-      if (JSON.stringify(this.checkedLabels).indexOf(JSON.stringify(this.newLabel)) === -1) {
+      if (this.checkedLabels.findIndex(item => item.labelName === this.newLabel.labelName) === -1) {
         this.checkedLabels.push(this.newLabel)
       }
+      // if (JSON.stringify(this.checkedLabels).indexOf(JSON.stringify(this.newLabel)) === -1) {
+      //   this.checkedLabels.push(this.newLabel)
+      // }
       this.newLabelVisible = false
       this.newLabel = {}
     },
@@ -235,6 +241,8 @@ export default {
           this.$axios.post('/article/updateArticle', {article:JSON.stringify(this.articleForm),
             labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)} ).then(response => {
             if (response.data.message === 'success') {
+              that.getArticleLabel(that.articleForm.articleId)
+              that.getArticleSort(that.articleForm.articleId)
               that.$message({
                 showClose: true,
                 message: '修改成功！',
