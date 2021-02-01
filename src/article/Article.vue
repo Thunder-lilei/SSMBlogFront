@@ -16,12 +16,12 @@
             v-for="sort in checkedSorts"
             closable
             :disable-transitions="false"
-            @close="removeArticleSort(sort)">
+            @close="removeCheckedArticleSorts(sort)">
             {{sort.sortName}}
           </el-tag>
           <el-input
             class="input-new-tag"
-            v-if="newSortNameVisible"
+            v-if="newSortVisible"
             v-model="newSort.sortName"
             ref="saveTagInput"
             size="small"
@@ -39,12 +39,12 @@
             v-for="label in checkedLabels"
             closable
             :disable-transitions="false"
-            @close="removeArticleLabel(label)">
+            @close="removeCheckedArticleLabels(label)">
             {{label.labelName}}
           </el-tag>
           <el-input
             class="input-new-tag"
-            v-if="newLabelNameVisible"
+            v-if="newLabelVisible"
             v-model="newLabel.labelName"
             ref="saveTagInput"
             size="small"
@@ -77,6 +77,7 @@ export default {
   data() {
     return {
       articleForm: {
+        articleId: '',
         articleContent: '',
         articleTitle: '',
       },
@@ -92,8 +93,8 @@ export default {
       newSort: {
         sortName: '',
       },
-      newLabelNameVisible: false,
-      newSortNameVisible: false,
+      newLabelVisible: false,
+      newSortVisible: false,
       checkedSorts: [],
       checkedLabels: [],
     }
@@ -102,32 +103,34 @@ export default {
     this.getArticle()
   },
   methods: {
-    removeArticleSort:function (sort) {
+    removeCheckedArticleSorts:function (sort) {
       this.checkedSorts.splice(this.checkedSorts.indexOf(sort), 1);
     },
     addCheckedSorts:function () {
       if (JSON.stringify(this.checkedSorts).indexOf(JSON.stringify(this.newSort)) === -1) {
         this.checkedSorts.push(this.newSort)
       }
+      this.newSortVisible = false
       this.newSort = {}
     },
     showAddArticleSortInput() {
-      this.newSortNameVisible = true;
+      this.newSortVisible = true;
       this.$nextTick(_ => {
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
-    removeArticleLabel:function (label) {
+    removeCheckedArticleLabels:function (label) {
       this.checkedLabels.splice(this.checkedLabels.indexOf(label), 1);
     },
     addCheckedLabels:function () {
       if (JSON.stringify(this.checkedLabels).indexOf(JSON.stringify(this.newLabel)) === -1) {
         this.checkedLabels.push(this.newLabel)
       }
+      this.newLabelVisible = false
       this.newLabel = {}
     },
     showAddArticleLabelInput() {
-      this.newLabelNameVisible = true;
+      this.newLabelVisible = true;
       this.$nextTick(_ => {
         this.$refs.saveTagInput.$refs.input.focus();
       });
@@ -138,6 +141,54 @@ export default {
         if (response.data.message === 'success') {
           that.articleForm = response.data.article
           that.updateShow = true
+          that.getArticleLabel(response.data.article.articleId)
+          that.getArticleSort(response.data.article.articleId)
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    getArticleLabel (articleId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("articleId", articleId)
+      this.$axios.post('/articleLabel/getArticleLabel', data).then(response => {
+        if (response.data.message === 'success') {
+          this.checkedLabels = response.data.labelList
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    getArticleSort (articleId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("articleId", articleId)
+      this.$axios.post('/articleSort/getArticleSort', data).then(response => {
+        if (response.data.message === 'success') {
+          this.checkedSorts = response.data.sortList
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
         }
       }).catch(
         function (error) {
@@ -181,7 +232,8 @@ export default {
       const that = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios.post('/article/updateArticle', this.articleForm).then(response => {
+          this.$axios.post('/article/updateArticle', {article:JSON.stringify(this.articleForm),
+            labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)} ).then(response => {
             if (response.data.message === 'success') {
               that.$message({
                 showClose: true,

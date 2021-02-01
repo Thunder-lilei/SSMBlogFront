@@ -8,21 +8,19 @@
         <el-tag
           :key="sort.sortName"
           v-for="sort in checkedSorts"
-          closable
           :disable-transitions="false"
           @close="removeArticleSort(sort.sortId)">
           {{sort.sortName}}
         </el-tag>
         <el-input
           class="input-new-tag"
-          v-if="newSortNameVisible"
+          v-if="newSortVisible"
           v-model="newSort.sortName"
           ref="saveTagInput"
           size="small"
           @blur="addArticleSort"
         >
         </el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showAddArticleSortInput">+ 添加分类</el-button>
       </div>
       <div style="width: 50%;margin: 1% 0 1% 0">
         <h3 style="margin: 0 0 1% 3%;text-align: left;">
@@ -31,21 +29,19 @@
         <el-tag
           :key="label.labelName"
           v-for="label in checkedLabels"
-          closable
           :disable-transitions="false"
           @close="removeArticleLabel(label.labelId)">
           {{label.labelName}}
         </el-tag>
         <el-input
           class="input-new-tag"
-          v-if="newLabelNameVisible"
+          v-if="newLabelVisible"
           v-model="newLabel.labelName"
           ref="saveTagInput"
           size="small"
           @blur="addArticleLabel"
         >
         </el-input>
-        <el-button v-else class="button-new-tag" size="small" @click="showAddArticleLabelInput">+ 添加标签</el-button>
       </div>
     </div>
     <div v-html="blog" class="markdown-body" style="background-color: white">
@@ -93,8 +89,8 @@ export default {
       ifOtherUser: '',
       showComment: false,
       articleId: '',
-      newLabelNameVisible: false,
-      newSortNameVisible: false,
+      newLabelVisible: false,
+      newSortVisible: false,
       checkedSorts: [],
       checkedLabels: [],
     }
@@ -129,7 +125,7 @@ export default {
         })
     },
     showAddArticleLabelInput() {
-      this.newLabelNameVisible = true;
+      this.newLabelVisible = true;
       this.$nextTick(_ => {
         this.$refs.saveTagInput.$refs.input.focus();
       });
@@ -142,7 +138,7 @@ export default {
       this.$axios.post('/articleLabel/addArticleLabel', data).then(response => {
         if (response.data.message === 'success') {
           that.getArticleLabel(that.article.articleId)
-          this.newLabelNameVisible = false;
+          this.newLabelVisible = false;
           this.newLabel.labelName = '';
         } else {
           that.$message({
@@ -185,7 +181,7 @@ export default {
         })
     },
     showAddArticleSortInput() {
-      this.newSortNameVisible = true;
+      this.newSortVisible = true;
       this.$nextTick(_ => {
         this.$refs.saveTagInput.$refs.input.focus();
       });
@@ -198,7 +194,7 @@ export default {
       this.$axios.post('/articleSort/addArticleSort', data).then(response => {
         if (response.data.message === 'success') {
           that.getArticleSort(that.article.articleId)
-          this.newSortNameVisible = false;
+          this.newSortVisible = false;
           this.newSort.sortName = '';
         } else {
           that.$message({
