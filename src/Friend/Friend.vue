@@ -53,10 +53,10 @@
               <el-avatar :src="scope.row.userProfilePhoto"></el-avatar>
             </template>
           </el-table-column>
-          <el-table-column
-            prop="userNickname"
-            label="昵称"
-            width="90">
+          <el-table-column>
+            <template slot-scope="props">
+              <el-link @click="toShowUser(props.row.userId)">{{ props.row.userNickname }}<i class="el-icon-view el-icon--right"></i> </el-link>
+            </template>
           </el-table-column>
           <el-table-column
             align="right"
@@ -216,6 +216,33 @@ export default {
         if (response.data.message === 'success') {
           that.userFriendList = response.data.userList
           that.total = response.data.userList
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    toShowUser:function (userId) {
+      this.setUser(userId)
+      this.$router.push('/ArticleControl');
+    },
+    setUser:function (userId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("userId", userId)
+      this.$axios.post('/user/setShowUser', data).then(response => {
+        if (response.data.message === 'success') {
+
         } else {
           that.$message({
             showClose: true,
