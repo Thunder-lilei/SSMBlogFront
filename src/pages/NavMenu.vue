@@ -19,8 +19,14 @@
           <span slot="title">博文</span>
         </el-menu-item>
       </router-link>
-      <router-link to='/Square'>
+      <router-link to='/SortLabel'>
         <el-menu-item index="4">
+          <i class="el-icon-folder"></i>
+          <span slot="title">分类|标签</span>
+        </el-menu-item>
+      </router-link>
+      <router-link to='/Square'>
+        <el-menu-item index="5">
           <i class="el-icon-orange"></i>
           <span slot="title">广场</span>
         </el-menu-item>

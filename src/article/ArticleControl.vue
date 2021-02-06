@@ -29,14 +29,26 @@
         align="right">
         <template slot="header" slot-scope="scope">
           <el-input
-            v-show="!ifOtherUser"
+            v-show="!ifOtherUser && !ifSortLabelArticle"
             @keyup.enter.native="selectArticleBaseInfoByKey"
             v-model="keyValue"
             size="max"
             placeholder="输入关键字搜索"/>
           <el-input
-            v-show="ifOtherUser"
+            v-show="ifOtherUser && !ifSortLabelArticle"
             @keyup.enter.native="getArticleByUserIdAndKey"
+            v-model="keyValue"
+            size="max"
+            placeholder="输入关键字搜索"/>
+          <el-input
+            v-show="sortId !== ''"
+            @keyup.enter.native="getSortAboutArticleWithKey"
+            v-model="keyValue"
+            size="max"
+            placeholder="输入关键字搜索"/>
+          <el-input
+            v-show="labelId !== ''"
+            @keyup.enter.native="getLabelAboutArticleWithKey"
             v-model="keyValue"
             size="max"
             placeholder="输入关键字搜索"/>
@@ -55,7 +67,7 @@
     </el-table>
     <br/>
     <el-pagination
-      v-show="!ifOtherUser"
+      v-show="!ifOtherUser && !ifSortLabelArticle"
       @current-change="pageNowChange"
       @size-change="pageSizeChange"
       background
@@ -65,9 +77,29 @@
       :total=total>
     </el-pagination>
     <el-pagination
-      v-show="ifOtherUser"
+      v-show="ifOtherUser && !ifSortLabelArticle"
       @current-change="otherPageNowChange"
       @size-change="otherPageSizeChange"
+      background
+      layout="total, sizes, prev, pager, next"
+      :page-sizes="[5, 10, 20, 30]"
+      :page-size=pageSize
+      :total=total>
+    </el-pagination>
+    <el-pagination
+      v-show="sortId !== ''"
+      @current-change="sortAboutArticlePageNowChange"
+      @size-change="sortAboutArticlePageSizeChange"
+      background
+      layout="total, sizes, prev, pager, next"
+      :page-sizes="[5, 10, 20, 30]"
+      :page-size=pageSize
+      :total=total>
+    </el-pagination>
+    <el-pagination
+      v-show="labelId !== ''"
+      @current-change="labelAboutArticlePageNowChange"
+      @size-change="labelAboutArticlePageSizeChange"
       background
       layout="total, sizes, prev, pager, next"
       :page-sizes="[5, 10, 20, 30]"
@@ -92,31 +124,182 @@ export default {
       pageNow: 1,
       pageSize: 10,
       ifOtherUser: false,
+      ifSortLabelArticle: false,
+      sortId: '',
+      labelId: '',
     }
   },
   mounted () {
+    this.getSortId()
+    this.getLabelId()
     this.getUser()
   },
   methods: {
-      getUser:function () {
-        const that = this
-        this.$axios.post('/user/getShowUser').then(response => {
-          if (response.data.message === 'success') {
-            that.user = response.data.user
-            that.getAllArticle(this.pageNow, this.pageSize, that.user.userId)
-            that.ifOtherUser = true
+    getSortAboutArticleWithKey:function () {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("pageNow", this.pageNow)
+      data.append("pageSize", this.pageSize)
+      data.append("sortId", this.sortId)
+      data.append("key", this.keyValue)
+      this.$axios.post('/article/getSortAboutArticleAndKey', data).then(response => {
+        if (response.data.message === 'success') {
+          that.ifSortLabelArticle = true
+          that.articleList = response.data.articlePageInfo.list
+          that.total = response.data.articlePageInfo.total
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    getLabelAboutArticleWithKey:function () {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("pageNow", this.pageNow)
+      data.append("pageSize", this.pageSize)
+      data.append("sortId", this.sortId)
+      data.append("key", this.keyValue)
+      this.$axios.post('/article/getLabelAboutArticleAndKey', data).then(response => {
+        if (response.data.message === 'success') {
+          that.ifSortLabelArticle = true
+          that.articleList = response.data.articlePageInfo.list
+          that.total = response.data.articlePageInfo.total
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    getSortId:function () {
+      const that = this
+      this.$axios.post('/article/getSortId').then(response => {
+        if (response.data.message === 'success') {
+          that.sortId = response.data.sortId
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    getLabelId:function () {
+      const that = this
+      this.$axios.post('/article/getLabelId').then(response => {
+        if (response.data.message === 'success') {
+          that.labelId = response.data.labelId
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    getUser:function () {
+      const that = this
+      this.$axios.post('/user/getShowUser').then(response => {
+        if (response.data.message === 'success') {
+          that.user = response.data.user
+          that.getAllArticle(this.pageNow, this.pageSize, that.user.userId)
+          that.ifOtherUser = true
+        } else {
+          if (that.sortId !== '') {
+            that.getSortAboutArticle(that.sortId)
+          } else if (that.labelId !== '') {
+            that.getLabelAboutArticle(that.labelId)
           } else {
             that.selectAllArticleBaseInfo(that.pageNow, that.pageSize)
           }
-        }).catch(
-          function (error) {
-            that.$message({
-              showClose: true,
-              message: error,
-              type: 'warning'
-            });
-          })
-      },
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    getSortAboutArticle:function (sortId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("pageNow", this.pageNow)
+      data.append("pageSize", this.pageSize)
+      data.append("sortId", sortId)
+      this.$axios.post('/article/getSortAboutArticle', data).then(response => {
+        if (response.data.message === 'success') {
+          that.ifSortLabelArticle = true
+          that.articleList = response.data.articlePageInfo.list
+          that.total = response.data.articlePageInfo.total
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
+    getLabelAboutArticle:function (labelId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("pageNow", this.pageNow)
+      data.append("pageSize", this.pageSize)
+      data.append("labelId", labelId)
+      this.$axios.post('/article/getLabelAboutArticle', data).then(response => {
+        if (response.data.message === 'success') {
+          that.ifSortLabelArticle = true
+          that.articleList = response.data.articlePageInfo.list
+          that.total = response.data.articlePageInfo.total
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     otherPageSizeChange(pageSize) {
       this.pageSize = pageSize
       this.selectAllArticleBaseInfo(this.pageNow, pageSize, this.user.userId)
@@ -124,6 +307,22 @@ export default {
     otherPageNowChange:function(pageNow) {
       this.pageNow = pageNow
       this.selectAllArticleBaseInfo(pageNow, this.pageSize, this.user.userId)
+    },
+    sortAboutArticlePageSizeChange(pageSize) {
+      this.pageSize = pageSize
+      this.getSortAboutArticle(this.pageNow, pageSize, this.sortId)
+    },
+    sortAboutArticlePageNowChange:function(pageNow) {
+      this.pageNow = pageNow
+      this.getSortAboutArticle(pageNow, this.pageSize, this.sortId)
+    },
+    labelAboutArticlePageSizeChange(pageSize) {
+      this.pageSize = pageSize
+      this.getLabelAboutArticle(this.pageNow, pageSize, this.labelId)
+    },
+    labelAboutArticlePageNowChange:function(pageNow) {
+      this.pageNow = pageNow
+      this.getLabelAboutArticle(pageNow, this.pageSize, this.labelId)
     },
     getAllArticle(pageNow, pageSize, userId) {
       const that = this
@@ -134,6 +333,7 @@ export default {
       this.$axios.post('/article/getArticleByUserId', data).then(response => {
         if (response.data.message === 'success') {
           that.articleList = response.data.articlePageInfo.list
+          that.total = response.data.articlePageInfo.total
         } else {
           that.$message({
             showClose: true,

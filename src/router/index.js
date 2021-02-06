@@ -20,6 +20,7 @@ import White from '../pages/White'
 import Comment from '../article/Comment'
 import TelLogin from '../user/TelLogin'
 import EmailLogin from '../user/EmailLogin'
+import SortLabel from '../article/SortLabel'
 
 Vue.use(Router)
 
@@ -75,6 +76,11 @@ export default new Router({
           path: '/Article',
           name: 'Article',
           component: Article,
+        },
+        {
+          path: '/SortLabel',
+          name: 'SortLabel',
+          component: SortLabel,
         },
         {
           path: '/ShowArticle',
