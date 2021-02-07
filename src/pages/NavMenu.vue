@@ -6,19 +6,19 @@
       <el-button @click="labelControl" type="primary" icon="el-icon-menu" circle></el-button>
     </el-radio-group>
     <el-menu v-show="isCollapse" :style="menuStyle" default-active="1-4-1" class="el-menu-vertical-demo" :collapse="true">
-      <router-link to='/UserControl'>
+      <router-link v-show="userId === 1" to='/UserControl'>
         <el-menu-item index="1">
           <i class="el-icon-user"></i>
           <span slot="title">用户管理</span>
         </el-menu-item>
       </router-link>
-      <Friend></Friend>
       <router-link to='/ArticleControl'>
-        <el-menu-item index="3">
+        <el-menu-item index="2">
           <i class="el-icon-tickets"></i>
           <span slot="title">博文</span>
         </el-menu-item>
       </router-link>
+      <Friend></Friend>
       <router-link to='/SortLabel'>
         <el-menu-item index="4">
           <i class="el-icon-folder"></i>
@@ -38,7 +38,6 @@
 
 <script>
 import Header from './Header'
-import bus from '../router/bus'
 import Friend from '../Friend/Friend'
 import Square from '../article/Square'
 export default {
@@ -55,6 +54,7 @@ export default {
       total: 0,
       pageNow: 1,
       pageSize: 10,
+      userId: '',
     };
   },
   mounted () {
@@ -65,6 +65,7 @@ export default {
       const that = this
       this.$axios.post('/user/getLoginUser').then(response => {
         if (response.data.message === 'success') {
+          that.userId = response.data.loginUser.userId
           that.iconStyle = 'margin: 0 0 10% 0'
           that.menuStyle = 'width: 40%;margin: 0 0 0 30%;'
         } else {
