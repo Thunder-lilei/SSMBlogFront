@@ -97,7 +97,6 @@ export default {
   },
   mounted () {
     this.getArticle()
-    this.getUser()
   },
   methods: {
     removeArticleLabel(labelId) {
@@ -348,6 +347,7 @@ export default {
           that.ifHaveLike(response.data.article.articleId)
           that.getArticleLabel(response.data.article.articleId)
           that.getArticleSort(response.data.article.articleId)
+          that.ifMyArticle(response.data.article.articleId)
           bus.$emit('articleId',that.article.articleId)
         } else {
           that.$message({
@@ -392,13 +392,19 @@ export default {
           });
         })
     },
-    getUser:function () {
+    ifMyArticle:function (articleId) {
       const that = this
-      this.$axios.post('/user/getShowUser').then(response => {
+      let data = new URLSearchParams();
+      data.append("articleId", articleId)
+      this.$axios.post('/article/ifMyArticle', data).then(response => {
         if (response.data.message === 'success') {
-          that.ifOtherUser = true
+          that.ifOtherUser = !response.data.result
         } else {
-          that.ifOtherUser = false
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
         }
       }).catch(
         function (error) {

@@ -36,6 +36,38 @@
         </div>
       </div>
     </el-card>
+    <el-card style="margin: 5% 0 0 0" class="box-card">
+      <el-input
+        @keyup.enter.native="searchArticle(pageNow, pageSize)"
+        v-model="keyValue"
+        size="max"
+        placeholder="输入关键字搜索"/>
+      <div style="display: flex" v-for="item in articleList" class="text item">
+        <div style="text-align: left;height: 30px;width: 35%;font-size: 25px">
+          <span style="color: #42b983;font-size: 15px;">博文标题：</span>
+          <el-link @click="toShowArticle(item.articleId, item.userId)">{{ item.articleTitle }}<i class="el-icon-view el-icon--right"></i> </el-link>
+        </div>
+        <div style="text-align: left;width: 35%;font-size: 25px">
+          <span style="color: #42b983;font-size: 15px;">作者：</span>
+          <el-link @click="toShowUser(item.userId)">{{ item.userBaseInfoPojo.userNickname }}<i class="el-icon-view el-icon--right"></i> </el-link>
+        </div>
+        <div style="width: 30%;text-align: left;">
+          <el-button style="width: 27%" type="success" icon="el-icon-tickets" size="mini">{{ item.articleCommentCount }}</el-button>
+          <el-button style="width: 27%" type="success" icon="el-icon-thumb" size="mini">{{ item.articleLikeCount }}</el-button>
+          <el-button style="width: 27%" type="success" icon="el-icon-s-data" size="mini">{{ item.articleViews }}</el-button>
+        </div>
+      </div>
+      <br/>
+      <el-pagination
+        @current-change="pageNowChange"
+        @size-change="pageSizeChange"
+        background
+        layout="total, sizes, prev, pager, next"
+        :page-sizes="[5, 10, 20, 30]"
+        :page-size=pageSize
+        :total=total>
+      </el-pagination>
+    </el-card>
   </div>
 </template>
 
@@ -48,6 +80,11 @@ export default {
       recommendArticleSize: 5,
       recommendUserList: [],
       recommendUserSize: 5,
+      articleList: [],
+      keyValue: '',
+      pageNow: 1,
+      pageSize: 10,
+      total: 0,
     }
   },
   mounted () {
@@ -55,6 +92,40 @@ export default {
     this.getRecommendUser()
   },
   methods: {
+    pageNowChange:function (pageNow) {
+      this.pageNow = pageNow
+      this.searchArticle(pageNow, this.pageSize)
+    },
+    pageSizeChange:function (pageSize) {
+      this.pageSize = pageSize
+      this.searchArticle(this.pageNow, pageSize)
+    },
+    searchArticle:function (pageNow, pageSize) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("pageNow", pageNow)
+      data.append("pageSize", pageSize)
+      data.append("key", this.keyValue)
+      this.$axios.post('/article/searchArticle', data).then(response => {
+        if (response.data.message === 'success') {
+          that.articleList = response.data.articlePageInfo.list
+          that.total = response.data.articlePageInfo.total
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     toShowArticle:function (articleId, userId) {
       this.setArticle(articleId)
       this.setUser(userId)
