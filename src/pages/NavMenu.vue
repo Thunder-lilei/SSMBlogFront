@@ -57,8 +57,28 @@ export default {
     };
   },
   mounted () {
+    this.getLoginUser()
   },
   methods: {
+    getLoginUser:function () {
+      const that = this
+      this.$axios.post('/user/getLoginUser').then(response => {
+        if (response.data.message === 'success') {
+          that.iconStyle = 'margin: 0 0 10% 0'
+          that.menuStyle = 'width: 40%;margin: 0 0 0 30%;'
+        } else {
+          that.iconStyle = 'margin: 0 60% 10% 0'
+          that.menuStyle = 'width: 40%;'
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     labelControl() {
       this.isCollapse = !this.isCollapse
     },
