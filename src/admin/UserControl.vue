@@ -2,7 +2,6 @@
   <div>
     <h1>用户管理</h1>
     <el-table
-      v-show="userId === 1"
       :data="userList"
       style="width: 100%">
       <el-table-column
@@ -37,7 +36,6 @@
     </el-table>
     <br/>
     <el-pagination
-      v-show="userId === 1"
       @current-change="pageNowChange"
       @size-change="pageSizeChange"
       background
@@ -59,12 +57,10 @@ export default {
       total: 0,
       pageNow: 1,
       pageSize: 10,
-      userId: '',
     }
   },
   mounted () {
     this.selectAllUserBaseInfo(1, this.pageSize)
-    this.getLoginUser()
   },
   methods: {
     pageSizeChange(pageSize) {
@@ -167,26 +163,6 @@ export default {
             message: response.data.message,
             type: 'warning'
           });
-        }
-      }).catch(
-        function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
-        })
-    },
-    getLoginUser:function () {
-      const that = this
-      this.$axios.post('/user/getLoginUser').then(response => {
-        if (response.data.message === 'success') {
-          that.userId = response.data.loginUser.userId
-          that.iconStyle = 'margin: 0 0 10% 0'
-          that.menuStyle = 'width: 40%;margin: 0 0 0 30%;'
-        } else {
-          that.iconStyle = 'margin: 0 60% 10% 0'
-          that.menuStyle = 'width: 40%;'
         }
       }).catch(
         function (error) {
