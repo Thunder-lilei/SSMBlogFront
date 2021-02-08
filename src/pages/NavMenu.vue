@@ -6,7 +6,7 @@
       <el-button @click="labelControl" type="primary" icon="el-icon-menu" circle></el-button>
     </el-radio-group>
     <el-menu v-show="isCollapse" :style="menuStyle" default-active="1-4-1" class="el-menu-vertical-demo" :collapse="true">
-      <router-link to='/UserControl'>
+      <router-link v-show="ifAdminResult" to='/UserControl'>
         <el-menu-item index="1">
           <i class="el-icon-user"></i>
           <span slot="title">用户管理</span>
@@ -54,12 +54,29 @@ export default {
       total: 0,
       pageNow: 1,
       pageSize: 10,
+      ifAdminResult: false,
     };
   },
   mounted () {
     this.getLoginUser()
+    this.ifAdmin()
   },
   methods: {
+    ifAdmin:function () {
+      const that = this
+      this.$axios.post('/user/ifAdmin').then(response => {
+        if (response.data.message === 'success') {
+          that.ifAdminResult = response.data.result
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     getLoginUser:function () {
       const that = this
       this.$axios.post('/user/getLoginUser').then(response => {
