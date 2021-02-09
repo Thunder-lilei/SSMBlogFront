@@ -4,9 +4,20 @@
     <div style="font-size: 20px">
       <strong v-show="ifOtherUser">当前博主：</strong><strong style="color: aliceblue">{{ user.userNickname }}</strong>
     </div>
-    <router-link to='/Article'>
-      <el-button v-show="!ifOtherUser" type="success" icon="el-icon-plus" circle></el-button>
-    </router-link>
+    <div style="display: flex">
+      <router-link style="width: 20%" to='/Article'>
+        <el-button v-show="!ifOtherUser" type="success" icon="el-icon-plus" circle></el-button>
+      </router-link>
+      <el-dropdown style="width: 20%;margin: 0 0 0 60%" split-button type="primary">
+        排序方式
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item @click.native="articleListSortTotal" icon="el-icon-s-help">数据量排序</el-dropdown-item>
+          <el-dropdown-item @click.native="articleListSort('articleCommentCount')" icon="el-icon-tickets">评论数排序</el-dropdown-item>
+          <el-dropdown-item @click.native="articleListSort('articleLikeCount')" icon="el-icon-thumb">点赞数排序</el-dropdown-item>
+          <el-dropdown-item @click.native="articleListSort('articleViews')" icon="el-icon-s-data">访问量排序</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
     <br/><br/>
     <el-table
       :data="articleList"
@@ -55,8 +66,8 @@
         </template>
         <template slot-scope="scope">
           <el-button type="success" icon="el-icon-tickets" size="mini">{{ scope.row.articleCommentCount }}</el-button>
-          <el-button type="success" icon="el-icon-tickets" size="mini">{{ scope.row.articleLikeCount }}</el-button>
-          <el-button type="success" icon="el-icon-tickets" size="mini">{{ scope.row.articleViews }}</el-button>
+          <el-button type="success" icon="el-icon-thumb" size="mini">{{ scope.row.articleLikeCount }}</el-button>
+          <el-button type="success" icon="el-icon-s-data" size="mini">{{ scope.row.articleViews }}</el-button>
           <el-button v-show="!ifOtherUser" @click="toUpdateArticle(scope.row.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
           <el-popconfirm
             v-show="!ifOtherUser"
@@ -138,6 +149,20 @@ export default {
     this.getUser()
   },
   methods: {
+    articleListSortTotal:function() {
+      this.articleList = this.articleList.sort(function (a, b) {
+        let x = a['articleCommentCount'] + a['articleLikeCount'] + a['articleViews']
+        let y = b['articleCommentCount'] + b['articleLikeCount'] + b['articleViews']
+        return ((x > y) ? -1 : (x < y) ? 1 : 0)
+      })
+    },
+    articleListSort:function(key) {
+     this.articleList = this.articleList.sort(function (a, b) {
+        let x = a[key]
+        let y = b[key]
+        return ((x > y) ? -1 : (x < y) ? 1 : 0)
+      })
+    },
     getSortAboutArticleWithKey:function () {
       const that = this
       let data = new URLSearchParams();
@@ -540,4 +565,20 @@ export default {
 
 <style scoped>
 
+</style>
+
+<style>
+.el-dropdown-link {
+  cursor: pointer;
+  color: white;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}
+.demonstration {
+  display: block;
+  color: white;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
 </style>
