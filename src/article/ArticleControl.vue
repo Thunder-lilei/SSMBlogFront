@@ -54,6 +54,9 @@
             placeholder="输入关键字搜索"/>
         </template>
         <template slot-scope="scope">
+          <el-button type="success" icon="el-icon-tickets" size="mini">{{ scope.row.articleCommentCount }}</el-button>
+          <el-button type="success" icon="el-icon-tickets" size="mini">{{ scope.row.articleLikeCount }}</el-button>
+          <el-button type="success" icon="el-icon-tickets" size="mini">{{ scope.row.articleViews }}</el-button>
           <el-button v-show="!ifOtherUser" @click="toUpdateArticle(scope.row.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
           <el-popconfirm
             v-show="!ifOtherUser"

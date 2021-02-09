@@ -131,17 +131,5 @@ export default new Router({
       name: 'Header',
       component: Header,
     },
-    {
-      path: '/ShowArticle',
-      name: 'ShowArticle',
-      component: ShowArticle,
-      children: [
-        {
-          path: '/GitTalk',
-          name: 'GitTalk',
-          component: GitTalk,
-        },
-      ]
-    },
   ]
 })
