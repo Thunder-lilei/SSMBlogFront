@@ -99,9 +99,6 @@ export default {
     labelControl() {
       this.isCollapse = !this.isCollapse
     },
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     }

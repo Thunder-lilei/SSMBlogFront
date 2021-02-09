@@ -124,8 +124,6 @@
 </template>
 
 <script>
-import bus from '../router/bus'
-
 export default {
   name: 'ArticleControl',
   components: {Comment},
@@ -565,20 +563,4 @@ export default {
 
 <style scoped>
 
-</style>
-
-<style>
-.el-dropdown-link {
-  cursor: pointer;
-  color: white;
-}
-.el-icon-arrow-down {
-  font-size: 12px;
-}
-.demonstration {
-  display: block;
-  color: white;
-  font-size: 14px;
-  margin-bottom: 20px;
-}
 </style>
