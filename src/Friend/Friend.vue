@@ -53,14 +53,15 @@
               <el-avatar :src="scope.row.userProfilePhoto"></el-avatar>
             </template>
           </el-table-column>
-          <el-table-column>
+          <el-table-column
+            width="120">
             <template slot-scope="props">
               <el-link @click="toShowUser(props.row.userId)">{{ props.row.userNickname }}<i class="el-icon-view el-icon--right"></i> </el-link>
             </template>
           </el-table-column>
           <el-table-column
             align="right"
-            width="150"
+            width="120"
           >
             <template slot="header" slot-scope="scope">
               <el-input
@@ -216,12 +217,6 @@ export default {
         if (response.data.message === 'success') {
           that.userFriendList = response.data.userList
           that.total = response.data.userList
-        } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
         }
       }).catch(
         function (error) {
