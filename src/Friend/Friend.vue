@@ -54,14 +54,14 @@
             </template>
           </el-table-column>
           <el-table-column
-            width="120">
+            width="130">
             <template slot-scope="props">
-              <el-link @click="toShowUser(props.row.userId)">{{ props.row.userNickname }}<i class="el-icon-view el-icon--right"></i> </el-link>
+              <el-link style="margin: 0 2% 0 0" @click="toShowUser(props.row.userId)">{{ props.row.userNickname }}</el-link><el-link @click="changeFriendNickname(props.row.userId)"><i class="el-icon-edit"></i></el-link>
             </template>
           </el-table-column>
           <el-table-column
             align="right"
-            width="120"
+            width="110"
           >
             <template slot="header" slot-scope="scope">
               <el-input
@@ -102,6 +102,49 @@ export default {
     this.getUserFriend()
   },
   methods: {
+    changeFriendNickname:function (userId) {
+      this.$prompt('请输入评论内容', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      }).then(({ value }) => {
+        if (value === null) {value = ''}
+        this.updateUserFriendNickname(userId, value)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消输入'
+        });
+      });
+    },
+    updateUserFriendNickname:function (userFriendId, nickName) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("userFriendId", userFriendId)
+      data.append("nickName", nickName)
+      this.$axios.post('/userFriend/updateFriendNickName', data).then(response => {
+        if (response.data.message === 'success') {
+          that.$message({
+            showClose: true,
+            message: '更新昵称成功！',
+            type: 'success'
+          });
+          that.getUserFriend()
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     deleteFriend:function (userId) {
       const that = this
       let data = new URLSearchParams();
