@@ -5,7 +5,8 @@
         <strong style="color: #42b983;">
           <el-avatar class="headImg" :src="item.userBaseInfo.userProfilePhoto"></el-avatar>
           <el-link class="nameText" @click="toShowUser(item.userBaseInfo.userId)">
-            <strong>{{ item.userBaseInfo.userNickname }}</strong>
+            <strong class="articleUserName" v-if="articleUserId == item.userId">博主</strong>
+            <strong v-else>{{ item.userBaseInfo.userNickname }}</strong>
             <i class="el-icon-view el-icon--right"></i>
           </el-link>
         </strong>
@@ -15,7 +16,8 @@
           <strong style="color: #42b983;" v-if="item.parentCommentUserBaseInfo !== null">
             <el-avatar :src="item.parentCommentUserBaseInfo.userProfilePhoto"></el-avatar>
             <el-link class="nameText" @click="toShowUser(item.parentCommentUserBaseInfo.userId)">
-              <strong>{{ item.parentCommentUserBaseInfo.userNickname}}</strong>
+              <strong class="articleUserName" v-if="articleUserId == item.userId">博主</strong>
+              <strong v-else>{{ item.parentCommentUserBaseInfo.userNickname }}</strong>
               <i class="el-icon-view el-icon--right"></i>
             </el-link>
           </strong>
@@ -54,6 +56,7 @@ export default {
   data(){
     return {
       articleId: '',
+      articleUserId: '',
       commentList: [],
       comment: {
         articleId: '',
@@ -67,6 +70,9 @@ export default {
       this.getComment(articleId)
       this.articleId = articleId
       this.comment.articleId = articleId
+    })
+    bus.$on("articleUserId",(articleUserId)=> {
+      this.articleUserId = articleUserId
     })
   },
   methods: {
@@ -119,6 +125,11 @@ export default {
         if (response.data.message === 'success') {
           that.commentList = response.data.commentList
         } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
         }
       }).catch(
         function (error) {
@@ -162,6 +173,9 @@ export default {
 
 
 <style scoped>
+.articleUserName {
+  color: red;
+}
 .commentBox {
   margin: 0 3% 0 3%;
 }

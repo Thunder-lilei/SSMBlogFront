@@ -350,6 +350,7 @@ export default {
           that.getArticleSort(response.data.article.articleId)
           that.ifMyArticle(response.data.article.articleId)
           bus.$emit('articleId',that.article.articleId)
+          bus.$emit('articleUserId',that.article.userId)
         } else {
           that.$message({
             showClose: true,
