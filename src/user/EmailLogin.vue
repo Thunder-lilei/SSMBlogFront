@@ -87,7 +87,7 @@ export default {
           this.$axios.post('/user/mailLogin', data).then(response => {
             if (response.data.message === 'success') {
               bus.$emit('changeMenu',true)
-              that.$router.push('/');
+              that.$router.push('/White');
               that.$router.go(0)
             } else {
               that.$message({

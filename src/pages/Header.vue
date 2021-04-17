@@ -80,6 +80,8 @@ export default {
         if (response.data.message === 'success') {
           that.logoutShow = false
           that.userInfo = ''
+          that.$router.push('/White');
+          that.$router.go(0)
         } else {
           that.$message({
             showClose: true,
@@ -87,8 +89,6 @@ export default {
             type: 'warning'
           });
         }
-        that.$router.push('/');
-        that.$router.go(0)
       }).catch(
         function (error) {
           that.$message({
