@@ -87,6 +87,8 @@ export default {
           this.$axios.post('/user/mailLogin', data).then(response => {
             if (response.data.message === 'success') {
               bus.$emit('changeMenu',true)
+              that.$router.push('/');
+              that.$router.go(0)
             } else {
               that.$message({
                 showClose: true,
@@ -94,8 +96,6 @@ export default {
                 type: 'warning'
               });
             }
-            that.$router.push('/');
-            that.$router.go(0)
           }).catch(
             function (error) {
               that.$message({
