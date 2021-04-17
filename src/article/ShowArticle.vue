@@ -48,7 +48,7 @@
     </div>
     <br/>
     <el-button v-show="!ifOtherUser" @click="toUpdateArticle(article.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
-    <el-badge style="margin: 0 0 0 3%" :value="article.articleCommentCount" :max="99" class="item">
+    <el-badge style="margin: 0 0 0 3%" :value="articleCommentNum" :max="99" class="item">
       <el-button v-if="!showComment" @click="changeShowComment" size="small">评论 ↓</el-button>
       <el-button v-if="showComment" @click="changeShowComment" size="small">评论 ↑</el-button>
     </el-badge>
@@ -58,7 +58,7 @@
     </el-badge>
     <span style="color: white;margin: 0 0 0 5%;background-color: black;">{{ article.articleDate }}</span>
     <div v-show="showComment">
-      <Comment></Comment>
+      <Comment v-bind:articleCommentNum = "articleCommentNum" v-on:changeArticleCommentNum = "setArticleCommentNum($event)"></Comment>
     </div>
   </div>
 </template>
@@ -77,6 +77,7 @@ export default {
     return {
       blog: '',
       article: {},
+      articleCommentNum: '', //博文评论总数
       newLabel: {
         labelName: '',
       },
@@ -96,10 +97,37 @@ export default {
       checkedLabels: [],
     }
   },
-  mounted () {
+  created () {
     this.getArticle()
   },
   methods: {
+    setArticleCommentNum(data) {
+      this.articleCommentNum = data
+    },
+    getArticleCommentNum(articleId) {
+      const that = this
+      let param = {
+        articleId : articleId,
+      }
+      this.$axios.post('/article/getArticleCommentNum', param).then(response => {
+        if (response.data.message === 'success') {
+          that.articleCommentNum = response.data.articleCommentNum
+        } else {
+          that.$message({
+            showClose: true,
+            message: response.data.message,
+            type: 'warning'
+          });
+        }
+      }).catch(
+        function (error) {
+          that.$message({
+            showClose: true,
+            message: error,
+            type: 'warning'
+          });
+        })
+    },
     removeArticleLabel(labelId) {
       const that = this
       let data = new URLSearchParams();
@@ -349,6 +377,7 @@ export default {
           that.getArticleLabel(response.data.article.articleId)
           that.getArticleSort(response.data.article.articleId)
           that.ifMyArticle(response.data.article.articleId)
+          that.getArticleCommentNum(that.article.articleId)
           bus.$emit('articleId',that.article.articleId)
           bus.$emit('articleUserId',that.article.userId)
         } else {
