@@ -49,11 +49,12 @@
     <br/>
     <el-button v-show="!ifOtherUser" @click="toUpdateArticle(article.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
     <el-badge style="margin: 0 0 0 3%" :value="article.articleCommentCount" :max="99" class="item">
-      <el-button @click="changeShowComment" size="small">评论</el-button>
+      <el-button v-if="!showComment" @click="changeShowComment" size="small">评论 ↓</el-button>
+      <el-button v-if="showComment" @click="changeShowComment" size="small">评论 ↑</el-button>
     </el-badge>
     <el-badge style="margin: 0 0 0 3%" :value="article.articleLikeCount" :max="10" class="item">
-      <el-button v-show="!ifHaveLikeResult" @click="addLike(article.articleId)" size="small" icon="">点赞</el-button>
-      <el-button v-show="ifHaveLikeResult" @click="removeLike(article.articleId)" size="small" icon="">取消点赞</el-button>
+      <img v-if="ifHaveLikeResult" @click="removeLike(article.articleId)" class="likeStyle" src="static/img/点赞.png">
+      <img v-if="!ifHaveLikeResult" @click="addLike(article.articleId)" class="noLikeStyle" src="static/img/未点赞.png">
     </el-badge>
     <span style="color: white;margin: 0 0 0 5%;background-color: black;">{{ article.articleDate }}</span>
     <div v-show="showComment">
@@ -446,5 +447,14 @@ export default {
   width: 90px;
   margin-left: 10px;
   vertical-align: bottom;
+}
+.likeStyle {
+  width: 40px;
+  height: 40px;
+}
+.noLikeStyle {
+  width: 40px;
+  height: 40px;
+  background-color: white;
 }
 </style>

@@ -1,32 +1,35 @@
 <template>
   <div>
     <div v-for="item in commentList" style="background-color: white;text-align: left;margin: 5% 0 0 0;font-size: 20px">
-      <strong style="color: #42b983;margin: 0 0 0 5%">
-        <el-avatar :src="item.userBaseInfo.userProfilePhoto"></el-avatar>
-        <el-link style="color: #42b983;font-size: 20px" @click="toShowUser(item.userBaseInfo.userId)">
-          <strong>{{ item.userBaseInfo.userNickname }}</strong>
-          <i class="el-icon-view el-icon--right"></i>
-        </el-link>
-      </strong>
-        <strong v-if="item.parentCommentUserBaseInfo !== null">
-          {{ ' 回复：'}}
-        </strong>
-        <strong style="color: #42b983;" v-if="item.parentCommentUserBaseInfo !== null">
-          <el-avatar :src="item.parentCommentUserBaseInfo.userProfilePhoto"></el-avatar>
-          <el-link style="color: #42b983;font-size: 20px" @click="toShowUser(item.parentCommentUserBaseInfo.userId)">
-            <strong>{{ item.parentCommentUserBaseInfo.userNickname}}</strong>
+      <div class="commentBox">
+        <strong style="color: #42b983;">
+          <el-avatar class="headImg" :src="item.userBaseInfo.userProfilePhoto"></el-avatar>
+          <el-link class="nameText" @click="toShowUser(item.userBaseInfo.userId)">
+            <strong>{{ item.userBaseInfo.userNickname }}</strong>
             <i class="el-icon-view el-icon--right"></i>
           </el-link>
         </strong>
-      <Strong>
-        ：
-      </Strong>
-        <el-button type="text" @click="open(item.commentId)">
-        <strong style="font-size: 20px">
-          {{ item.commentContent }}
-        </strong>
-        </el-button>
-        <strong>{{ item.commentDate }}</strong>
+          <strong v-if="item.parentCommentUserBaseInfo !== null">
+            {{ ' 回复：'}}
+          </strong>
+          <strong style="color: #42b983;" v-if="item.parentCommentUserBaseInfo !== null">
+            <el-avatar :src="item.parentCommentUserBaseInfo.userProfilePhoto"></el-avatar>
+            <el-link class="nameText" @click="toShowUser(item.parentCommentUserBaseInfo.userId)">
+              <strong>{{ item.parentCommentUserBaseInfo.userNickname}}</strong>
+              <i class="el-icon-view el-icon--right"></i>
+            </el-link>
+          </strong>
+          <Strong>
+            ：
+          </Strong>
+          <el-button type="text" @click="open(item.commentId)">
+          <strong class="commentText">
+            {{ item.commentContent }}
+          </strong>
+          </el-button>
+          <br/>
+          <strong>{{ item.commentDate }}</strong>
+        </div>
       </div>
     <br/>
     <div>
@@ -159,7 +162,19 @@ export default {
 
 
 <style scoped>
-
+.commentBox {
+  margin: 0 3% 0 3%;
+}
+.commentBox .commentText {
+  font-size: 20px;
+}
+.commentBox .headImg {
+  margin-top: 10px;
+}
+.commentBox .nameText {
+  color: #42b983;
+  font-size: 20px;
+  margin: 0 0 30px 0;
+}
 </style>
-
 
