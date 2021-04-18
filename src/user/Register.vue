@@ -32,7 +32,6 @@
             <el-button @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
         </el-form>
-        <Footer></Footer>
   </div>
 </template>
 
@@ -42,7 +41,7 @@ import NavMenu from '../pages/NavMenu'
 import Header from '../pages/Header'
 export default {
   name: 'Register',
-  components: {Footer, NavMenu, Header},
+  components: {NavMenu, Header},
   data() {
     return {
       userForm: {

@@ -38,7 +38,6 @@
             <el-button @click="resetForm('ruleForm')">重置</el-button>
           </el-form-item>
         </el-form>
-        <Footer></Footer>
   </div>
 </template>
 
@@ -49,7 +48,7 @@ import NavMenu from '../pages/NavMenu'
 import bus from '../router/bus'
 export default {
   name: 'UpdateUser',
-  components: {Header, Footer ,NavMenu},
+  components: {Header ,NavMenu},
   data() {
     return {
       loginUser: {},
