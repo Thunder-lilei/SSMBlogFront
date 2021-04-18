@@ -22,7 +22,7 @@
       <router-link to='/SortLabel'>
         <el-menu-item index="4">
           <i class="el-icon-folder"></i>
-          <span slot="title">分类|标签</span>
+          <span slot="title">归档</span>
         </el-menu-item>
       </router-link>
       <router-link to='/Square'>

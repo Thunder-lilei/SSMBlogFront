@@ -68,11 +68,12 @@ import 'github-markdown-css';
 import GitTalk from '../components/gittalk/GitTalk'
 import bus from '../router/bus'
 import Comment from './Comment'
+import SortLabel from './SortLabel'
 
 export default {
 
   name: 'ShowArticle',
-  components: {Comment, GitTalk},
+  components: {SortLabel, Comment, GitTalk},
   data() {
     return {
       blog: '',
