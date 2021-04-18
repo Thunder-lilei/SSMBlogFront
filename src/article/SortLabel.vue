@@ -11,7 +11,9 @@
           :disable-transitions="false"
           style="margin: 2% 2% 2% 2% "
         >
-        <el-link type="primary" :underline="false" @click="showSortAboutArticle(sort.sortId)">{{ sort.sortName }}</el-link>
+        <el-badge style="margin: 0 0 0 3%" :value="sort.num" :max="99" class="item">
+          <el-link type="primary" :underline="false" @click="showSortAboutArticle(sort.sortId)">{{ sort.sortName }}</el-link>
+        </el-badge>
         </el-tag>
       </div>
     </el-card>
@@ -26,7 +28,8 @@
           :disable-transitions="false"
           style="margin: 2% 2% 2% 2% "
         >
-        <el-link type="primary" :underline="false" @click="showLabelAboutArticle(label.labelId)">{{label.labelName}}</el-link>
+        <el-badge style="margin: 0 0 0 3%" :value="label.num" :max="99" class="item">
+          <el-link type="primary" :underline="false" @click="showLabelAboutArticle(label.labelId)">{{label.labelName}}</el-link></el-badge>
         </el-tag>
       </div>
     </el-card>
@@ -46,7 +49,7 @@ export default {
       newSortVisible: false,
     }
   },
-  mounted () {
+  created () {
     this.getMyLabel()
     this.getMySort()
   },
@@ -101,7 +104,7 @@ export default {
       const that = this
       this.$axios.post('/label/getMyLabel').then(response => {
         if (response.data.message === 'success') {
-          this.labelList = response.data.labelList
+          that.labelList = response.data.labelList
         } else {
           that.$message({
             showClose: true,
@@ -122,7 +125,7 @@ export default {
       const that = this
       this.$axios.post('/sort/getMySort').then(response => {
         if (response.data.message === 'success') {
-          this.sortList = response.data.sortList
+          that.sortList = response.data.sortList
         } else {
           that.$message({
             showClose: true,
