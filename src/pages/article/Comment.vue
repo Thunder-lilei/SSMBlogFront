@@ -167,6 +167,7 @@ export default {
               message: "成功发表评论！",
               type: 'success'
             });
+            that.comment.commentContent = ''
             that.getComment(this.articleId)
           } else {
             that.$message({
