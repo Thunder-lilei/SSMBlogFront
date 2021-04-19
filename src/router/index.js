@@ -21,6 +21,7 @@ import Comment from '../pages/article/Comment'
 import TelLogin from '../pages/user/TelLogin'
 import EmailLogin from '../pages/user/EmailLogin'
 import SortLabel from '../pages/article/SortLabel'
+import DraftControl from '../pages/Draft/DraftControl'
 
 Vue.use(Router)
 
@@ -106,6 +107,11 @@ export default new Router({
           path: '/Comment',
           name: 'Comment',
           component: Comment,
+        },
+        {
+          path: '/DraftControl',
+          name: 'DraftControl',
+          component: DraftControl,
         },
       ]
     },

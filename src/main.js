@@ -9,6 +9,7 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false
 Vue.prototype.$axios = Axios
 Axios.defaults.baseURL = '/api'
+Vue.prototype.$bus = new Vue()
 
 /* eslint-disable no-new */
 new Vue({

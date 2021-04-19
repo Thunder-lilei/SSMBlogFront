@@ -18,15 +18,21 @@
           <span slot="title">博文</span>
         </el-menu-item>
       </router-link>
+      <router-link to='/DraftControl'>
+        <el-menu-item index="3">
+          <i class="el-icon-document"></i>
+          <span slot="title">草稿</span>
+        </el-menu-item>
+      </router-link>
       <Friend></Friend>
       <router-link to='/SortLabel'>
-        <el-menu-item index="4">
+        <el-menu-item index="5">
           <i class="el-icon-folder"></i>
           <span slot="title">归档</span>
         </el-menu-item>
       </router-link>
       <router-link to='/Square'>
-        <el-menu-item index="5">
+        <el-menu-item index="6">
           <i class="el-icon-orange"></i>
           <span slot="title">广场</span>
         </el-menu-item>

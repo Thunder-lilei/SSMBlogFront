@@ -1,7 +1,9 @@
 <template>
   <div>
-    <h1 v-show="updateShow">编辑博文</h1>
-    <h1 v-show="!updateShow">创建博文</h1>
+    <h1 v-if="isEditArticle">编辑博文</h1>
+    <h1 v-else-if="isCreateArticle">创建博文</h1>
+    <h1 v-else-if="isEditDraft">编辑草稿</h1>
+    <h1 v-else>未知的情况</h1>
     <el-form :model="articleForm" :rules="rules" ref="ruleForm" label-width="" class="demo-ruleForm">
       <el-form-item prop="articleTitle">
         <el-input v-model="articleForm.articleTitle" placeholder="博文标题"></el-input>
@@ -58,8 +60,11 @@
         <Markdown @on-save="handleOnSave" v-model="articleForm.articleContent"/>
       </el-form-item>
       <el-form-item>
-        <el-button v-show="updateShow" type="primary" @click="updateArticle('ruleForm')">修改</el-button>
-        <el-button v-show="!updateShow" type="primary" @click="addArticle('ruleForm')">提交</el-button>
+        <el-button v-if="isEditArticle" type="primary" @click="updateArticle('ruleForm')">修改</el-button>
+        <el-button v-if="!isEditDraft" type="primary" @click="addDraft('ruleForm')">保存</el-button>
+        <el-button v-if="isEditDraft" type="primary" @click="editDraft('ruleForm')">保存</el-button>
+        <el-button v-if="isEditDraft" type="success" @click="uploadDraft()">发布</el-button>
+        <el-button v-if="isCreateArticle" type="primary" @click="addArticle('ruleForm')">提交</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -78,6 +83,7 @@ export default {
     return {
       articleForm: {
         articleId: '',
+        draftId: '',
         articleContent: '',
         articleTitle: '',
       },
@@ -86,7 +92,11 @@ export default {
           { required: true, message: '请填写博文标题', trigger: 'blur' },
         ],
       },
-      updateShow: false,
+      updateShow: false, //当前博文是否是需要更新的博文
+      isDraft: false, // 当前博文是否是草稿
+      isCreateArticle: true, //创建博文
+      isEditArticle: false, //编辑博文
+      isEditDraft: false, //编辑草稿
       newLabel: {
         labelName: '',
       },
@@ -97,12 +107,47 @@ export default {
       newSortVisible: false,
       checkedSorts: [],
       checkedLabels: [],
+      draftId: '', //草稿ID
     }
   },
-  mounted () {
+  created () {
     this.getArticle()
+    this.getShowDraft()
   },
   methods: {
+    uploadDraft() {
+      let that = this
+      let param = {
+        draftId : this.articleForm.draftId,
+      }
+      this.$axios.post('/draft/uploadDraft', param).then(response => {
+        if (response.data.message === 'success') {
+          that.$message.success("发布成功！")
+          this.$router.push('/DraftControl');
+        } else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
+    getShowDraft() {
+      let that = this
+      this.$axios.post('/draft/getShowDraft').then(response => {
+        if (response.data.message === 'success') {
+          that.isEditArticle = false
+          that.isCreateArticle = false
+          that.isEditDraft = true
+          that.articleForm = response.data.showDraft
+          that.getDraftLabel(that.articleForm.draftId)
+          that.getDraftSort(that.articleForm.draftId)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
     removeCheckedArticleSorts:function (sort) {
       this.checkedSorts.splice(this.checkedSorts.indexOf(sort), 1);
     },
@@ -110,9 +155,6 @@ export default {
       if (this.checkedSorts.findIndex(item => item.sortName === this.newSort.sortName) === -1) {
         this.checkedSorts.push(this.newSort)
       }
-      // if (JSON.stringify(this.checkedSorts).indexOf(JSON.stringify(this.newSort)) === -1) {
-      //   this.checkedSorts.push(this.newSort)
-      // }
       this.newSortVisible = false
       this.newSort = {}
     },
@@ -129,9 +171,6 @@ export default {
       if (this.checkedLabels.findIndex(item => item.labelName === this.newLabel.labelName) === -1) {
         this.checkedLabels.push(this.newLabel)
       }
-      // if (JSON.stringify(this.checkedLabels).indexOf(JSON.stringify(this.newLabel)) === -1) {
-      //   this.checkedLabels.push(this.newLabel)
-      // }
       this.newLabelVisible = false
       this.newLabel = {}
     },
@@ -146,17 +185,45 @@ export default {
       this.$axios.post('/article/getShowArticle').then(response => {
         if (response.data.message === 'success') {
           that.articleForm = response.data.article
-          that.updateShow = true
+          that.isEditArticle = true
+          that.isCreateArticle = false
+          that.isEditDraft = false
           that.getArticleLabel(response.data.article.articleId)
           that.getArticleSort(response.data.article.articleId)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
+        })
+    },
+    getDraftLabel (draftId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("draftId", draftId)
+      this.$axios.post('/articleLabel/getDraftLabel', data).then(response => {
+        if (response.data.message === 'success') {
+          that.checkedLabels = response.data.labelList
+        } else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
+    getDraftSort (draftId) {
+      const that = this
+      let data = new URLSearchParams();
+      data.append("draftId", draftId)
+      this.$axios.post('/articleSort/getDraftSort', data).then(response => {
+        if (response.data.message === 'success') {
+          that.checkedSorts = response.data.sortList
+        } else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
         })
     },
     getArticleLabel (articleId) {
@@ -165,21 +232,13 @@ export default {
       data.append("articleId", articleId)
       this.$axios.post('/articleLabel/getArticleLabel', data).then(response => {
         if (response.data.message === 'success') {
-          this.checkedLabels = response.data.labelList
+          that.checkedLabels = response.data.labelList
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getArticleSort (articleId) {
@@ -188,22 +247,74 @@ export default {
       data.append("articleId", articleId)
       this.$axios.post('/articleSort/getArticleSort', data).then(response => {
         if (response.data.message === 'success') {
-          this.checkedSorts = response.data.sortList
+          that.checkedSorts = response.data.sortList
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
+    },
+    addDraft:function (formName) {
+      const that = this
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$axios.post('/draft/addDraft', {draft:JSON.stringify(this.articleForm),
+            labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)}).then(response => {
+            if (response.data.message === 'success') {
+              that.$message({
+                showClose: true,
+                message: '草稿保存成功！',
+                type: 'success'
+              });
+            } else {
+              that.$message({
+                showClose: true,
+                message: response.data.message,
+                type: 'warning'
+              });
+            }
+          }).catch(
+            function (error) {
+              that.$message({
+                showClose: true,
+                message: error,
+                type: 'warning'
+              });
+            })
+        }
+      })
+    },
+    editDraft:function (formName) {
+      const that = this
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.$axios.post('/draft/updateDraft', {draft:JSON.stringify(this.articleForm),
+            labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)}).then(response => {
+            if (response.data.message === 'success') {
+              that.$message({
+                showClose: true,
+                message: '草稿更新成功！',
+                type: 'success'
+              });
+            } else {
+              that.$message({
+                showClose: true,
+                message: response.data.message,
+                type: 'warning'
+              });
+            }
+          }).catch(
+            function (error) {
+              that.$message({
+                showClose: true,
+                message: error,
+                type: 'warning'
+              });
+            })
+        }
+      })
     },
     addArticle:function (formName) {
       const that = this
