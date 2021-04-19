@@ -60,7 +60,7 @@
 
 
 <script>
-import bus from '../router/bus'
+import bus from '../../router/bus'
 
 export default {
   name:'Comment',

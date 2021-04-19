@@ -65,8 +65,8 @@
 <script>
 import marked from 'marked'
 import 'github-markdown-css';
-import GitTalk from '../components/gittalk/GitTalk'
-import bus from '../router/bus'
+import GitTalk from '../../components/gittalk/GitTalk'
+import bus from '../../router/bus'
 import Comment from './Comment'
 import SortLabel from './SortLabel'
 

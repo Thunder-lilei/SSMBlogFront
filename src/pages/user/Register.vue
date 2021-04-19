@@ -36,9 +36,9 @@
 </template>
 
 <script>
-import Footer from '../pages/Footer'
-import NavMenu from '../pages/NavMenu'
-import Header from '../pages/Header'
+import Footer from '../Footer'
+import NavMenu from '../NavMenu'
+import Header from '../Header'
 export default {
   name: 'Register',
   components: {NavMenu, Header},

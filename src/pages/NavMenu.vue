@@ -38,8 +38,8 @@
 
 <script>
 import Header from './Header'
-import Friend from '../Friend/Friend'
-import Square from '../article/Square'
+import Friend from './Friend/Friend'
+import Square from './article/Square'
 export default {
   name: 'NavMenu',
   components: {Square, Friend, Header},

@@ -42,10 +42,10 @@
 </template>
 
 <script>
-import Footer from '../pages/Footer'
-import Header from '../pages/Header'
-import NavMenu from '../pages/NavMenu'
-import bus from '../router/bus'
+import Footer from '../Footer'
+import Header from '../Header'
+import NavMenu from '../NavMenu'
+import bus from '../../router/bus'
 export default {
   name: 'UpdateUser',
   components: {Header ,NavMenu},

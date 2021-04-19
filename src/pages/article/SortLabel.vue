@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import bus from '../router/bus'
+import bus from '../../router/bus'
 
 export default {
   name: 'SortLabel',

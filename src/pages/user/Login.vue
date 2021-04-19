@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import Footer from '../pages/Footer'
-import bus from '../router/bus'
+import Footer from '../Footer'
+import bus from '../../router/bus'
 import TelLogin from './TelLogin'
 import EmailLogin from './EmailLogin'
 export default {
