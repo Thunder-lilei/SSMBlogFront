@@ -5,7 +5,10 @@
       <el-form-item label="邮箱" prop="mail">
         <el-input v-model="ruleForm.mail"></el-input>
       </el-form-item>
-      <el-form-item label="验证码" prop="code">
+      <el-form-item v-if="!isCodeLogin" label="密码" prop="password">
+        <el-input v-model="ruleForm.password"></el-input>
+      </el-form-item>
+      <el-form-item v-if="isCodeLogin" label="验证码" prop="code">
         <el-input v-model="ruleForm.code">
           <template slot="append">
             <el-button @click="getCode" style="color: #005cc5" type="info" round>获取验证码</el-button>
@@ -14,6 +17,8 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+        <el-button v-if="!isCodeLogin" type="primary" @click="isCodeLogin = true">验证码登录</el-button>
+        <el-button v-if="isCodeLogin" type="primary" @click="isCodeLogin = false">密码登录</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -30,15 +35,14 @@ export default {
       ruleForm: {
         mail: '',
         code: '',
+        password: '',
       },
       rules: {
         mail: [
           { required: true, message: '请输入邮箱', trigger: 'blur' },
-        ],
-        code: [
-          { required: true, message: '请输入验证码', trigger: 'blur' },
         ]
       },
+      isCodeLogin: false, //是否是验证码登录
     }
   },
   methods: {
@@ -79,37 +83,27 @@ export default {
     },
     submitForm(formName) {
       const that = this
-      let data = new URLSearchParams();
-      data.append("mail", this.ruleForm.mail)
-      data.append("code", this.ruleForm.code)
+      let param = {
+        password: this.ruleForm.password,
+        mail: this.ruleForm.mail,
+        code: this.ruleForm.code,
+      }
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$axios.post('/user/mailLogin', data).then(response => {
+          this.$axios.post('/user/mailLogin', param).then(response => {
             if (response.data.message === 'success') {
               bus.$emit('changeMenu',true)
               that.$router.push('/White');
               that.$router.go(0)
             } else {
-              that.$message({
-                showClose: true,
-                message: response.data.message,
-                type: 'warning'
-              });
+              that.$message.warning(response.data.message)
             }
           }).catch(
             function (error) {
-              that.$message({
-                showClose: true,
-                message: '请求失败！',
-                type: 'warning'
-              });
+              that.$message.error(error)
             })
         } else {
-          this.$message({
-            showClose: true,
-            message: '请检查格式！',
-            type: 'warning'
-          });
+          this.$message.warning("请检查格式！")
           return false;
         }
       });
