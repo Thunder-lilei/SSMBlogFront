@@ -2,6 +2,7 @@
   <div>
     <h1>草稿</h1>
     <el-table
+      v-loading="loadingData"
       :data="draftList"
       style="width: 100%">
       <el-table-column
@@ -37,6 +38,7 @@ export default {
   name: 'DraftControl',
   data() {
     return {
+      loadingData: true, //数据加载判断
       draftList: [], //草稿列表
     }
   },
@@ -94,14 +96,13 @@ export default {
           that.$message.error(error)
         })
     },
-    toShowDraft() {
-
-    },
     getDraftList() {
       const that = this
+      that.loadingData = true
       this.$axios.post('/draft/getDraftList').then(response => {
         if (response.data.message === 'success') {
           that.draftList = response.data.draftList
+          that.loadingData = false
         } else {
           that.$message.warning(response.data.message)
         }

@@ -2,6 +2,7 @@
   <div>
     <h1>用户管理</h1>
     <el-table
+      v-loading="loadingData"
       :data="userList"
       style="width: 100%">
       <el-table-column
@@ -52,6 +53,7 @@ export default {
   name: 'UserControl',
   data() {
     return {
+      loadingData: true, //数据加载判定
       userList: [],
       keyValue: '',
       total: 0,
@@ -79,19 +81,11 @@ export default {
         if (response.data.message === 'success') {
           this.$router.push('/UpdateUser');
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     deleteUser:function (userId) {
@@ -100,30 +94,19 @@ export default {
       data.append("userId", userId)
       this.$axios.post('/user/deleteUser', data).then(response => {
         if (response.data.message === 'success') {
-          that.$message({
-            showClose: true,
-            message: "成功移除",
-            type: 'success'
-          });
+          that.$message.success("移除成功！")
           that.selectAllUserBaseInfo(that.pageNow, that.pageSize)
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     selectAllUserBaseInfo:function (pageNow, pageSize) {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", pageNow)
       data.append("pageSize", pageSize)
@@ -131,24 +114,18 @@ export default {
         if (response.data.message === 'success') {
           that.userList = response.data.allUserPageInfo.list
           that.total = response.data.allUserPageInfo.total
+          that.loadingData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     selectUserBaseInfoByKey:function () {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
@@ -157,20 +134,13 @@ export default {
         if (response.data.message === 'success') {
           that.userList = response.data.userPageInfo.list
           that.total = response.data.userPageInfo.total
+          that.loadingData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
   },

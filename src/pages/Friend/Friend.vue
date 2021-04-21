@@ -14,6 +14,7 @@
               style="width: 50%;margin: 0 0 0 25%"
               placeholder="输入关键字搜索"/>
             <el-table
+              v-loading="loadingAddData"
               :data="addUserList"
               style="width: 100%"
               max-height="300"
@@ -42,6 +43,7 @@
           </el-collapse-item>
         </el-collapse>
         <el-table
+          v-loading="loadingData"
           :data="userFriendList"
           style="width: 100%"
           max-height="500"
@@ -90,6 +92,8 @@ export default {
   name: 'Friend',
   data() {
     return {
+      loadingAddData: false,//好友数据加载判断
+      loadingData: true, //添加好友数据加载判断
       userFriendList: [],
       addUserList: [],
       keyValue: '',
@@ -123,26 +127,14 @@ export default {
       data.append("nickName", nickName)
       this.$axios.post('/userFriend/updateFriendNickName', data).then(response => {
         if (response.data.message === 'success') {
-          that.$message({
-            showClose: true,
-            message: '更新昵称成功！',
-            type: 'success'
-          });
+          that.$message.success("添加备注成功！")
           that.getUserFriend()
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     deleteFriend:function (userId) {
@@ -151,26 +143,14 @@ export default {
       data.append("userFriendId", userId)
       this.$axios.post('/userFriend/deleteFriend', data).then(response => {
         if (response.data.message === 'success') {
-          that.$message({
-            showClose: true,
-            message: '移除成功！',
-            type: 'success'
-          });
+          that.$message.success("成功移除！")
           that.getUserFriend()
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     addFriend:function (userId) {
@@ -179,30 +159,19 @@ export default {
       data.append("userId", userId)
       this.$axios.post('/userFriend/addFriend', data).then(response => {
         if (response.data.message === 'success') {
-          that.$message({
-            showClose: true,
-            message: '添加成功！',
-            type: 'success'
-          });
+          that.$message.success("成功添加！")
           that.getUserFriend()
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     selectUserBaseInfoByKey:function () {
       const that = this
+      that.loadingAddData = true
       let data = new URLSearchParams();
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
@@ -210,24 +179,18 @@ export default {
       this.$axios.post('/user/selectUserBaseInfoByKeyWithoutMineList', data).then(response => {
         if (response.data.message === 'success') {
           that.addUserList = response.data.userList
+          that.loadingAddData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     selectUserFriendBaseInfoByKey:function () {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
@@ -235,24 +198,18 @@ export default {
       this.$axios.post('/userFriend/getMyFriendByKeyList', data).then(response => {
         if (response.data.message === 'success') {
           that.userFriendList = response.data.userList
+          that.loadingData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getUserFriend:function () {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
@@ -260,14 +217,11 @@ export default {
         if (response.data.message === 'success') {
           that.userFriendList = response.data.userList
           that.total = response.data.userList
+          that.loadingData = false
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     toShowUser:function (userId) {
@@ -279,22 +233,12 @@ export default {
       let data = new URLSearchParams();
       data.append("userId", userId)
       this.$axios.post('/user/setShowUser', data).then(response => {
-        if (response.data.message === 'success') {
-
-        } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+        if (response.data.message !== 'success') {
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
   },

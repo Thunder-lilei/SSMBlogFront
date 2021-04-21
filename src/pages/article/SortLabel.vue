@@ -84,7 +84,6 @@ export default {
   methods: {
     loadArticleList() {
       this.pageSize += this.pageSizeAdd
-      console.log(this.pageSize)
       if (this.pageSize >= (this.articleListCount + this.pageSizeAdd)) {
         this.$message.warning("到底啦！")
       } else {
@@ -117,19 +116,11 @@ export default {
         if (response.data.message === 'success') {
           this.$router.push('/ArticleControl');
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     showLabelAboutArticle:function (labelId) {
@@ -140,19 +131,11 @@ export default {
         if (response.data.message === 'success') {
           this.$router.push('/ArticleControl');
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getMyLabel:function () {
@@ -161,19 +144,11 @@ export default {
         if (response.data.message === 'success') {
           that.labelList = response.data.labelList
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getMySort:function () {
@@ -182,19 +157,11 @@ export default {
         if (response.data.message === 'success') {
           that.sortList = response.data.sortList
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
   },

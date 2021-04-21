@@ -4,7 +4,7 @@
     <div style="font-size: 20px">
       <strong v-show="ifOtherUser">当前博主：</strong><strong style="color: aliceblue">{{ user.userNickname }}</strong>
     </div>
-    <div style="display: flex">
+    <div style="display: flex;">
       <router-link style="width: 20%" to='/Article'>
         <el-button v-show="!ifOtherUser" type="success" icon="el-icon-plus" circle></el-button>
       </router-link>
@@ -20,6 +20,7 @@
     </div>
     <br/><br/>
     <el-table
+      v-loading = "loadingData"
       :data="articleList"
       style="width: 100%">
       <el-table-column
@@ -124,11 +125,13 @@
 </template>
 
 <script>
+import Loading from '../Loading'
 export default {
   name: 'ArticleControl',
-  components: {Comment},
+  components: {Loading, Comment},
   data() {
     return {
+      loadingData: true, //数据加载判定
       user: {},
       articleList: [],
       keyValue: '',
@@ -163,6 +166,7 @@ export default {
     },
     getSortAboutArticleWithKey:function () {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
@@ -173,24 +177,18 @@ export default {
           that.ifSortLabelArticle = true
           that.articleList = response.data.articlePageInfo.list
           that.total = response.data.articlePageInfo.total
+          that.loadingData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getLabelAboutArticleWithKey:function () {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
@@ -201,20 +199,13 @@ export default {
           that.ifSortLabelArticle = true
           that.articleList = response.data.articlePageInfo.list
           that.total = response.data.articlePageInfo.total
+          that.loadingData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getSortId:function () {
@@ -225,11 +216,7 @@ export default {
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getLabelId:function () {
@@ -240,11 +227,7 @@ export default {
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getUser:function () {
@@ -265,15 +248,12 @@ export default {
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getSortAboutArticle:function (sortId) {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
@@ -283,24 +263,18 @@ export default {
           that.ifSortLabelArticle = true
           that.articleList = response.data.articlePageInfo.list
           that.total = response.data.articlePageInfo.total
+          that.loadingData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getLabelAboutArticle:function (labelId) {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
@@ -310,20 +284,13 @@ export default {
           that.ifSortLabelArticle = true
           that.articleList = response.data.articlePageInfo.list
           that.total = response.data.articlePageInfo.total
+          that.loadingData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     otherPageSizeChange(pageSize) {
@@ -352,6 +319,7 @@ export default {
     },
     getAllArticle(pageNow, pageSize, userId) {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", this.pageNow)
       data.append("pageSize", this.pageSize)
@@ -360,20 +328,13 @@ export default {
         if (response.data.message === 'success') {
           that.articleList = response.data.articlePageInfo.list
           that.total = response.data.articlePageInfo.total
+          that.loadingData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     pageSizeChange(pageSize) {
@@ -386,6 +347,7 @@ export default {
     },
     selectAllArticleBaseInfo:function (pageNow, pageSize) {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", pageNow)
       data.append("pageSize", pageSize)
@@ -393,20 +355,13 @@ export default {
         if (response.data.message === 'success') {
           that.articleList = response.data.articlePageInfo.list
           that.total = response.data.articlePageInfo.total
+          that.loadingData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     deleteArticle:function (articleId) {
@@ -422,19 +377,11 @@ export default {
           });
           that.selectAllArticleBaseInfo(that.pageNow, that.pageSize)
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     toUpdateArticle:function (articleId) {
@@ -453,26 +400,17 @@ export default {
       let data = new URLSearchParams();
       data.append("articleId", articleId)
       this.$axios.post('/article/setShowArticle', data).then(response => {
-        if (response.data.message === 'success') {
-
-        } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+        if (response.data.message !== 'success') {
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getArticleByUserIdAndKey:function () {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", "1")
       data.append("pageSize", "10")
@@ -482,24 +420,18 @@ export default {
         if (response.data.message === 'success') {
           that.articleList = response.data.articlePageInfo.list
           that.total = response.data.articlePageInfo.total
+          that.loadingData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     selectArticleBaseInfoByKey:function () {
       const that = this
+      that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", "1")
       data.append("pageSize", "10")
@@ -508,20 +440,13 @@ export default {
         if (response.data.message === 'success') {
           that.articleList = response.data.articlePageInfo.list
           that.total = response.data.articlePageInfo.total
+          that.loadingData = false
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     setUser:function (userId) {
@@ -529,22 +454,13 @@ export default {
       let data = new URLSearchParams();
       data.append("userId", userId)
       this.$axios.post('/user/setShowUser', data).then(response => {
-        if (response.data.message === 'success') {
-
-        } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+        if (response.data.message !== 'success') {
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
+
         })
     },
   },

@@ -22,6 +22,7 @@ import TelLogin from '../pages/user/TelLogin'
 import EmailLogin from '../pages/user/EmailLogin'
 import SortLabel from '../pages/article/SortLabel'
 import DraftControl from '../pages/Draft/DraftControl'
+import Loading from '../pages/Loading'
 
 Vue.use(Router)
 
@@ -136,6 +137,11 @@ export default new Router({
       path: '/Header',
       name: 'Header',
       component: Header,
+    },
+    {
+      path: '/Loading',
+      name: 'Loading',
+      component: Loading,
     },
   ]
 })
