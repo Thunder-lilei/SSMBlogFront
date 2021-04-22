@@ -1,30 +1,34 @@
 <template>
-  <div>
-        <el-alert v-show="userForm.userPassword !== userForm.userPasswordConfirm" title="两次密码不一致" type="error"></el-alert>
+  <div class="bodyBox">
 
         <el-form :model="userForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="头像链接" prop="userProfilePhoto">
+          <el-form-item class="inputText" label="头像链接" prop="userProfilePhoto">
             <el-input type="url" v-model="userForm.userProfilePhoto"></el-input>
           </el-form-item>
-          <el-form-item label="用户名" prop="userName">
+          <el-form-item class="inputText" label="用户名" prop="userName">
             <el-input v-model="userForm.userName"></el-input>
           </el-form-item>
-          <el-form-item label="昵称" prop="userNickname">
+          <el-form-item class="inputText" label="昵称" prop="userNickname">
             <el-input v-model="userForm.userNickname"></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="userPassword">
+          <el-form-item class="inputText" label="密码" prop="userPassword">
             <el-input v-model="userForm.userPassword" show-password></el-input>
           </el-form-item>
-          <el-form-item label="确认密码" prop="userPassword">
+          <el-form-item class="inputText" label="确认密码" prop="userPassword">
             <el-input v-model="userForm.userPasswordConfirm" show-password></el-input>
+            <el-alert class="waringText" v-show="userForm.userPassword !== userForm.userPasswordConfirm" title="两次密码不一致" type="error"></el-alert>
           </el-form-item>
-          <el-form-item label="生日" prop="userBirthday">
-            <el-input type="date" v-model="userForm.userBirthday"></el-input>
+          <el-form-item class="birthdayInput inputText" label="生日" prop="userBirthday">
+            <el-date-picker
+              v-model="userForm.userBirthday"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
           </el-form-item>
-          <el-form-item label="邮箱" prop="userEmail">
+          <el-form-item class="inputText" label="邮箱" prop="userEmail">
             <el-input type="email" v-model="userForm.userEmail"></el-input>
           </el-form-item>
-          <el-form-item label="电话" prop="userTelephoneNumber">
+          <el-form-item class="inputText" label="电话" prop="userTelephoneNumber">
             <el-input type="tel" v-model="userForm.userTelephoneNumber"></el-input>
           </el-form-item>
           <el-form-item>
@@ -126,5 +130,18 @@ export default {
 }
 </script>
 <style scoped>
-
+.bodyBox {
+  width: 60%;
+}
+.birthdayInput {
+  margin-right: 50%;
+}
+.waringText {
+  height: 40px;
+}
+</style>
+<style>
+.inputText .el-form-item__label {
+  color: white;
+}
 </style>

@@ -1,37 +1,42 @@
 <template>
-  <div>
-        <el-alert v-show="loginUser.userPassword !== userPasswordConfirm" title="两次密码不一致" type="error"></el-alert>
+  <div class="bodyBox">
 
         <el-form :model="loginUser" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-          <el-form-item label="用户ID" prop="userId">
-            <el-input v-model="loginUser.userId" readonly></el-input>
+          <el-form-item class="inputText" label="ID" prop="userId">
+            <div class="tagBox">
+              <div class="tagText">
+                {{ loginUser.userId }}
+              </div>
+            </div>
           </el-form-item>
-          <el-form-item label="头像链接" prop="userProfilePhoto">
-            <el-input type="url" v-model="loginUser.userProfilePhoto"></el-input>
-          </el-form-item>
-          <el-form-item label="用户名" prop="userName">
+          <el-form-item class="inputText" label="用户名" prop="userName">
             <el-input v-model="loginUser.userName" @blur="checkUserName"></el-input>
             <el-alert v-show="ifHaveSameUserName !== ''" title="" type="error">{{ ifHaveSameUserName }}</el-alert>
           </el-form-item>
-          <el-form-item label="昵称" prop="userNickname">
+          <el-form-item class="inputText" label="昵称" prop="userNickname">
             <el-input v-model="loginUser.userNickname"></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="userPassword">
+          <el-form-item class="inputText" label="密码" prop="userPassword">
             <el-input v-model="loginUser.userPassword" show-password></el-input>
           </el-form-item>
-          <el-form-item label="确认密码" prop="userPassword">
+          <el-form-item class="inputText" label="确认密码" prop="userPassword">
             <el-input v-model="userPasswordConfirm" show-password></el-input>
+            <el-alert class="waringText" v-show="loginUser.userPassword !== userPasswordConfirm" title="两次密码不一致" type="error"></el-alert>
           </el-form-item>
-          <el-form-item label="生日" prop="userBirthday">
-            <el-input type="date" v-model="loginUser.userBirthday"></el-input>
+          <el-form-item class="birthdayInput inputText" label="生日" prop="userBirthday">
+            <el-date-picker
+              v-model="loginUser.userBirthday"
+              type="date"
+              placeholder="选择日期">
+            </el-date-picker>
           </el-form-item>
-          <el-form-item label="邮箱" prop="userEmail">
+          <el-form-item class="inputText" label="邮箱" prop="userEmail">
             <el-input type="email" v-model="loginUser.userEmail" @blur="checkEmail"></el-input>
-            <el-alert v-show="ifHaveSameEmail !== ''" title="" type="error">{{ ifHaveSameEmail }}</el-alert>
+            <el-alert class="waringText" v-show="ifHaveSameEmail !== ''" title="" type="error">{{ ifHaveSameEmail }}</el-alert>
           </el-form-item>
-          <el-form-item label="电话" prop="userTelephoneNumber">
+          <el-form-item class="inputText" label="电话" prop="userTelephoneNumber">
             <el-input type="tel" v-model="loginUser.userTelephoneNumber" @blur="checkTel"></el-input>
-            <el-alert v-show="ifHaveSameTel !== ''" title="" type="error">{{ ifHaveSameTel }}</el-alert>
+            <el-alert class="waringText" v-show="ifHaveSameTel !== ''" title="" type="error">{{ ifHaveSameTel }}</el-alert>
           </el-form-item>
           <el-form-item>
             <el-button v-show="ifHaveSameUserName === '' && ifHaveSameEmail === '' && ifHaveSameTel === ''" type="primary" @click="submitForm('ruleForm')">确认修改</el-button>
@@ -230,5 +235,28 @@ export default {
 </script>
 
 <style scoped>
-
+.bodyBox {
+  width: 60%;
+}
+.birthdayInput {
+  margin-right: 50%;
+}
+.tagBox {
+  background-color: #fdf6ec ;
+  width: 10%;
+  border-radius: 20px;
+}
+.tagText {
+  color: #3e76f6;
+  line-height: 40px;
+  height: 40px;
+}
+.waringText {
+  height: 40px;
+}
+</style>
+<style>
+.inputText .el-form-item__label {
+  color: white;
+}
 </style>
