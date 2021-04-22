@@ -1,6 +1,14 @@
 <template>
   <div>
     <h1>草稿</h1>
+    <div class="tagBox">
+      <div class="tagTextLeft">
+        {{ tagText }}
+      </div>
+      <div class="tagTextRight">
+        {{ surplusDraftCount }}
+      </div>
+    </div>
     <el-table
       v-loading="loadingData"
       :data="draftList"
@@ -38,6 +46,8 @@ export default {
   name: 'DraftControl',
   data() {
     return {
+      tagText: '剩余可添加的草稿数量为：', //提示信息文本内容
+      surplusDraftCount: '', //剩余可添加草稿数量
       loadingData: true, //数据加载判断
       draftList: [], //草稿列表
     }
@@ -46,6 +56,19 @@ export default {
     this.getDraftList()
   },
   methods: {
+    getSurplusDraftCount() {
+      let that = this
+      this.$axios.post('/draft/getSurplusDraftCount').then(response => {
+        if (response.data.message === 'success') {
+          that.surplusDraftCount = response.data.surplusDraftCount
+        } else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
     toUploadDraft(draftId) {
       let that = this
       let param = {
@@ -103,6 +126,8 @@ export default {
         if (response.data.message === 'success') {
           that.draftList = response.data.draftList
           that.loadingData = false
+          //获取剩余可添加的草稿数量
+          that.getSurplusDraftCount()
         } else {
           that.$message.warning(response.data.message)
         }
@@ -126,5 +151,22 @@ export default {
 </script>
 
 <style scoped>
-
+.tagBox {
+  display: flex;
+  margin-bottom: 15px;
+  background-color: #fdf6ec ;
+  width: 30%;
+  border-radius: 20px;
+}
+.tagTextLeft {
+  width: 85%;
+  color: #E6A23C;
+  line-height: 40px;
+  height: 40px;
+ }
+.tagTextRight {
+  color: #3e76f6;
+  line-height: 40px;
+  height: 40px;
+}
 </style>

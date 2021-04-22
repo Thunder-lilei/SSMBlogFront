@@ -6,7 +6,7 @@
       </el-aside>
       <el-main>
 <!--        <h1 style="font-size: 50px">欢迎访问SSMBlog</h1>-->
-        <div style="width: 50%;margin: auto;">
+        <div class="divBox">
           <el-main>
             <router-view/>
           </el-main>
@@ -48,5 +48,8 @@ export default {
 }
 </style>
 <style scoped>
-
+.divBox {
+  width: 50%;
+  margin: auto;
+}
 </style>
