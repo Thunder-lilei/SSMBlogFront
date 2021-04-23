@@ -11,7 +11,7 @@
       <el-form-item v-if="isCodeLogin" label="验证码" prop="code">
         <el-input v-model="ruleForm.code">
           <template slot="append">
-            <el-button @click="getCode" style="color: #005cc5" type="info" round>获取验证码</el-button>
+            <el-button v-loading="isGetCode" @click="getCode" style="color: #005cc5" type="info" round>获取验证码</el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -32,6 +32,7 @@ export default {
   name: 'EmailLogin',
   data() {
     return {
+      isGetCode: false, //是否正在获取验证码
       ruleForm: {
         mail: '',
         code: '',
@@ -56,10 +57,12 @@ export default {
         return ;
       }
       const that = this
+      that.isGetCode = true
       let data = new URLSearchParams();
       data.append("mail", this.ruleForm.mail)
       this.$axios.post('/user/setMailCode', data).then(response => {
         if (response.data.message === 'success') {
+          that.isGetCode = false
           that.$message({
             showClose: true,
             message: "验证码发送成功！",
