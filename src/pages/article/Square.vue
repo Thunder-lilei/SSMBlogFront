@@ -85,6 +85,7 @@ export default {
       pageNow: 1,
       pageSize: 10,
       total: 0,
+      articleUser: {}, //选择的博主信息
     }
   },
   mounted () {
@@ -111,19 +112,11 @@ export default {
           that.articleList = response.data.articlePageInfo.list
           that.total = response.data.articlePageInfo.total
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     toShowArticle:function (articleId, userId) {
@@ -139,46 +132,29 @@ export default {
         if (response.data.message === 'success') {
 
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     toShowUser:function (userId) {
-      this.setUser(userId)
-      this.$router.push('/ArticleControl');
+      // this.setUser(userId)
+      this.$router.push({name:'ArticleControl', params: {articleUserId: userId}});
+      // this.$router.push('/ArticleControl');
     },
     setUser:function (userId) {
       const that = this
       let data = new URLSearchParams();
       data.append("userId", userId)
       this.$axios.post('/user/setShowUser', data).then(response => {
-        if (response.data.message === 'success') {
-
-        } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+        if (response.data.message !== 'success') {
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getRecommendArticle:function () {
@@ -189,19 +165,11 @@ export default {
         if (response.data.message === 'success') {
           that.recommendArticleList = response.data.recommendArticleList
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getRecommendUser:function () {
@@ -212,19 +180,11 @@ export default {
         if (response.data.message === 'success') {
           that.recommendUserList = response.data.recommendUserList
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
   },

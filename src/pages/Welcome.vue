@@ -12,6 +12,9 @@
               <router-view/>
             </el-main>
           </div>
+          <div class="showUserInfo">
+            <UserInfo></UserInfo>
+          </div>
           <div>
             <el-button class="toTop" v-if="btnFlag" type="primary" icon="el-icon-caret-top" @click="backTop" circle></el-button>
           </div>
@@ -25,14 +28,15 @@
 import Header from './Header'
 import NavMenu from './NavMenu'
 import GitTalk from '../components/gittalk/GitTalk'
+import UserInfo from './user/UserInfo'
 
 export default {
   name: 'index',
-  components: {GitTalk, NavMenu, Header},
+  components: {UserInfo, GitTalk, NavMenu, Header},
   data () {
     return {
-      btnFlag: false,
-      scrollTop: '',
+      btnFlag: false, //回到顶部按钮是否显示
+      scrollTop: '', //顶部距离
     }
   },
   mounted () {
@@ -86,6 +90,13 @@ export default {
 .divBox {
   width: 50%;
   margin: auto;
+}
+.showUserInfo {
+  width: 15%;
+  height: 500px;
+  margin-top: 165px;
+  margin-right: 100px;
+  /*background-color: white;*/
 }
 .toTop {
   position: fixed;

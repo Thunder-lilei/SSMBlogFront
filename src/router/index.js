@@ -23,6 +23,7 @@ import EmailLogin from '../pages/user/EmailLogin'
 import SortLabel from '../pages/article/SortLabel'
 import DraftControl from '../pages/Draft/DraftControl'
 import Loading from '../pages/Loading'
+import UserInfo from '../pages/user/UserInfo'
 
 Vue.use(Router)
 
@@ -142,6 +143,11 @@ export default new Router({
       path: '/Loading',
       name: 'Loading',
       component: Loading,
+    },
+    {
+      path: '/UserInfo',
+      name: 'UserInfo',
+      component: UserInfo,
     },
   ]
 })

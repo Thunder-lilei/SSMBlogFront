@@ -130,11 +130,7 @@ export default {
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getUpdateUser:function () {
@@ -149,11 +145,7 @@ export default {
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getLoginUser() {
@@ -163,19 +155,11 @@ export default {
             that.loginUser = response.data.loginUser
             that.userPasswordConfirm = response.data.loginUser.userPassword
           }else {
-            that.$message({
-              showClose: true,
-              message: response.data.message,
-              type: 'warning'
-            });
+            that.$message.warning(response.data.message)
           }
         }).catch(
           function (error) {
-            that.$message({
-              showClose: true,
-              message: error,
-              type: 'warning'
-            });
+            that.$message.error(error)
           })
     },
     submitForm(formName) {
@@ -184,35 +168,19 @@ export default {
         if (valid) {
           this.$axios.post('/user/updateUser', this.loginUser).then(response => {
             if (response.data.message === 'success') {
-              that.$message({
-                showClose: true,
-                message: '修改完成！',
-                type: 'success'
-              });
+              that.$message.success("成功修改！")
               if (!that.isUpdateUser) {
                 bus.$emit('changeLoginUserInfo',that.loginUser)
               }
             } else {
-              that.$message({
-                showClose: true,
-                message: response.data.message,
-                type: 'warning'
-              });
+              that.$message.warning(response.data.message)
             }
           }).catch(
             function (error) {
-              that.$message({
-                showClose: true,
-                message: error,
-                type: 'warning'
-              });
+              that.$message.error(error)
             })
         } else {
-          this.$message({
-            showClose: true,
-            message: '请检查格式！',
-            type: 'warning'
-          });
+          this.$message.warning("请检查格式！")
           return false;
         }
       });
