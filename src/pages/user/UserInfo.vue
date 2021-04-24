@@ -1,7 +1,7 @@
 <template>
   <div class="userInfoBox">
 <!--    <h1>个人信息</h1>-->
-    <div v-if="JSON.stringify(loginUser) !== '{}'">
+    <div v-show="JSON.stringify(loginUser) !== '{}'">
       <div class="tagBox">
         <div class="tagTextLeft">
           当前用户：
@@ -27,25 +27,6 @@
         </div>
       </div>
     </div>
-
-    <div v-if="JSON.stringify(articleUser) !== '{}'" class="ArticleUserBox">
-      <div class="tagBox">
-        <div class="tagTextLeft">
-          当前博主：
-        </div>
-        <div class="tagTextRight">
-          {{ articleUser.userNickname }}
-        </div>
-      </div>
-      <div class="tagBox">
-        <div class="tagTextLeft">
-          联系方式：
-        </div>
-        <div class="tagTextRight">
-          {{ articleUser.userEmail }}
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -61,7 +42,6 @@ export default {
     }
   },
   created () {
-    // console.log(this.$route.params.articleUserId)
     this.getLoginUser()
     this.getArticleUser()
   },
@@ -112,6 +92,7 @@ export default {
 <style scoped>
 .userInfoBox {
   position: fixed;
+  right: 100px;
 }
 .tagBox {
   width: 300px;

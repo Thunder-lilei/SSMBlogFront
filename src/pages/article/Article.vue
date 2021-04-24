@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>
     <h1 v-if="isEditArticle">编辑博文</h1>
     <h1 v-else-if="isCreateArticle">创建博文</h1>
     <h1 v-else-if="isEditDraft">编辑草稿</h1>
@@ -68,15 +69,21 @@
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
+    </div>
+    <div class="userInfoDiv">
+      <UserInfo></UserInfo>
+    </div>
   </div>
 </template>
 
 <script>
 import Markdown from 'vue-meditor';
+import UserInfo from '../user/UserInfo'
 
 export default {
   name: 'AddArticle',
   components: {
+    UserInfo,
     Markdown
   },
   data() {
@@ -263,25 +270,13 @@ export default {
           this.$axios.post('/draft/addDraft', {draft:JSON.stringify(this.articleForm),
             labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)}).then(response => {
             if (response.data.message === 'success') {
-              that.$message({
-                showClose: true,
-                message: '草稿保存成功！',
-                type: 'success'
-              });
+              that.$message.success("草稿保存成功！")
             } else {
-              that.$message({
-                showClose: true,
-                message: response.data.message,
-                type: 'warning'
-              });
+              that.$message.warning(response.data.message)
             }
           }).catch(
             function (error) {
-              that.$message({
-                showClose: true,
-                message: error,
-                type: 'warning'
-              });
+              that.$message.error(error)
             })
         }
       })
@@ -293,25 +288,13 @@ export default {
           this.$axios.post('/draft/updateDraft', {draft:JSON.stringify(this.articleForm),
             labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)}).then(response => {
             if (response.data.message === 'success') {
-              that.$message({
-                showClose: true,
-                message: '草稿更新成功！',
-                type: 'success'
-              });
+              that.$message.success("草稿更新成功！")
             } else {
-              that.$message({
-                showClose: true,
-                message: response.data.message,
-                type: 'warning'
-              });
+              that.$message.warning(response.data.message)
             }
           }).catch(
             function (error) {
-              that.$message({
-                showClose: true,
-                message: error,
-                type: 'warning'
-              });
+              that.$message.error(error)
             })
         }
       })
@@ -323,25 +306,13 @@ export default {
           this.$axios.post('/article/addArticle', {article:JSON.stringify(this.articleForm),
             labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)}).then(response => {
             if (response.data.message === 'success') {
-              that.$message({
-                showClose: true,
-                message: '保存成功！',
-                type: 'success'
-              });
+              that.$message.success("发布成功！")
             } else {
-              that.$message({
-                showClose: true,
-                message: response.data.message,
-                type: 'warning'
-              });
+              that.$message.warning(response.data.message)
             }
           }).catch(
             function (error) {
-              that.$message({
-                showClose: true,
-                message: error,
-                type: 'warning'
-              });
+              that.$message.error(error)
             })
         }
       })
@@ -355,25 +326,13 @@ export default {
             if (response.data.message === 'success') {
               that.getArticleLabel(that.articleForm.articleId)
               that.getArticleSort(that.articleForm.articleId)
-              that.$message({
-                showClose: true,
-                message: '修改成功！',
-                type: 'success'
-              });
+              that.$message.success("修改成功！")
             } else {
-              that.$message({
-                showClose: true,
-                message: response.data.message,
-                type: 'warning'
-              });
+              that.$message.warning(response.data.message)
             }
           }).catch(
             function (error) {
-              that.$message({
-                showClose: true,
-                message: error,
-                type: 'warning'
-              });
+              that.$message.error(error)
             })
         }
       })
@@ -399,5 +358,8 @@ export default {
 </script>
 
 <style scoped>
-
+.userInfoDiv {
+  position: fixed;
+  top: 200px;
+}
 </style>

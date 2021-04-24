@@ -225,21 +225,7 @@ export default {
         })
     },
     toShowUser:function (userId) {
-      this.setUser(userId)
-      this.$router.push('/ArticleControl');
-    },
-    setUser:function (userId) {
-      const that = this
-      let data = new URLSearchParams();
-      data.append("userId", userId)
-      this.$axios.post('/user/setShowUser', data).then(response => {
-        if (response.data.message !== 'success') {
-          that.$message.warning(response.data.message)
-        }
-      }).catch(
-        function (error) {
-          that.$message.error(error)
-        })
+      this.$router.push({name:'ArticleControl', params: {articleUserId: userId}});
     },
   },
   beforeRouteEnter(to, from, next) {

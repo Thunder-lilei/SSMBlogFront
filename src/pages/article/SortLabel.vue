@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span style="color: #42b983;font-size: 25px">分类</span>
@@ -54,14 +55,20 @@
         <el-link @click="loadArticleList" class="el-icon-more"></el-link>
       </div>
     </el-card>
+    </div>
+    <div class="userInfoDiv">
+      <UserInfo></UserInfo>
+    </div>
   </div>
 </template>
 
 <script>
 import bus from '../../router/bus'
+import UserInfo from '../user/UserInfo'
 
 export default {
   name: 'SortLabel',
+  components: {UserInfo},
   data() {
     return {
       reverse: false, //博文列表顺序
@@ -109,34 +116,10 @@ export default {
         })
     },
     showSortAboutArticle:function (sortId) {
-      const that = this
-      let data = new URLSearchParams();
-      data.append("sortId", sortId)
-      this.$axios.post('/article/setSortId', data).then(response => {
-        if (response.data.message === 'success') {
-          this.$router.push('/ArticleControl');
-        } else {
-          that.$message.warning(response.data.message)
-        }
-      }).catch(
-        function (error) {
-          that.$message.error(error)
-        })
+      this.$router.push({name:'ArticleControl', params: {sortId: sortId}});
     },
     showLabelAboutArticle:function (labelId) {
-      const that = this
-      let data = new URLSearchParams();
-      data.append("labelId", labelId)
-      this.$axios.post('/article/setLabelId', data).then(response => {
-        if (response.data.message === 'success') {
-          this.$router.push('/ArticleControl');
-        } else {
-          that.$message.warning(response.data.message)
-        }
-      }).catch(
-        function (error) {
-          that.$message.error(error)
-        })
+      this.$router.push({name:'ArticleControl', params: {labelId: labelId}});
     },
     getMyLabel:function () {
       const that = this
@@ -181,6 +164,10 @@ export default {
 <style scoped>
 .cardBox {
   margin: 5% 0 0 0;
+}
+.userInfoDiv {
+  position: fixed;
+  top: 200px;
 }
 </style>
 

@@ -24,6 +24,7 @@ import SortLabel from '../pages/article/SortLabel'
 import DraftControl from '../pages/Draft/DraftControl'
 import Loading from '../pages/Loading'
 import UserInfo from '../pages/user/UserInfo'
+import ArticleUserInfo from '../pages/user/ArticleUserInfo'
 
 Vue.use(Router)
 
@@ -148,6 +149,11 @@ export default new Router({
       path: '/UserInfo',
       name: 'UserInfo',
       component: UserInfo,
+    },
+    {
+      path: '/ArticleUserInfo',
+      name: 'ArticleUserInfo',
+      component: ArticleUserInfo,
     },
   ]
 })

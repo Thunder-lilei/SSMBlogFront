@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>
     <h1>草稿</h1>
     <div class="tagBox">
       <div class="tagTextLeft">
@@ -38,12 +39,18 @@
         </template>
       </el-table-column>
     </el-table>
+    </div>
+    <div class="userInfoDiv">
+      <UserInfo></UserInfo>
+    </div>
   </div>
 </template>
 
 <script>
+import UserInfo from '../user/UserInfo'
 export default {
   name: 'DraftControl',
+  components: {UserInfo},
   data() {
     return {
       tagText: '剩余可添加的草稿数量为：', //提示信息文本内容
@@ -151,8 +158,9 @@ export default {
 </script>
 
 <style scoped>
-.bodyDiv {
-  width: 70%;
+.userInfoDiv {
+  position: fixed;
+  top: 200px;
 }
 .tagBox {
   display: flex;

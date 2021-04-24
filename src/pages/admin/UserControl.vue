@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>
     <h1>用户管理</h1>
     <el-table
       v-loading="loadingData"
@@ -45,12 +46,18 @@
       :page-size=pageSize
       :total=total>
     </el-pagination>
+    </div>
+    <div class="userInfoDiv">
+      <UserInfo></UserInfo>
+    </div>
   </div>
 </template>
 
 <script>
+import UserInfo from '../user/UserInfo'
 export default {
   name: 'UserControl',
+  components: {UserInfo},
   data() {
     return {
       loadingData: true, //数据加载判定
@@ -158,5 +165,8 @@ export default {
 </script>
 
 <style scoped>
-
+.userInfoDiv {
+  position: fixed;
+  top: 200px;
+}
 </style>

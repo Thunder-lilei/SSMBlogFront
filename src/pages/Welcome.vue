@@ -12,9 +12,6 @@
               <router-view/>
             </el-main>
           </div>
-          <div class="showUserInfo">
-            <UserInfo></UserInfo>
-          </div>
           <div>
             <el-button class="toTop" v-if="btnFlag" type="primary" icon="el-icon-caret-top" @click="backTop" circle></el-button>
           </div>
@@ -37,6 +34,7 @@ export default {
     return {
       btnFlag: false, //回到顶部按钮是否显示
       scrollTop: '', //顶部距离
+      isReloadUserInfo: true, //刷新用户信息
     }
   },
   mounted () {
@@ -86,17 +84,11 @@ export default {
 <style scoped>
 .bodyBox {
   display: flex;
+  width: 90%;
 }
 .divBox {
   width: 50%;
   margin: auto;
-}
-.showUserInfo {
-  width: 15%;
-  height: 500px;
-  margin-top: 165px;
-  margin-right: 100px;
-  /*background-color: white;*/
 }
 .toTop {
   position: fixed;

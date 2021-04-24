@@ -54,13 +54,13 @@
                 size="max"
                 placeholder="输入关键字搜索"/>
               <el-input
-                v-show="sortId !== ''"
+                v-show="typeof sortId !== 'undefined' && sortId !== ''"
                 @keyup.enter.native="getSortAboutArticleWithKey"
                 v-model="keyValue"
                 size="max"
                 placeholder="输入关键字搜索"/>
               <el-input
-                v-show="labelId !== ''"
+                v-show="typeof labelId !== 'undefined' && labelId !== ''"
                 @keyup.enter.native="getLabelAboutArticleWithKey"
                 v-model="keyValue"
                 size="max"
@@ -83,7 +83,7 @@
         </el-table>
         <br/>
         <el-pagination
-          v-show="!ifOtherUser && !ifSortLabelArticle"
+          v-if="!ifOtherUser && !ifSortLabelArticle"
           @current-change="pageIndexChange"
           @size-change="pageSizeChange"
           background
@@ -93,7 +93,7 @@
           :total=total>
         </el-pagination>
         <el-pagination
-          v-show="ifOtherUser && !ifSortLabelArticle"
+          v-if="ifOtherUser && !ifSortLabelArticle"
           @current-change="otherPageIndexChange"
           @size-change="otherPageSizeChange"
           background
@@ -103,7 +103,7 @@
           :total=total>
         </el-pagination>
         <el-pagination
-          v-show="sortId !== ''"
+          v-if="typeof sortId !== 'undefined' && sortId !== ''"
           @current-change="sortAboutArticlepageIndexChange"
           @size-change="sortAboutArticlePageSizeChange"
           background
@@ -113,7 +113,7 @@
           :total=total>
         </el-pagination>
         <el-pagination
-          v-show="labelId !== ''"
+          v-if="typeof labelId !== 'undefined' && labelId !== ''"
           @current-change="labelAboutArticlepageIndexChange"
           @size-change="labelAboutArticlePageSizeChange"
           background
@@ -123,14 +123,22 @@
           :total=total>
         </el-pagination>
       </div>
+    <div class="userInfoDiv">
+      <UserInfo></UserInfo>
+    </div>
+    <div class="articleUserInfoDiv">
+      <ArticleUserInfo v-bind:articleUser = "articleUser"></ArticleUserInfo>
+    </div>
   </div>
 </template>
 
 <script>
 import Loading from '../Loading'
+import ArticleUserInfo from '../user/ArticleUserInfo'
+import UserInfo from '../user/UserInfo'
 export default {
   name: 'ArticleControl',
-  components: {Loading, Comment},
+  components: {UserInfo, ArticleUserInfo, Loading, Comment},
   data() {
     return {
       loadingData: true, //数据加载判定
@@ -145,7 +153,7 @@ export default {
       sortId: '', //当前选择的分类ID
       labelId: '', //当前选择的标签ID
       articleUserId: '', //其他博主ID
-      articleUser: '', //其他博主
+      articleUser: {}, //其他博主
     }
   },
   mounted () {
@@ -229,26 +237,10 @@ export default {
         })
     },
     getSortId:function () {
-      const that = this
-      this.$axios.post('/article/getSortId').then(response => {
-        if (response.data.message === 'success') {
-          that.sortId = response.data.sortId
-        }
-      }).catch(
-        function (error) {
-          that.$message.error(error)
-        })
+      this.sortId = this.$route.params.sortId
     },
     getLabelId:function () {
-      const that = this
-      this.$axios.post('/article/getLabelId').then(response => {
-        if (response.data.message === 'success') {
-          that.labelId = response.data.labelId
-        }
-      }).catch(
-        function (error) {
-          that.$message.error(error)
-        })
+      this.labelId = this.$route.params.labelId
     },
     getUser:function () {
       const that = this
@@ -258,9 +250,9 @@ export default {
         that.getAllArticle(that.pageIndex, that.pageSize, that.articleUserId)
         that.ifOtherUser = true
       } else {
-          if (that.sortId !== '') {
+          if (typeof that.sortId !== 'undefined' && that.sortId !== '') {
             that.getSortAboutArticle(that.sortId)
-          } else if (that.labelId !== '') {
+          } else if (typeof that.labelId !== 'undefined' && that.labelId !== '') {
             that.getLabelAboutArticle(that.labelId)
           } else {
             that.selectAllArticleBaseInfo(that.pageIndex, that.pageSize)
@@ -411,11 +403,7 @@ export default {
       data.append("articleId", articleId)
       this.$axios.post('/article/deleteArticle', data).then(response => {
         if (response.data.message === 'success') {
-          that.$message({
-            showClose: true,
-            message: "成功移除",
-            type: 'success'
-          });
+          that.$message.success("成功移除！")
           that.selectAllArticleBaseInfo(that.pageIndex, that.pageSize)
         } else {
           that.$message.warning(response.data.message)
@@ -430,11 +418,11 @@ export default {
       this.$router.push('/Article');
     },
     toShowArticle:function (articleId) {
-      this.setArticle(articleId)
       if (JSON.stringify(this.articleUser) !== '{}') {
-        this.setUser(this.articleUser.userId)
+        this.$router.push({name:'ShowArticle', params: {articleId: articleId, articleUserId: this.articleUserId}});
+      } else {
+        this.$router.push({name:'ShowArticle', params: {articleId: articleId}});
       }
-      this.$router.push('/ShowArticle');
     },
     setArticle:function (articleId) {
       const that = this
@@ -519,7 +507,13 @@ export default {
 </script>
 
 <style scoped>
-.bodyBox {
-
+.userInfoDiv {
+  position: fixed;
+  top: 200px;
+}
+.articleUserInfoDiv {
+  position: fixed;
+  right: 100px;
+  top: 400px;
 }
 </style>

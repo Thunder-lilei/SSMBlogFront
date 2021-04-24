@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span style="color: #42b983;font-size: 25px">推荐博文</span>
@@ -68,12 +69,18 @@
         :total=total>
       </el-pagination>
     </el-card>
+    </div>
+    <div class="userInfoDiv">
+      <UserInfo></UserInfo>
+    </div>
   </div>
 </template>
 
 <script>
+import UserInfo from '../user/UserInfo'
 export default {
   name: 'Square',
+  components: {UserInfo},
   data() {
     return {
       recommendArticleList: [],
@@ -120,9 +127,7 @@ export default {
         })
     },
     toShowArticle:function (articleId, userId) {
-      this.setArticle(articleId)
-      this.setUser(userId)
-      this.$router.push('/ShowArticle');
+      this.$router.push({name:'ShowArticle', params: {articleId: articleId, articleUserId: userId}});
     },
     setArticle:function (articleId) {
       const that = this
@@ -141,12 +146,7 @@ export default {
     },
     //设置状态中的博主ID 刷新页面获取当前博主信息
     toShowUser:function (userId) {
-      this.setUser(userId)
-      // this.$router.go(0)
-      // this.$router.push({name:'UserInfo', params: {articleUserId: userId}});
       this.$router.push({name:'ArticleControl', params: {articleUserId: userId}});
-      // this.$router.go(0)
-      // this.$router.push('/ArticleControl');
     },
     setUser:function (userId) {
       const that = this
@@ -206,7 +206,8 @@ export default {
 </script>
 
 <style scoped>
-.bodyDiv {
-  width: 70%;
+.userInfoDiv {
+  position: fixed;
+  top: 200px;
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>
     <div style="display: flex;background-color: white;margin: 0 0 3% 0">
       <div style="width: 50%;margin: 1% 0 1% 0">
         <h3 style="margin: 0 0 1% 3%;text-align: left;">
@@ -60,6 +61,13 @@
     <div v-show="showComment">
       <Comment v-bind:articleCommentNum = "articleCommentNum" v-on:changeArticleCommentNum = "setArticleCommentNum($event)"></Comment>
     </div>
+    </div>
+    <div class="userInfoDiv">
+      <UserInfo></UserInfo>
+    </div>
+    <div class="articleUserInfoDiv">
+      <ArticleUserInfo v-bind:articleUser = "articleUser"></ArticleUserInfo>
+    </div>
   </div>
 </template>
 <script>
@@ -69,11 +77,12 @@ import GitTalk from '../../components/gittalk/GitTalk'
 import bus from '../../router/bus'
 import Comment from './Comment'
 import SortLabel from './SortLabel'
+import UserInfo from '../user/UserInfo'
+import ArticleUserInfo from '../user/ArticleUserInfo'
 
 export default {
-
   name: 'ShowArticle',
-  components: {SortLabel, Comment, GitTalk},
+  components: {ArticleUserInfo, UserInfo, SortLabel, Comment, GitTalk},
   data() {
     return {
       blog: '',
@@ -96,6 +105,7 @@ export default {
       newSortVisible: false,
       checkedSorts: [],
       checkedLabels: [],
+      articleUser: {}, //其他博主
     }
   },
   created () {
@@ -114,19 +124,11 @@ export default {
         if (response.data.message === 'success') {
           that.articleCommentNum = response.data.articleCommentNum
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     removeArticleLabel(labelId) {
@@ -138,19 +140,11 @@ export default {
         if (response.data.message === 'success') {
           that.getArticleLabel(this.article.articleId)
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     showAddArticleLabelInput() {
@@ -170,19 +164,11 @@ export default {
           this.newLabelVisible = false;
           this.newLabel.labelName = '';
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     removeArticleSort(sortId) {
@@ -194,19 +180,11 @@ export default {
         if (response.data.message === 'success') {
           that.getArticleSort(this.article.articleId)
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     showAddArticleSortInput() {
@@ -226,19 +204,11 @@ export default {
           this.newSortVisible = false;
           this.newSort.sortName = '';
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     changeShowComment:function () {
@@ -252,19 +222,11 @@ export default {
         if (response.data.message === 'success') {
           this.checkedLabels = response.data.labelList
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getArticleSort (articleId) {
@@ -275,19 +237,11 @@ export default {
         if (response.data.message === 'success') {
           this.checkedSorts = response.data.sortList
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     ifHaveLike(articleId) {
@@ -297,19 +251,11 @@ export default {
         if (response.data.message === 'success') {
           that.ifHaveLikeResult = response.data.ifHaveLikeResult
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     addLike(articleId) {
@@ -319,25 +265,13 @@ export default {
         if (response.data.message === 'success') {
           that.ifHaveLikeResult = true
           that.article.articleLikeCount = that.article.articleLikeCount+1
-          that.$message({
-            showClose: true,
-            message: "点赞成功！",
-            type: 'success'
-          });
+          that.$message.success("点赞成功！")
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     removeLike(articleId) {
@@ -347,30 +281,21 @@ export default {
         if (response.data.message === 'success') {
           that.ifHaveLikeResult = false
           that.article.articleLikeCount = that.article.articleLikeCount-1
-          that.$message({
-            showClose: true,
-            message: "取消点赞！",
-            type: 'success'
-          });
+          that.$message.warning("取消点赞！")
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     getArticle:function () {
       const that = this
-      this.$axios.post('/article/getShowArticle').then(response => {
+      let param = {
+        articleId:this.$route.params.articleId,
+      }
+      this.$axios.post('/article/getArticle', param).then(response => {
         if (response.data.message === 'success') {
           that.blog = marked(response.data.article.articleContent)
           that.article = response.data.article
@@ -381,20 +306,17 @@ export default {
           that.getArticleCommentNum(that.article.articleId)
           bus.$emit('articleId',that.article.articleId)
           bus.$emit('articleUserId',that.article.userId)
+          //获取其他博主信息
+          if (typeof this.$route.params.articleUserId !== 'undefined' && this.$route.params.articleUserId !== '') {
+            that.ifOtherUser = true
+            that.getArticleUser(this.$route.params.articleUserId)
+          }
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     toUpdateArticle:function (articleId) {
@@ -406,22 +328,12 @@ export default {
       let data = new URLSearchParams();
       data.append("articleId", articleId)
       this.$axios.post('/article/setShowArticle', data).then(response => {
-        if (response.data.message === 'success') {
-
-        } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+        if (response.data.message !== 'success') {
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     ifMyArticle:function (articleId) {
@@ -432,19 +344,27 @@ export default {
         if (response.data.message === 'success') {
           that.ifOtherUser = !response.data.result
         } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
+        })
+    },
+    getArticleUser(userId) {
+      let that = this
+      let param = {
+        userId: userId,
+      }
+      this.$axios.post('/user/getArticleUser', param).then(response => {
+        if (response.data.message === 'success') {
+          that.articleUser = response.data.articleUser
+        } else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
         })
     },
   },
@@ -467,7 +387,15 @@ export default {
 }
 </style>
 <style scoped>
-
+.userInfoDiv {
+  position: fixed;
+  top: 200px;
+}
+.articleUserInfoDiv {
+  position: fixed;
+  right: 100px;
+  top: 400px;
+}
 </style>
 
 <style>
