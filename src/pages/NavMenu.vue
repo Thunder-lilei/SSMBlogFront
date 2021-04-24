@@ -12,12 +12,10 @@
           <span slot="title">用户管理</span>
         </el-menu-item>
       </router-link>
-      <router-link to='/ArticleControl'>
-        <el-menu-item index="2">
-          <i class="el-icon-tickets"></i>
-          <span slot="title">博文</span>
-        </el-menu-item>
-      </router-link>
+      <el-menu-item @click="toArticleControl" index="2">
+        <i class="el-icon-tickets"></i>
+        <span slot="title">博文</span>
+      </el-menu-item>
       <router-link to='/DraftControl'>
         <el-menu-item index="3">
           <i class="el-icon-document"></i>
@@ -68,6 +66,10 @@ export default {
     this.ifAdmin()
   },
   methods: {
+    toArticleControl() {
+      this.$router.push('/ArticleControl');
+      this.$router.go(0)
+    },
     ifAdmin:function () {
       const that = this
       this.$axios.post('/user/ifAdmin').then(response => {

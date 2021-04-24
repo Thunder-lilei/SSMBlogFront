@@ -1,7 +1,7 @@
 <template>
   <div class="userInfoBox">
 <!--    <h1>个人信息</h1>-->
-    <div>
+    <div v-if="JSON.stringify(loginUser) !== '{}'">
       <div class="tagBox">
         <div class="tagTextLeft">
           当前用户：
@@ -18,9 +18,17 @@
           {{ loginUser.userEmail }}
         </div>
       </div>
+      <div class="tagBox">
+        <div class="tagTextLeft">
+          博文总数：
+        </div>
+        <div class="tagTextRight">
+          {{ articleCount }}
+        </div>
+      </div>
     </div>
 
-    <div v-if="isArticleUser" class="ArticleUserBox">
+    <div v-if="JSON.stringify(articleUser) !== '{}'" class="ArticleUserBox">
       <div class="tagBox">
         <div class="tagTextLeft">
           当前博主：
@@ -48,8 +56,8 @@ export default {
     return {
       loginUser: {}, //当前用户
       articleUser: {}, //当前博主
-      isArticleUser: false, //是否是其他博主
       articleUserId: '', //其他博主ID
+      articleCount: '', //当前用户的博文数量
     }
   },
   created () {
@@ -61,6 +69,20 @@ export default {
       this.$axios.post('/user/getLoginUser').then(response => {
         if (response.data.message === 'success') {
           that.loginUser = response.data.loginUser
+          that.getUserArticleCount()
+        }else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
+    getUserArticleCount() {
+      const that = this
+      this.$axios.post('/article/getArticleCountByUser').then(response => {
+        if (response.data.message === 'success') {
+          that.articleCount = response.data.articleCount
         }else {
           that.$message.warning(response.data.message)
         }
@@ -85,7 +107,7 @@ export default {
   border-radius: 20px;
 }
 .tagTextLeft {
-  width: 30%;
+  width: 40%;
   color: #E6A23C;
   line-height: 40px;
   height: 40px;
