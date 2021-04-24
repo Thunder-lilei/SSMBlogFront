@@ -84,7 +84,7 @@
         <br/>
         <el-pagination
           v-show="!ifOtherUser && !ifSortLabelArticle"
-          @current-change="pageNowChange"
+          @current-change="pageIndexChange"
           @size-change="pageSizeChange"
           background
           layout="total, sizes, prev, pager, next"
@@ -94,7 +94,7 @@
         </el-pagination>
         <el-pagination
           v-show="ifOtherUser && !ifSortLabelArticle"
-          @current-change="otherPageNowChange"
+          @current-change="otherPageIndexChange"
           @size-change="otherPageSizeChange"
           background
           layout="total, sizes, prev, pager, next"
@@ -104,7 +104,7 @@
         </el-pagination>
         <el-pagination
           v-show="sortId !== ''"
-          @current-change="sortAboutArticlePageNowChange"
+          @current-change="sortAboutArticlepageIndexChange"
           @size-change="sortAboutArticlePageSizeChange"
           background
           layout="total, sizes, prev, pager, next"
@@ -114,7 +114,7 @@
         </el-pagination>
         <el-pagination
           v-show="labelId !== ''"
-          @current-change="labelAboutArticlePageNowChange"
+          @current-change="labelAboutArticlepageIndexChange"
           @size-change="labelAboutArticlePageSizeChange"
           background
           layout="total, sizes, prev, pager, next"
@@ -138,7 +138,7 @@ export default {
       articleList: [],
       keyValue: '',
       total: 0,
-      pageNow: 1,
+      pageIndex: 0,
       pageSize: 10,
       ifOtherUser: false, //是否是其他博主
       ifSortLabelArticle: false,
@@ -188,7 +188,7 @@ export default {
       const that = this
       that.loadingData = true
       let data = new URLSearchParams();
-      data.append("pageNow", this.pageNow)
+      data.append("pageNow", this.pageIndex)
       data.append("pageSize", this.pageSize)
       data.append("sortId", this.sortId)
       data.append("key", this.keyValue)
@@ -210,7 +210,7 @@ export default {
       const that = this
       that.loadingData = true
       let data = new URLSearchParams();
-      data.append("pageNow", this.pageNow)
+      data.append("pageNow", this.pageIndex)
       data.append("pageSize", this.pageSize)
       data.append("sortId", this.sortId)
       data.append("key", this.keyValue)
@@ -255,7 +255,7 @@ export default {
       this.articleUserId = this.$route.params.articleUserId
       if (this.articleUserId != null && this.articleUserId !== '') {
         that.getArticleUser()
-        that.getAllArticle(that.pageNow, that.pageSize, that.articleUserId)
+        that.getAllArticle(that.pageIndex, that.pageSize, that.articleUserId)
         that.ifOtherUser = true
       } else {
           if (that.sortId !== '') {
@@ -263,7 +263,7 @@ export default {
           } else if (that.labelId !== '') {
             that.getLabelAboutArticle(that.labelId)
           } else {
-            that.selectAllArticleBaseInfo(that.pageNow, that.pageSize)
+            that.selectAllArticleBaseInfo(that.pageIndex, that.pageSize)
           }
       }
     },
@@ -271,7 +271,7 @@ export default {
       const that = this
       that.loadingData = true
       let data = new URLSearchParams();
-      data.append("pageNow", this.pageNow)
+      data.append("pageNow", this.pageIndex)
       data.append("pageSize", this.pageSize)
       data.append("sortId", sortId)
       this.$axios.post('/article/getSortAboutArticle', data).then(response => {
@@ -292,7 +292,7 @@ export default {
       const that = this
       that.loadingData = true
       let data = new URLSearchParams();
-      data.append("pageNow", this.pageNow)
+      data.append("pageNow", this.pageIndex)
       data.append("pageSize", this.pageSize)
       data.append("labelId", labelId)
       this.$axios.post('/article/getLabelAboutArticle', data).then(response => {
@@ -311,33 +311,33 @@ export default {
     },
     otherPageSizeChange(pageSize) {
       this.pageSize = pageSize
-      this.selectAllArticleBaseInfo(this.pageNow, pageSize, this.articleUser.userId)
+      this.selectUserArticleBaseInfo(this.pageIndex, pageSize, this.articleUser.userId)
     },
-    otherPageNowChange:function(pageNow) {
-      this.pageNow = pageNow
-      this.selectAllArticleBaseInfo(pageNow, this.pageSize, this.articleUser.userId)
+    otherPageIndexChange:function(pageIndex) {
+      this.pageIndex = pageIndex
+      this.selectUserArticleBaseInfo(pageIndex, this.pageSize, this.articleUser.userId)
     },
     sortAboutArticlePageSizeChange(pageSize) {
       this.pageSize = pageSize
-      this.getSortAboutArticle(this.pageNow, pageSize, this.sortId)
+      this.getSortAboutArticle(this.pageIndex, pageSize, this.sortId)
     },
-    sortAboutArticlePageNowChange:function(pageNow) {
-      this.pageNow = pageNow
-      this.getSortAboutArticle(pageNow, this.pageSize, this.sortId)
+    sortAboutArticlepageIndexChange:function(pageIndex) {
+      this.pageIndex = pageIndex
+      this.getSortAboutArticle(pageIndex, this.pageSize, this.sortId)
     },
     labelAboutArticlePageSizeChange(pageSize) {
       this.pageSize = pageSize
-      this.getLabelAboutArticle(this.pageNow, pageSize, this.labelId)
+      this.getLabelAboutArticle(this.pageIndex, pageSize, this.labelId)
     },
-    labelAboutArticlePageNowChange:function(pageNow) {
-      this.pageNow = pageNow
-      this.getLabelAboutArticle(pageNow, this.pageSize, this.labelId)
+    labelAboutArticlepageIndexChange:function(pageIndex) {
+      this.pageIndex = pageIndex
+      this.getLabelAboutArticle(pageIndex, this.pageSize, this.labelId)
     },
-    getAllArticle(pageNow, pageSize, userId) {
+    getAllArticle(pageIndex, pageSize, userId) {
       const that = this
       that.loadingData = true
       let data = new URLSearchParams();
-      data.append("pageNow", this.pageNow)
+      data.append("pageNow", this.pageIndex)
       data.append("pageSize", this.pageSize)
       data.append("userId", userId)
       this.$axios.post('/article/getArticleByUserId', data).then(response => {
@@ -355,17 +355,42 @@ export default {
     },
     pageSizeChange(pageSize) {
       this.pageSize = pageSize
-      this.selectAllArticleBaseInfo(this.pageNow, pageSize)
+      this.selectAllArticleBaseInfo(this.pageIndex, pageSize)
     },
-    pageNowChange:function(pageNow) {
-      this.pageNow = pageNow
-      this.selectAllArticleBaseInfo(pageNow, this.pageSize)
+    pageIndexChange:function(pageIndex) {
+      this.pageIndex = pageIndex
+      this.selectAllArticleBaseInfo(pageIndex, this.pageSize)
     },
-    selectAllArticleBaseInfo:function (pageNow, pageSize) {
+    selectUserArticleBaseInfo (pageIndex, pageSize, userId) {
+      const that = this
+      that.loadingData = true
+      let param = {
+        pageParam: {
+          pageIndex: pageIndex,
+          pageSize: pageSize,
+        },
+        userParam: {
+          userId: userId,
+        },
+      }
+      this.$axios.post('/article/selectUserArticleBaseInfo', param).then(response => {
+        if (response.data.message === 'success') {
+          that.articleList = response.data.articleList
+          that.total = response.data.articleCount
+          that.loadingData = false
+        } else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
+    selectAllArticleBaseInfo (pageIndex, pageSize) {
       const that = this
       that.loadingData = true
       let data = new URLSearchParams();
-      data.append("pageNow", pageNow)
+      data.append("pageNow", pageIndex)
       data.append("pageSize", pageSize)
       this.$axios.post('/article/selectAllArticleBaseInfo', data).then(response => {
         if (response.data.message === 'success') {
@@ -391,7 +416,7 @@ export default {
             message: "成功移除",
             type: 'success'
           });
-          that.selectAllArticleBaseInfo(that.pageNow, that.pageSize)
+          that.selectAllArticleBaseInfo(that.pageIndex, that.pageSize)
         } else {
           that.$message.warning(response.data.message)
         }
@@ -428,7 +453,7 @@ export default {
       const that = this
       that.loadingData = true
       let data = new URLSearchParams();
-      data.append("pageNow", "1")
+      data.append("pageIndex", "1")
       data.append("pageSize", "10")
       data.append("key", this.keyValue)
       data.append("userId", this.articleUser.userId)
@@ -449,7 +474,7 @@ export default {
       const that = this
       that.loadingData = true
       let data = new URLSearchParams();
-      data.append("pageNow", "1")
+      data.append("pageIndex", "1")
       data.append("pageSize", "10")
       data.append("key", this.keyValue)
       this.$axios.post('/article/selectArticleBaseInfoByKey', data).then(response => {
@@ -494,5 +519,7 @@ export default {
 </script>
 
 <style scoped>
+.bodyBox {
 
+}
 </style>

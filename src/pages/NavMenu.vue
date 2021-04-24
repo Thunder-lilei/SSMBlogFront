@@ -12,7 +12,7 @@
           <span slot="title">用户管理</span>
         </el-menu-item>
       </router-link>
-      <el-menu-item @click="toArticleControl" index="2">
+      <el-menu-item @click="toArticleControl()" index="2">
         <i class="el-icon-tickets"></i>
         <span slot="title">博文</span>
       </el-menu-item>
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     toArticleControl() {
-      this.$router.push('/ArticleControl');
+      this.$router.push({name:'ArticleControl'});
       this.$router.go(0)
     },
     ifAdmin:function () {

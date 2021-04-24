@@ -1,6 +1,5 @@
 <template>
-  <div class="bodyBox">
-
+  <div class="bodyDiv">
         <el-form :model="loginUser" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item class="inputText" label="ID" prop="userId">
             <div class="tagBox">
@@ -203,8 +202,8 @@ export default {
 </script>
 
 <style scoped>
-.bodyBox {
-  width: 60%;
+.bodyDiv {
+  width: 80%;
 }
 .birthdayInput {
   margin-right: 50%;

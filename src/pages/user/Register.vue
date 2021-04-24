@@ -1,6 +1,5 @@
 <template>
-  <div class="bodyBox">
-
+  <div class="bodyDiv">
         <el-form :model="userForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item class="inputText" label="头像链接" prop="userProfilePhoto">
             <el-input type="url" v-model="userForm.userProfilePhoto"></el-input>
@@ -130,8 +129,8 @@ export default {
 }
 </script>
 <style scoped>
-.bodyBox {
-  width: 60%;
+.bodyDiv {
+  width: 80%;
 }
 .birthdayInput {
   margin-right: 50%;

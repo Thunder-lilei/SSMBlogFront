@@ -34,7 +34,7 @@
           当前博主：
         </div>
         <div class="tagTextRight">
-          {{ articleUserId }}
+          {{ articleUser.userNickname }}
         </div>
       </div>
       <div class="tagBox">
@@ -42,7 +42,7 @@
           联系方式：
         </div>
         <div class="tagTextRight">
-          {{  }}
+          {{ articleUser.userEmail }}
         </div>
       </div>
     </div>
@@ -61,9 +61,23 @@ export default {
     }
   },
   created () {
+    // console.log(this.$route.params.articleUserId)
     this.getLoginUser()
+    this.getArticleUser()
   },
   methods: {
+    getArticleUser() {
+      const that = this
+      this.$axios.post('/user/getShowUser').then(response => {
+        if (response.data.message === 'success') {
+          that.articleUser = response.data.user
+          // that.$router.push({name:'ArticleControl', params: {articleUserId: that.$route.params.articleUserId}});
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
     getLoginUser() {
       const that = this
       this.$axios.post('/user/getLoginUser').then(response => {

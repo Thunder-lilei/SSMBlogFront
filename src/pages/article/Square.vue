@@ -139,9 +139,13 @@ export default {
           that.$message.error(error)
         })
     },
+    //设置状态中的博主ID 刷新页面获取当前博主信息
     toShowUser:function (userId) {
-      // this.setUser(userId)
+      this.setUser(userId)
+      // this.$router.go(0)
+      // this.$router.push({name:'UserInfo', params: {articleUserId: userId}});
       this.$router.push({name:'ArticleControl', params: {articleUserId: userId}});
+      // this.$router.go(0)
       // this.$router.push('/ArticleControl');
     },
     setUser:function (userId) {
@@ -202,5 +206,7 @@ export default {
 </script>
 
 <style scoped>
-
+.bodyDiv {
+  width: 70%;
+}
 </style>

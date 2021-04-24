@@ -151,6 +151,9 @@ export default {
 </script>
 
 <style scoped>
+.bodyDiv {
+  width: 70%;
+}
 .tagBox {
   display: flex;
   margin-bottom: 15px;
