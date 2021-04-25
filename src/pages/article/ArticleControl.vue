@@ -404,7 +404,9 @@ export default {
       this.$axios.post('/article/deleteArticle', data).then(response => {
         if (response.data.message === 'success') {
           that.$message.success("成功移除！")
-          that.selectAllArticleBaseInfo(that.pageIndex, that.pageSize)
+          this.$router.push({name:'ArticleControl'});
+          this.$router.go(0)
+          // that.selectAllArticleBaseInfo(that.pageIndex, that.pageSize)
         } else {
           that.$message.warning(response.data.message)
         }

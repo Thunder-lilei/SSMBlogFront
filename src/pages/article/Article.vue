@@ -130,7 +130,7 @@ export default {
       this.$axios.post('/draft/uploadDraft', param).then(response => {
         if (response.data.message === 'success') {
           that.$message.success("发布成功！")
-          this.$router.push('/DraftControl');
+          that.$router.push('/DraftControl');
         } else {
           that.$message.warning(response.data.message)
         }
@@ -271,6 +271,7 @@ export default {
             labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)}).then(response => {
             if (response.data.message === 'success') {
               that.$message.success("草稿保存成功！")
+              that.$router.push('/DraftControl');
             } else {
               that.$message.warning(response.data.message)
             }
@@ -289,6 +290,7 @@ export default {
             labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)}).then(response => {
             if (response.data.message === 'success') {
               that.$message.success("草稿更新成功！")
+              that.$router.push('/DraftControl');
             } else {
               that.$message.warning(response.data.message)
             }
@@ -307,6 +309,8 @@ export default {
             labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)}).then(response => {
             if (response.data.message === 'success') {
               that.$message.success("发布成功！")
+              that.$router.push({name:'ArticleControl'});
+              that.$router.go(0)
             } else {
               that.$message.warning(response.data.message)
             }
@@ -324,8 +328,8 @@ export default {
           this.$axios.post('/article/updateArticle', {article:JSON.stringify(this.articleForm),
             labelList:JSON.stringify(this.checkedLabels), sortList:JSON.stringify(this.checkedSorts)} ).then(response => {
             if (response.data.message === 'success') {
-              that.getArticleLabel(that.articleForm.articleId)
-              that.getArticleSort(that.articleForm.articleId)
+              // that.getArticleLabel(that.articleForm.articleId)
+              // that.getArticleSort(that.articleForm.articleId)
               that.$message.success("修改成功！")
             } else {
               that.$message.warning(response.data.message)
