@@ -6,7 +6,7 @@
       trigger="click">
       <el-button slot="reference" icon="el-icon-user-solid"></el-button>
         <el-collapse>
-          <el-collapse-item style="margin: 0 0 0 3%" title="添加好友" name="1">
+          <el-collapse-item style="margin: 0 0 0 3%" title="添加关注" name="1">
             <el-input
               @keyup.enter.native="selectUserBaseInfoByKey"
               v-model="keyValue"
@@ -92,8 +92,8 @@ export default {
   name: 'Friend',
   data() {
     return {
-      loadingAddData: false,//好友数据加载判断
-      loadingData: true, //添加好友数据加载判断
+      loadingAddData: false,//关注数据加载判断
+      loadingData: true, //添加关注数据加载判断
       userFriendList: [],
       addUserList: [],
       keyValue: '',

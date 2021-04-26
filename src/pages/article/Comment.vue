@@ -209,31 +209,7 @@ export default {
         })
     },
     toShowUser:function (userId) {
-      this.setUser(userId)
-      this.$router.push('/ArticleControl');
-    },
-    setUser:function (userId) {
-      const that = this
-      let data = new URLSearchParams();
-      data.append("userId", userId)
-      this.$axios.post('/user/setShowUser', data).then(response => {
-        if (response.data.message === 'success') {
-
-        } else {
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
-        }
-      }).catch(
-        function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
-        })
+      this.$router.push({name:'ArticleControl', params: {articleUserId: userId}});
     },
   },
 }

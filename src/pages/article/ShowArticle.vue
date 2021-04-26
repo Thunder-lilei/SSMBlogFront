@@ -66,7 +66,10 @@
       <UserInfo></UserInfo>
     </div>
     <div class="articleUserInfoDiv">
-      <ArticleUserInfo v-bind:articleUser = "articleUser"></ArticleUserInfo>
+      <ArticleUserInfo v-bind:articleUser = "articleUser"
+                       v-bind:articleUserArticleCount = "articleUserArticleCount"
+                       v-bind:articleUserFunCount = "articleUserFunCount"
+                       v-bind:articleUserNewArticleList = "articleUserNewArticleList"></ArticleUserInfo>
     </div>
   </div>
 </template>
@@ -106,6 +109,9 @@ export default {
       checkedSorts: [],
       checkedLabels: [],
       articleUser: {}, //其他博主
+      articleUserArticleCount: '', //其他博主博文总数
+      articleUserFunCount: '', //其他博主粉丝数
+      articleUserNewArticleList: [], //其他博主最新博文列表
     }
   },
   created () {
@@ -359,7 +365,58 @@ export default {
       this.$axios.post('/user/getArticleUser', param).then(response => {
         if (response.data.message === 'success') {
           that.articleUser = response.data.articleUser
+          that.getUserArticleCount(that.articleUser.userId)
+          that.getUserFunCount(that.articleUser.userId)
+          that.getUserNewArticle(that.articleUser.userId)
         } else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
+    getUserNewArticle(userId) {
+      const that = this
+      let param = {
+        userId: userId,
+      }
+      this.$axios.post('/article/getUserNewArticle', param).then(response => {
+        if (response.data.message === 'success') {
+          that.articleUserNewArticleList = response.data.newArticleList
+        }else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
+    getUserArticleCount(userId) {
+      const that = this
+      let param = {
+        userId: userId,
+      }
+      this.$axios.post('/article/getUserArticleCount', param).then(response => {
+        if (response.data.message === 'success') {
+          that.articleUserArticleCount = response.data.articleCount
+        }else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
+    getUserFunCount(userId) {
+      const that = this
+      let param = {
+        userId: userId,
+      }
+      this.$axios.post('/userFriend/getUserFunCount', param).then(response => {
+        if (response.data.message === 'success') {
+          that.articleUserFunCount = response.data.funCount
+        }else {
           that.$message.warning(response.data.message)
         }
       }).catch(
