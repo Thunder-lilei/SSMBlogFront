@@ -69,7 +69,8 @@
       <ArticleUserInfo v-bind:articleUser = "articleUser"
                        v-bind:articleUserArticleCount = "articleUserArticleCount"
                        v-bind:articleUserFunCount = "articleUserFunCount"
-                       v-bind:articleUserNewArticleList = "articleUserNewArticleList"></ArticleUserInfo>
+                       v-bind:articleUserNewArticleList = "articleUserNewArticleList"
+                       v-bind:isOnShowArticle = "isOnShowArticle"></ArticleUserInfo>
     </div>
   </div>
 </template>
@@ -112,9 +113,11 @@ export default {
       articleUserArticleCount: '', //其他博主博文总数
       articleUserFunCount: '', //其他博主粉丝数
       articleUserNewArticleList: [], //其他博主最新博文列表
+      isOnShowArticle: true, //是否处于博文展示页面
     }
   },
   created () {
+    this.articleId = this.$route.params.articleId
     this.getArticle()
   },
   methods: {
@@ -299,7 +302,7 @@ export default {
     getArticle:function () {
       const that = this
       let param = {
-        articleId:this.$route.params.articleId,
+        articleId:this.articleId,
       }
       this.$axios.post('/article/getArticle', param).then(response => {
         if (response.data.message === 'success') {

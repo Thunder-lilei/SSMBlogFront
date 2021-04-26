@@ -59,6 +59,7 @@ export default {
     "articleUserArticleCount",
     "articleUserFunCount",
     "articleUserNewArticleList",
+    "isOnShowArticle",
   ],//当前博主
   data() {
     return {
@@ -68,7 +69,7 @@ export default {
   },
   methods: {
     toShowArticle:function (articleId, articleUserId) {
-        this.$router.push({name:'ShowArticle', params: {articleId: articleId, articleUserId: articleUserId}});
+        this.$router.push({name:'ArticleBus', params: {articleId: articleId, articleUserId: articleUserId}});
     },
   }
 }

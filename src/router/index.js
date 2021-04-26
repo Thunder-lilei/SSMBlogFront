@@ -25,6 +25,8 @@ import DraftControl from '../pages/Draft/DraftControl'
 import Loading from '../pages/Loading'
 import UserInfo from '../pages/user/UserInfo'
 import ArticleUserInfo from '../pages/user/ArticleUserInfo'
+import ArticleBus from '../pages/article/ArticleBus'
+import ArticleControlBus from '../pages/article/ArticleControlBus'
 
 Vue.use(Router)
 
@@ -154,6 +156,16 @@ export default new Router({
       path: '/ArticleUserInfo',
       name: 'ArticleUserInfo',
       component: ArticleUserInfo,
+    },
+    {
+      path: '/ArticleBus',
+      name: 'ArticleBus',
+      component: ArticleBus,
+    },
+    {
+      path: '/ArticleControlBus',
+      name: 'ArticleControlBus',
+      component: ArticleControlBus,
     },
   ]
 })

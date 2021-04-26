@@ -67,8 +67,9 @@ export default {
   },
   methods: {
     toArticleControl() {
-      this.$router.push({name:'ArticleControl'});
-      this.$router.go(0)
+      // this.$router.push({name:'ArticleControl'});
+      // this.$router.go(0)
+      this.$router.push({name:'ArticleControlBus'})
     },
     ifAdmin:function () {
       const that = this
