@@ -168,6 +168,7 @@ export default {
               type: 'success'
             });
             that.comment.commentContent = ''
+            that.$emit("changeArticleCommentNum", that.articleCommentNum + 1)
             that.getComment(this.articleId)
           } else {
             that.$message({
