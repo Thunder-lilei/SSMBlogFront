@@ -107,7 +107,7 @@ export default {
   },
   methods: {
     changeFriendNickname:function (userId) {
-      this.$prompt('请输入评论内容', '提示', {
+      this.$prompt('请输入用户昵称！', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       }).then(({ value }) => {
@@ -225,7 +225,7 @@ export default {
         })
     },
     toShowUser:function (userId) {
-      this.$router.push({name:'ArticleControl', params: {articleUserId: userId}});
+      this.$router.push({name:'ArticleControlBus', params: {articleUserId: userId}});
     },
   },
   beforeRouteEnter(to, from, next) {

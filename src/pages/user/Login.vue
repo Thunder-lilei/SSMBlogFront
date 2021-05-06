@@ -83,20 +83,10 @@ export default {
               that.$router.push('/White');
               that.$router.go(0)
             } else {
-              that.$message({
-                showClose: true,
-                message: response.data.message,
-                type: 'warning'
-              });
+              that.$message.warning(response.data.message)
             }
           }).catch(
-            function (error) {
-              that.$message({
-                showClose: true,
-                message: '请求失败！',
-                type: 'warning'
-              });
-            })
+            )
         } else {
           this.$message({
             showClose: true,

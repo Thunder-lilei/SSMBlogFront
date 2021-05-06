@@ -83,11 +83,12 @@ export default {
 </style>
 <style scoped>
 .bodyBox {
+  margin-top: 40px;
   display: flex;
   width: 90%;
 }
 .divBox {
-  width: 50%;
+  width: 60%;
   margin: auto;
 }
 .toTop {

@@ -2,12 +2,12 @@
   <div>
     <h1 v-show="!ifOtherUser">博文管理</h1>
       <div>
-        <div style="font-size: 20px">
-          <strong v-show="ifOtherUser">当前博主：</strong><strong style="color: aliceblue">{{ articleUser.userNickname }}</strong>
+        <div class="otherUserTitle">
+          <strong v-if="ifOtherUser">当前博主：</strong><strong style="color: aliceblue">{{ articleUser.userNickname }}</strong>
         </div>
         <div style="display: flex;">
           <router-link style="width: 20%" to='/Article'>
-            <el-button v-show="!ifOtherUser" type="success" icon="el-icon-plus" circle></el-button>
+            <el-button v-if="!ifOtherUser" type="success" icon="el-icon-plus" circle></el-button>
           </router-link>
           <el-dropdown style="width: 20%;margin: 0 0 0 60%" split-button type="primary">
             排序方式
@@ -566,6 +566,9 @@ export default {
 </script>
 
 <style scoped>
+.otherUserTitle {
+  font-size: 20px;
+}
 .userInfoDiv {
   position: fixed;
   top: 200px;
