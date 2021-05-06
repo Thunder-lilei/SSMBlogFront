@@ -210,10 +210,10 @@ export default {
     getUserFriend:function () {
       const that = this
       that.loadingData = true
-      let data = new URLSearchParams();
-      data.append("pageNow", this.pageNow)
-      data.append("pageSize", this.pageSize)
-      this.$axios.post('/userFriend/getMyFriendList', data).then(response => {
+      // let data = new URLSearchParams();
+      // data.append("pageNow", this.pageNow)
+      // data.append("pageSize", this.pageSize)
+      this.$axios.post('/userFriend/getMyFriendList').then(response => {
         if (response.data.message === 'success') {
           that.userFriendList = response.data.userList
           that.total = response.data.userList
