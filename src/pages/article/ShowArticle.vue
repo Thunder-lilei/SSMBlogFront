@@ -54,8 +54,8 @@
       <el-button v-if="showComment" @click="changeShowComment" size="small">评论 ↑</el-button>
     </el-badge>
     <el-badge style="margin: 0 0 0 3%" :value="article.articleLikeCount" :max="10" class="item">
-      <img v-if="ifHaveLikeResult" @click="removeLike(article.articleId)" class="likeStyle" src="static/img/点赞.png">
-      <img v-if="!ifHaveLikeResult" @click="addLike(article.articleId)" class="noLikeStyle" src="static/img/未点赞.png">
+      <img v-if="ifHaveLikeResult" @click="removeLike(article.articleId)" class="likeStyle" src="static/img/like.png">
+      <img v-if="!ifHaveLikeResult" @click="addLike(article.articleId)" class="noLikeStyle" src="static/img/noLike.png">
     </el-badge>
     <span style="color: white;margin: 0 0 0 5%;background-color: black;">{{ article.articleDate }}</span>
     <div v-show="showComment">
@@ -474,6 +474,6 @@ export default {
 .noLikeStyle {
   width: 40px;
   height: 40px;
-  background-color: white;
+  /*background-color: white;*/
 }
 </style>
