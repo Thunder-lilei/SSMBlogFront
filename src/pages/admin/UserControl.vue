@@ -17,6 +17,16 @@
         width="180">
       </el-table-column>
       <el-table-column
+        prop="userRole"
+        label="身份"
+        width="180">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.userRole === '1'">管理员</el-tag>
+          <el-tag v-else-if="scope.row.userRole === '0'" type="info">用户</el-tag>
+          <el-tag v-else type="danger">非法身份</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
         align="right">
         <template slot="header" slot-scope="scope">
           <el-input
@@ -26,6 +36,8 @@
             placeholder="输入关键字搜索"/>
         </template>
         <template slot-scope="scope">
+          <el-button v-if="scope.row.userRole === '0'" @click="toUploadUser(scope.row.userId)" type="success" icon="el-icon-upload2" circle></el-button>
+          <el-button v-else-if="scope.row.userRole === '1'" @click="toDownUser(scope.row.userId)" type="info" icon="el-icon-download" circle></el-button>
           <el-button @click="toUpdateUser(scope.row.userId)" type="primary" icon="el-icon-edit" circle></el-button>
           <el-popconfirm
             title="确定删除吗？"
@@ -61,11 +73,11 @@ export default {
   data() {
     return {
       loadingData: true, //数据加载判定
-      userList: [],
-      keyValue: '',
-      total: 0,
-      pageNow: 1,
-      pageSize: 10,
+      userList: [], //用户列表
+      keyValue: '', //搜索关键词
+      total: 0, //表格总数
+      pageNow: 1, //当前页码
+      pageSize: 10, //每页数量
     }
   },
   mounted () {
@@ -79,6 +91,40 @@ export default {
     pageNowChange:function(pageNow) {
       this.pageNow = pageNow
       this.selectAllUserBaseInfo(pageNow, this.pageSize)
+    },
+    toUploadUser:function (userId) {
+      const that = this
+      let param = {
+        userId: userId,
+      }
+      this.$axios.post('/user/addAdmin', param).then(response => {
+        if (response.data.message === 'success') {
+          that.$message.success("成功任命管理员！")
+          that.selectAllUserBaseInfo(that.pageNow, that.pageSize)
+        } else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
+    toDownUser:function (userId) {
+      const that = this
+      let param = {
+        userId: userId,
+      }
+      this.$axios.post('/user/removeAdmin', param).then(response => {
+        if (response.data.message === 'success') {
+          that.$message.success("成功设置为用户！")
+          that.selectAllUserBaseInfo(that.pageNow, that.pageSize)
+        } else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
     },
     toUpdateUser:function (userId) {
       const that = this
