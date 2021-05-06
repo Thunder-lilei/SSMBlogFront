@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>电话登陆</h1>
+    <h2 style="color: white">暂未购买短信服务，该功能暂时关闭</h2>
   </div>
 </template>
 

@@ -6,7 +6,7 @@
         <el-input v-model="ruleForm.mail"></el-input>
       </el-form-item>
       <el-form-item v-if="!isCodeLogin" label="密码" prop="password">
-        <el-input v-model="ruleForm.password"></el-input>
+        <el-input v-model="ruleForm.password" show-password></el-input>
       </el-form-item>
       <el-form-item v-if="isCodeLogin" label="验证码" prop="code">
         <el-input v-model="ruleForm.code">
@@ -69,6 +69,7 @@ export default {
             type: 'success'
           });
         } else {
+          that.isGetCode = false
           that.$message({
             showClose: true,
             message: response.data.message,
