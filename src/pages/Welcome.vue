@@ -1,7 +1,7 @@
 <template>
   <div class='backGround'>
     <el-container>
-      <el-aside width="200px">
+      <el-aside class="leftNav" width="200px">
         <NavMenu></NavMenu>
       </el-aside>
       <el-main>
@@ -79,17 +79,24 @@ export default {
 .backGround {
   background: url('../assets/back.jpeg') center top no-repeat;
   background-size: 100% 100%;
+  min-height: 947px;
 }
 </style>
 <style scoped>
 .bodyBox {
   margin-top: 40px;
+  margin-left: 5%;
   display: flex;
   width: 90%;
 }
 .divBox {
   width: 60%;
   margin: auto;
+}
+.leftNav {
+  position: fixed;
+  top: 50px;
+  left: 50px;
 }
 .toTop {
   position: fixed;

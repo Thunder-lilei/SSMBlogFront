@@ -1,5 +1,5 @@
 <template>
-<div style="height: 925px;margin: 0 0 0 10%">
+<div style="min-height: 893px;margin: 0 0 0 10%">
   <Header></Header>
   <div>
     <el-radio-group v-model="isCollapse" :style="iconStyle">

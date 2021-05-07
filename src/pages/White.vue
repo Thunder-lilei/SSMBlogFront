@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="min-height: 827px">
 
   </div>
 </template>
