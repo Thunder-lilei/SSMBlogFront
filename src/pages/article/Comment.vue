@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div v-loading="commentLoading">
     <div class="commentListBox" v-for="item in commentList">
       <div class="commentBox">
         <div class="commentBoxLeft">
           <strong style="color: #42b983;">
             <el-avatar class="headImg" :src="item.userBaseInfo.userProfilePhoto"></el-avatar>
             <el-link class="nameText" @click="toShowUser(item.userBaseInfo.userId)">
-              <strong class="articleUserName" v-if="articleUserId == item.userId">博主</strong>
+              <strong class="articleUserName" v-if="articleUserId === item.userId">博主</strong>
               <strong v-else>{{ item.userBaseInfo.userNickname }}</strong>
               <i class="el-icon-view el-icon--right"></i>
             </el-link>
@@ -17,7 +17,7 @@
           <strong style="color: #42b983;" v-if="item.parentCommentUserBaseInfo !== null">
             <el-avatar :src="item.parentCommentUserBaseInfo.userProfilePhoto"></el-avatar>
             <el-link class="nameText" @click="toShowUser(item.parentCommentUserBaseInfo.userId)">
-              <strong class="articleUserName" v-if="articleUserId == item.userId">博主</strong>
+              <strong class="articleUserName" v-if="articleUserId === item.parentCommentUserBaseInfo.userId">博主</strong>
               <strong v-else>{{ item.parentCommentUserBaseInfo.userNickname }}</strong>
               <i class="el-icon-view el-icon--right"></i>
             </el-link>
@@ -76,6 +76,7 @@ export default {
         commentContent: '',
       },
       loginUser: {}, //当前登录的用户
+      commentLoading: false, //获取评论加载事件
     }
   },
   mounted () {
@@ -187,18 +188,21 @@ export default {
           })
     },
     getComment:function (articleId) {
+      this.commentLoading = true
       const that = this
       let data = new URLSearchParams();
       data.append("articleId", articleId)
       this.$axios.post('/comment/getComment', data).then(response => {
         if (response.data.message === 'success') {
           that.commentList = response.data.commentList
+          this.commentLoading = false
         } else {
           that.$message({
             showClose: true,
             message: response.data.message,
             type: 'warning'
           });
+          this.commentLoading = true
         }
       }).catch(
         function (error) {
