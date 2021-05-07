@@ -8,11 +8,15 @@
       <div style="display: flex" v-for="item in recommendArticleList" class="text item">
         <div style="text-align: left;height: 30px;width: 35%;font-size: 25px">
           <span style="color: #42b983;font-size: 15px;">博文标题：</span>
-          <el-link @click="toShowArticle(item.articleId, item.userId)">{{ item.articleTitle }}<i class="el-icon-view el-icon--right"></i> </el-link>
+          <el-link @click="toShowArticle(item.articleId, item.userId)">{{ item.articleTitle }}
+            <i class="el-icon-view el-icon--right"></i>
+          </el-link>
         </div>
         <div style="text-align: left;width: 35%;font-size: 25px">
           <span style="color: #42b983;font-size: 15px;">作者：</span>
-          <el-link @click="toShowUser(item.userId)">{{ item.userBaseInfoPojo.userNickname }}<i class="el-icon-view el-icon--right"></i> </el-link>
+          <el-link @click="toShowUser(item.userId)">{{ item.userBaseInfoPojo.userNickname }}
+            <i class="el-icon-view el-icon--right"></i>
+          </el-link>
         </div>
         <div style="width: 30%;text-align: left;">
           <el-tag class="tagBox" type="success">

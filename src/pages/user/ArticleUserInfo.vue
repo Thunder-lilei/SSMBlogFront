@@ -6,7 +6,9 @@
           当前博主：
         </div>
         <div class="tagTextRight">
-          {{ articleUser.userNickname }}
+          <el-link @click="toShowUser(articleUser.userId)">{{ articleUser.userNickname }}
+            <i class="el-icon-view el-icon--right"></i>
+          </el-link>
         </div>
       </div>
       <div class="tagBox">
@@ -68,6 +70,9 @@ export default {
   created () {
   },
   methods: {
+    toShowUser:function (userId) {
+      this.$router.push({name:'ArticleControl', params: {articleUserId: userId}});
+    },
     toShowArticle:function (articleId, articleUserId) {
         this.$router.push({name:'ArticleBus', params: {articleId: articleId, articleUserId: articleUserId}});
     },

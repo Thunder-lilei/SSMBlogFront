@@ -7,7 +7,10 @@
           当前用户：
         </div>
         <div class="tagTextRight">
-          {{ loginUser.userNickname }}
+          <el-link class="linkText" @click="toArticleControl()">
+            {{ loginUser.userNickname }}
+            <i class="el-icon-view el-icon--right"></i>
+          </el-link>
         </div>
       </div>
       <div class="tagBox">
@@ -52,6 +55,9 @@ export default {
     this.getLoginUser()
   },
   methods: {
+    toArticleControl() {
+      this.$router.push({name:'ArticleControlBus'})
+    },
     getLoginUser() {
       const that = this
       this.$axios.post('/user/getLoginUser').then(response => {
