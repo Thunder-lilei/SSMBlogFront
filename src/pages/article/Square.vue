@@ -15,9 +15,21 @@
           <el-link @click="toShowUser(item.userId)">{{ item.userBaseInfoPojo.userNickname }}<i class="el-icon-view el-icon--right"></i> </el-link>
         </div>
         <div style="width: 30%;text-align: left;">
-          <el-button style="width: 27%" type="success" icon="el-icon-tickets" size="mini">{{ item.articleCommentCount }}</el-button>
-          <el-button style="width: 27%" type="success" icon="el-icon-thumb" size="mini">{{ item.articleLikeCount }}</el-button>
-          <el-button style="width: 27%" type="success" icon="el-icon-s-data" size="mini">{{ item.articleViews }}</el-button>
+          <el-tag class="tagBox" type="success">
+            <i class="el-icon-tickets dataIcon"></i>
+            {{ item.articleCommentCount }}
+          </el-tag>
+          <el-tag class="tagBox" type="success">
+            <i class="el-icon-thumb dataIcon"></i>
+            {{ item.articleLikeCount }}
+          </el-tag>
+          <el-tag class="tagBox" type="success">
+            <i class="el-icon-s-data dataIcon"></i>
+            {{ item.articleViews }}
+          </el-tag>
+<!--          <el-button class="tagBox" type="success" icon="el-icon-tickets" size="mini">{{ item.articleCommentCount }}</el-button>-->
+<!--          <el-button class="tagBox" type="success" icon="el-icon-thumb" size="mini">{{ item.articleLikeCount }}</el-button>-->
+<!--          <el-button class="tagBox" type="success" icon="el-icon-s-data" size="mini">{{ item.articleViews }}</el-button>-->
         </div>
       </div>
     </el-card>
@@ -31,9 +43,21 @@
           <el-link @click="toShowUser(item.userId)">{{ item.userBaseInfoPojo.userNickname }}<i class="el-icon-view el-icon--right"></i> </el-link>
         </div>
         <div style="width: 30%;text-align: left;">
-          <el-button style="width: 27%" type="success" icon="el-icon-tickets" size="mini">{{ item.sumCommentCount }}</el-button>
-          <el-button style="width: 27%" type="success" icon="el-icon-thumb" size="mini">{{ item.sumLikeCount }}</el-button>
-          <el-button style="width: 27%" type="success" icon="el-icon-s-data" size="mini">{{ item.sumViews }}</el-button>
+          <el-tag class="tagBox" type="success">
+            <i class="el-icon-tickets dataIcon"></i>
+            {{ item.sumCommentCount }}
+          </el-tag>
+          <el-tag class="tagBox" type="success">
+            <i class="el-icon-thumb dataIcon"></i>
+            {{ item.sumLikeCount }}
+          </el-tag>
+          <el-tag class="tagBox" type="success">
+            <i class="el-icon-s-data dataIcon"></i>
+            {{ item.sumViews }}
+          </el-tag>
+<!--          <el-button class="tagBox" type="success" icon="el-icon-tickets" size="mini">{{ item.sumCommentCount }}</el-button>-->
+<!--          <el-button class="tagBox" type="success" icon="el-icon-thumb" size="mini">{{ item.sumLikeCount }}</el-button>-->
+<!--          <el-button class="tagBox" type="success" icon="el-icon-s-data" size="mini">{{ item.sumViews }}</el-button>-->
         </div>
       </div>
     </el-card>
@@ -42,8 +66,9 @@
         @keyup.enter.native="searchArticle(pageNow, pageSize)"
         v-model="keyValue"
         size="max"
+        style="margin-bottom: 2%"
         placeholder="输入关键字搜索"/>
-      <div style="display: flex" v-for="item in articleList" class="text item">
+      <div style="display: flex;" v-for="item in articleList" class="text item">
         <div style="text-align: left;height: 30px;width: 35%;font-size: 25px">
           <span style="color: #42b983;font-size: 15px;">博文标题：</span>
           <el-link @click="toShowArticle(item.articleId, item.userId)">{{ item.articleTitle }}<i class="el-icon-view el-icon--right"></i> </el-link>
@@ -53,9 +78,21 @@
           <el-link @click="toShowUser(item.userId)">{{ item.userBaseInfoPojo.userNickname }}<i class="el-icon-view el-icon--right"></i> </el-link>
         </div>
         <div style="width: 30%;text-align: left;">
-          <el-button style="width: 27%" type="success" icon="el-icon-tickets" size="mini">{{ item.articleCommentCount }}</el-button>
-          <el-button style="width: 27%" type="success" icon="el-icon-thumb" size="mini">{{ item.articleLikeCount }}</el-button>
-          <el-button style="width: 27%" type="success" icon="el-icon-s-data" size="mini">{{ item.articleViews }}</el-button>
+          <el-tag class="tagBox" type="success">
+            <i class="el-icon-tickets dataIcon"></i>
+            {{ item.articleCommentCount }}
+          </el-tag>
+          <el-tag class="tagBox" type="success">
+            <i class="el-icon-thumb dataIcon"></i>
+            {{ item.articleLikeCount }}
+          </el-tag>
+          <el-tag class="tagBox" type="success">
+            <i class="el-icon-s-data dataIcon"></i>
+            {{ item.articleViews }}
+          </el-tag>
+<!--          <el-button class="tagBox" type="success" icon="el-icon-tickets" size="mini">{{ item.articleCommentCount }}</el-button>-->
+<!--          <el-button class="tagBox" type="success" icon="el-icon-thumb" size="mini">{{ item.articleLikeCount }}</el-button>-->
+<!--          <el-button class="tagBox" type="success" icon="el-icon-s-data" size="mini">{{ item.articleViews }}</el-button>-->
         </div>
       </div>
       <br/>
@@ -209,5 +246,11 @@ export default {
 .userInfoDiv {
   position: fixed;
   top: 200px;
+}
+.tagBox {
+  width: 27%;
+}
+.dataIcon {
+  width: 50%;
 }
 </style>

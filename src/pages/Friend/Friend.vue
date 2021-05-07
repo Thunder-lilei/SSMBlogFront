@@ -45,8 +45,8 @@
         <el-table
           v-loading="loadingData"
           :data="userFriendList"
-          style="width: 100%"
           max-height="500"
+          style="width: 100%"
         >
           <el-table-column
             label="头像"
@@ -242,5 +242,8 @@ export default {
 </script>
 
 <style scoped>
-
+.friendBox {
+  width: 100%;
+  border-radius: 25px;
+}
 </style>

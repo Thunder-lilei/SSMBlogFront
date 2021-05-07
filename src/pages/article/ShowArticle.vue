@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-    <div style="display: flex;background-color: white;margin: 0 0 3% 0">
+    <div style="border-radius: 25px;display: flex;background-color: white;margin: 0 0 3% 0">
       <div style="width: 50%;margin: 1% 0 1% 0">
         <h3 style="margin: 0 0 1% 3%;text-align: left;">
           分类：
@@ -45,7 +45,9 @@
         </el-input>
       </div>
     </div>
-    <div v-html="blog" class="markdown-body" style="background-color: white">
+    <div class="articleBodyBox">
+      <div v-html="blog" class="markdown-body articleBody">
+      </div>
     </div>
     <br/>
     <el-button v-show="!ifOtherUser" @click="toUpdateArticle(article.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
@@ -475,5 +477,13 @@ export default {
   width: 40px;
   height: 40px;
   /*background-color: white;*/
+}
+.articleBodyBox {
+  border-radius: 25px;
+  background-color: white;
+}
+.articleBody {
+  width: 95%;
+  margin: 0 auto;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="item in commentList" style="background-color: white;text-align: left;margin: 5% 0 0 0;font-size: 20px">
+    <div class="commentListBox" v-for="item in commentList">
       <div class="commentBox">
         <div class="commentBoxLeft">
           <strong style="color: #42b983;">
@@ -45,15 +45,15 @@
       <strong class="commentDate">{{ item.commentDate }}</strong>
     </div>
     <br/>
-    <div>
-      <el-form label-width="100px" class="demo-ruleForm">
-        <el-form-item label="评论内容">
-          <el-input v-model="comment.commentContent"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="addComment(0)">提交</el-button>
-        </el-form-item>
-      </el-form>
+    <div class="commentFormBox">
+        <el-form label-width="100px" class="demo-ruleForm commentForm">
+          <el-form-item class="commentFormInput el-form-item__label" label="评论内容">
+            <el-input v-model="comment.commentContent"></el-input>
+          </el-form-item>
+          <el-form-item class="commentFormButton" >
+            <el-button type="primary" @click="addComment(0)">提交</el-button>
+          </el-form-item>
+        </el-form>
     </div>
   </div>
 </template>
@@ -216,10 +216,16 @@ export default {
 }
 </script>
 
-
 <style scoped>
 .articleUserName {
   color: red;
+}
+.commentListBox {
+  border-radius: 25px;
+  background-color: white;
+  text-align: left;
+  margin-top: 1%;
+  font-size: 20px;
 }
 .commentBox {
   margin: 0 3% 0 3%;
@@ -247,6 +253,19 @@ export default {
 }
 .commentDate {
   margin-left: 3%;
+}
+.commentFormBox {
+  /*border-radius: 25px;*/
+  /*height: 70px;*/
+}
+.commentForm {
+  display: flex;
+}
+.commentFormInput {
+  width: 70%;
+}
+.commentFormButton {
+  width: 30%;
 }
 </style>
 

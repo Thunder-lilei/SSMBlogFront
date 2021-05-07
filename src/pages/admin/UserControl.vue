@@ -5,7 +5,8 @@
     <el-table
       v-loading="loadingData"
       :data="userList"
-      style="width: 100%">
+      class="tableBox"
+      >
       <el-table-column
         type="index"
         label="序号"
@@ -214,5 +215,9 @@ export default {
 .userInfoDiv {
   position: fixed;
   top: 200px;
+}
+.tableBox {
+  width: 100%;
+  border-radius: 25px;
 }
 </style>

@@ -23,7 +23,8 @@
         <el-table
           v-loading = "loadingData"
           :data="articleList"
-          style="width: 100%">
+          class="tableBox"
+          >
           <el-table-column
             type="index"
             label="序号"
@@ -67,17 +68,29 @@
                 placeholder="输入关键字搜索"/>
             </template>
             <template slot-scope="scope">
-              <el-button type="success" icon="el-icon-tickets" size="mini">{{ scope.row.articleCommentCount }}</el-button>
-              <el-button type="success" icon="el-icon-thumb" size="mini">{{ scope.row.articleLikeCount }}</el-button>
-              <el-button type="success" icon="el-icon-s-data" size="mini">{{ scope.row.articleViews }}</el-button>
-              <el-button v-show="!ifOtherUser" @click="toUpdateArticle(scope.row.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
-              <el-popconfirm
-                v-show="!ifOtherUser"
-                title="确定删除吗？"
-                @confirm="deleteArticle(scope.row.articleId)"
-              >
-                <el-button slot="reference" type="danger" icon="el-icon-delete" circle></el-button>
-              </el-popconfirm>
+                  <el-tag class="tagBox" type="success">
+                    <i class="el-icon-tickets dataIcon"></i>
+                    {{ scope.row.articleCommentCount }}
+                  </el-tag>
+                  <el-tag class="tagBox" type="success">
+                    <i class="el-icon-thumb dataIcon"></i>
+                    {{ scope.row.articleLikeCount }}
+                  </el-tag>
+                  <el-tag class="tagBox" type="success">
+                    <i class="el-icon-s-data dataIcon"></i>
+                    {{ scope.row.articleViews }}
+                  </el-tag>
+  <!--              <el-button type="success" icon="el-icon-tickets" size="mini">{{ scope.row.articleCommentCount }}</el-button>-->
+  <!--              <el-button type="success" icon="el-icon-thumb" size="mini">{{ scope.row.articleLikeCount }}</el-button>-->
+  <!--              <el-button type="success" icon="el-icon-s-data" size="mini">{{ scope.row.articleViews }}</el-button>-->
+                  <el-button v-show="!ifOtherUser" @click="toUpdateArticle(scope.row.articleId)" type="primary" icon="el-icon-edit" circle></el-button>
+                  <el-popconfirm
+                    v-show="!ifOtherUser"
+                    title="确定删除吗？"
+                    @confirm="deleteArticle(scope.row.articleId)"
+                  >
+                    <el-button slot="reference" type="danger" icon="el-icon-delete" circle></el-button>
+                  </el-popconfirm>
             </template>
           </el-table-column>
         </el-table>
@@ -577,5 +590,15 @@ export default {
   position: fixed;
   right: 100px;
   top: 400px;
+}
+.tableBox {
+  width: 100%;
+  border-radius: 25px;
+}
+.tagBox {
+  width: 10%;
+}
+.dataIcon {
+  width: 50%;
 }
 </style>

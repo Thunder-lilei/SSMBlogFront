@@ -13,7 +13,8 @@
     <el-table
       v-loading="loadingData"
       :data="draftList"
-      style="width: 100%">
+      class="tableBox"
+      >
       <el-table-column
         type="index"
         label="序号"
@@ -179,5 +180,9 @@ export default {
   color: #3e76f6;
   line-height: 40px;
   height: 40px;
+}
+.tableBox {
+  width: 100%;
+  border-radius: 25px;
 }
 </style>
