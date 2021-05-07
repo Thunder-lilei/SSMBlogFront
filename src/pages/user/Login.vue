@@ -10,7 +10,7 @@
           <el-input v-model="ruleForm.userPassword" show-password></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button plain>忘记密码</el-button>
+<!--          <el-button plain>忘记密码</el-button>-->
           <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
@@ -22,7 +22,7 @@
     <div v-show="emailLoginShow">
       <EmailLogin></EmailLogin>
     </div>
-    <div>
+    <div class="endBox">
       <el-button @click="showUserNameLogin" v-show="!userNameLoginShow" type="primary" plain>账号登陆</el-button>
       <el-button @click="showTelLogin" v-show="!telLoginShow" type="primary" plain>电话登陆</el-button>
       <el-button @click="showEmailLogin" v-show="!emailLoginShow" type="primary" plain>邮箱登陆</el-button>
@@ -115,5 +115,7 @@ export default {
 </script>
 
 <style scoped>
-
+.endBox {
+  margin: 5% 0 0 10%;
+}
 </style>
