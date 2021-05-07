@@ -96,28 +96,40 @@ export default {
       })
     },
     checkEmail:function () {
-      let data = new URLSearchParams();
-      data.append("email", this.loginUser.userEmail)
-      data.append("userId", this.loginUser.userId)
-      this.ifHaveSame(data , (callbackData) => {
-        if (callbackData === true) {
-          this.ifHaveSameEmail = "邮箱重复绑定，请更换邮箱！"
-        } else {
-          this.ifHaveSameEmail = ''
-        }
-      })
+      if ((this.loginUser.userEmail === '' || this.loginUser.userEmail === null) ||
+        (this.loginUser.userId === '' || this.loginUser.userId === null)) {
+        return
+      } else {
+        let data = new URLSearchParams();
+        data.append("email", this.loginUser.userEmail)
+        data.append("userId", this.loginUser.userId)
+        this.ifHaveSame(data , (callbackData) => {
+          if (callbackData === true) {
+            this.ifHaveSameEmail = "邮箱重复绑定，请更换邮箱！"
+          } else {
+            this.ifHaveSameEmail = ''
+          }
+        })
+      }
+
     },
     checkTel:function () {
-      let data = new URLSearchParams();
-      data.append("tel", this.loginUser.userTelephoneNumber)
-      data.append("userId", this.loginUser.userId)
-      this.ifHaveSame(data , (callbackData) => {
-        if (callbackData === true) {
-          this.ifHaveSameTel = "电话重复绑定，请更换电话！"
-        } else {
-          this.ifHaveSameTel = ''
-        }
-      })
+      if ((this.loginUser.userTelephoneNumber === '' || this.loginUser.userTelephoneNumber === null) ||
+        (this.loginUser.userId === '' || this.loginUser.userId === null)) {
+        return
+      } else {
+        let data = new URLSearchParams();
+        data.append("tel", this.loginUser.userTelephoneNumber)
+        data.append("userId", this.loginUser.userId)
+        this.ifHaveSame(data , (callbackData) => {
+          if (callbackData === true) {
+            this.ifHaveSameTel = "电话重复绑定，请更换电话！"
+          } else {
+            this.ifHaveSameTel = ''
+          }
+        })
+      }
+
     },
     ifHaveSame(data, callback) {
       const that = this
@@ -171,6 +183,7 @@ export default {
               if (!that.isUpdateUser) {
                 bus.$emit('changeLoginUserInfo',that.loginUser)
               }
+              that.$router.push('/White');
             } else {
               that.$message.warning(response.data.message)
             }
