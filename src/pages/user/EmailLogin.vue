@@ -11,7 +11,10 @@
       <el-form-item v-if="isCodeLogin" label="验证码" prop="code">
         <el-input v-model="ruleForm.code">
           <template slot="append">
-            <el-button v-loading="isGetCode" @click="getCode" style="color: #005cc5" type="info" round>获取验证码</el-button>
+            <el-button v-if="showGetCode" v-loading="isGetCode" @click="getCode" style="color: #005cc5" type="info" round>
+              获取验证码</el-button>
+            <el-button v-if="!showGetCode" style="color: #005cc5" type="info" round>
+              {{ countDown }}</el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -44,16 +47,14 @@ export default {
         ]
       },
       isCodeLogin: false, //是否是验证码登录
+      showGetCode: true, //是否允许获取验证码
+      countDown: '', //获取验证码倒计时
     }
   },
   methods: {
     getCode:function () {
       if (this.ruleForm.mail === '') {
-        this.$message({
-          showClose: true,
-          message: "请填写邮箱！",
-          type: 'warning'
-        });
+        this.$message.warning("请填写邮箱！")
         return ;
       }
       const that = this
@@ -63,26 +64,26 @@ export default {
       this.$axios.post('/user/setMailCode', data).then(response => {
         if (response.data.message === 'success') {
           that.isGetCode = false
-          that.$message({
-            showClose: true,
-            message: "验证码发送成功！",
-            type: 'success'
-          });
+          that.$message.success("验证码发送成功！")
+          that.showGetCode = false
+
+          let i = 30;
+          let timer = setInterval(() => {
+            this.countDown = i + 's';
+            i--;
+            if (i < 0) {
+              that.showGetCode = true
+              clearInterval(timer);
+            }
+          }, 1000);
+
         } else {
           that.isGetCode = false
-          that.$message({
-            showClose: true,
-            message: response.data.message,
-            type: 'warning'
-          });
+          that.$message.warning(response.data.message)
         }
       }).catch(
         function (error) {
-          that.$message({
-            showClose: true,
-            message: error,
-            type: 'warning'
-          });
+          that.$message.error(error)
         })
     },
     submitForm(formName) {
