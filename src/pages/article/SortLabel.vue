@@ -48,7 +48,9 @@
             v-for="(item, index) in articleList"
             :key="index"
             :timestamp="item.createTime">
-            {{ item.articleTitle }}
+            <template slot-scope="scope">
+              <el-link @click="toShowArticle(item.articleId)">{{ item.articleTitle }}<i class="el-icon-view el-icon--right"></i> </el-link>
+            </template>
           </el-timeline-item>
         </el-timeline>
       <div>
@@ -146,6 +148,9 @@ export default {
         function (error) {
           that.$message.error(error)
         })
+    },
+    toShowArticle:function (articleId) {
+        this.$router.push({name:'ShowArticle', params: {articleId: articleId}});
     },
   },
   beforeRouteEnter(to, from, next) {
