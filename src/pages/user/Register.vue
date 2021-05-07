@@ -2,7 +2,21 @@
   <div class="bodyDiv">
         <el-form :model="userForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item class="inputText" label="头像链接" prop="userProfilePhoto">
-            <el-input type="url" v-model="userForm.userProfilePhoto"></el-input>
+            <div style="display: flex">
+              <el-input type="url" v-model="userForm.userProfilePhoto"></el-input>
+              <el-popover
+                placement="right"
+                width="170"
+                trigger="click">
+                <div style="display: flex;">
+                  <div v-for="(item, index) in headImgList">
+                    <img @click="userForm.userProfilePhoto = item.src" class="imgSelect" :src="item.src">
+                  </div>
+                  <img @click="userForm.userProfilePhoto = ''" class="imgSelect" src="static/img/cancel.png">
+                </div>
+                <el-button slot="reference">系统头像</el-button>
+              </el-popover>
+            </div>
           </el-form-item>
           <el-form-item class="inputText" label="用户名" prop="userName">
             <el-input v-model="userForm.userName"></el-input>
@@ -47,6 +61,10 @@ export default {
   components: {NavMenu, Header},
   data() {
     return {
+      headImgList: [ //头像数组
+        {src: 'static/headImg/hammer.jpg'},
+        {src: 'static/headImg/paiDaXing.jpg'},
+      ],
       userForm: {
         userName: '',
         userPassword: '',
@@ -137,6 +155,13 @@ export default {
 }
 .waringText {
   height: 40px;
+}
+.imgSelect {
+  width: 50px;
+  height: 50px;
+  margin-left: 5px;
+  border:1px solid green;
+  /*border-radius: 25px;*/
 }
 </style>
 <style>
