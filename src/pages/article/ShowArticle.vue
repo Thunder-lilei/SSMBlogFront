@@ -46,6 +46,9 @@
       </div>
     </div>
     <div class="articleBodyBox">
+      <div class="articleTitleBox">
+        {{ article.articleTitle }}
+      </div>
       <div v-html="blog" class="markdown-body articleBody">
       </div>
     </div>
@@ -485,5 +488,11 @@ export default {
 .articleBody {
   width: 95%;
   margin: 0 auto;
+}
+.articleTitleBox {
+  color: #3e76f6;
+  font-size: 30px;
+  margin-bottom: 2%;
+  margin-top: 2%;
 }
 </style>
