@@ -62,7 +62,7 @@
       </el-form-item>
       <el-form-item>
         <el-button v-if="isEditArticle" type="primary" @click="updateArticle('ruleForm')">修改</el-button>
-        <el-button v-if="!isEditDraft" type="primary" @click="addDraft('ruleForm')">保存</el-button>
+        <el-button v-if="!isEditDraft && !isEditArticle" type="primary" @click="addDraft('ruleForm')">保存</el-button>
         <el-button v-if="isEditDraft" type="primary" @click="editDraft('ruleForm')">保存</el-button>
         <el-button v-if="isEditDraft" type="success" @click="uploadDraft()">发布</el-button>
         <el-button v-if="isCreateArticle" type="primary" @click="addArticle('ruleForm')">提交</el-button>
@@ -331,6 +331,7 @@ export default {
               // that.getArticleLabel(that.articleForm.articleId)
               // that.getArticleSort(that.articleForm.articleId)
               that.$message.success("修改成功！")
+              that.$router.push('/ArticleControl');
             } else {
               that.$message.warning(response.data.message)
             }
