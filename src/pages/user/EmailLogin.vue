@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>邮箱登录</h1>
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm formBox">
       <el-form-item label="邮箱" prop="mail">
         <el-input v-model="ruleForm.mail"></el-input>
       </el-form-item>
@@ -131,5 +131,8 @@ export default {
 </script>
 
 <style scoped>
-
+.formBox {
+  width: 50%;
+  margin: 0 auto;
+}
 </style>

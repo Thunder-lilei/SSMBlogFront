@@ -117,7 +117,7 @@
         </el-pagination>
         <el-pagination
           v-if="typeof sortId !== 'undefined' && sortId !== ''"
-          @current-change="sortAboutArticlepageIndexChange"
+          @current-change="sortAboutArticlePageIndexChange"
           @size-change="sortAboutArticlePageSizeChange"
           background
           layout="total, sizes, prev, pager, next"
@@ -290,7 +290,7 @@ export default {
       let data = new URLSearchParams();
       data.append("pageNow", this.pageIndex)
       data.append("pageSize", this.pageSize)
-      data.append("sortId", this.sortId)
+      data.append("labelId", this.labelId)
       data.append("key", this.keyValue)
       this.$axios.post('/article/getLabelAboutArticleAndKey', data).then(response => {
         if (response.data.message === 'success') {
@@ -329,13 +329,13 @@ export default {
           }
       }
     },
-    getSortAboutArticle:function (sortId) {
+    getSortAboutArticle:function (sort) {
       const that = this
       that.loadingData = true
       let data = new URLSearchParams();
       data.append("pageNow", this.pageIndex)
       data.append("pageSize", this.pageSize)
-      data.append("sortId", sortId)
+      data.append("sortId", this.sortId)
       this.$axios.post('/article/getSortAboutArticle', data).then(response => {
         if (response.data.message === 'success') {
           that.ifSortLabelArticle = true
@@ -356,7 +356,7 @@ export default {
       let data = new URLSearchParams();
       data.append("pageNow", this.pageIndex)
       data.append("pageSize", this.pageSize)
-      data.append("labelId", labelId)
+      data.append("labelId", this.labelId)
       this.$axios.post('/article/getLabelAboutArticle', data).then(response => {
         if (response.data.message === 'success') {
           that.ifSortLabelArticle = true
@@ -383,7 +383,7 @@ export default {
       this.pageSize = pageSize
       this.getSortAboutArticle(this.pageIndex, pageSize, this.sortId)
     },
-    sortAboutArticlepageIndexChange:function(pageIndex) {
+    sortAboutArticlePageIndexChange:function(pageIndex) {
       this.pageIndex = pageIndex
       this.getSortAboutArticle(pageIndex, this.pageSize, this.sortId)
     },
@@ -417,11 +417,21 @@ export default {
     },
     pageSizeChange(pageSize) {
       this.pageSize = pageSize
-      this.selectAllArticleBaseInfo(this.pageIndex, pageSize)
+      if (this.keyValue !== null && this.keyValue !== '') {
+        //包含关键词的查询
+        this.selectAllArticleBaseInfoWithKey(this.pageIndex, pageSize)
+      } else {
+        this.selectAllArticleBaseInfo(this.pageIndex, pageSize)
+      }
     },
     pageIndexChange:function(pageIndex) {
       this.pageIndex = pageIndex
-      this.selectAllArticleBaseInfo(pageIndex, this.pageSize)
+      if (this.keyValue !== null && this.keyValue !== '') {
+        //包含关键词的查询
+        this.selectAllArticleBaseInfoWithKey(pageIndex, this.pageSize)
+      } else {
+        this.selectAllArticleBaseInfo(pageIndex, this.pageSize)
+      }
     },
     selectUserArticleBaseInfo (pageIndex, pageSize, userId) {
       const that = this
@@ -439,6 +449,29 @@ export default {
         if (response.data.message === 'success') {
           that.articleList = response.data.articleList
           that.total = response.data.articleCount
+          that.loadingData = false
+        } else {
+          that.$message.warning(response.data.message)
+        }
+      }).catch(
+        function (error) {
+          that.$message.error(error)
+        })
+    },
+    selectAllArticleBaseInfoWithKey (pageIndex, pageSize) {
+      const that = this
+      that.loadingData = true
+      let param = {
+        pageParam: {
+          pageIndex: pageIndex,
+          pageSize: pageSize,
+        },
+        key: this.keyValue,
+      }
+      this.$axios.post('/article/selectAllArticleBaseInfoWithKey', param).then(response => {
+        if (response.data.message === 'success') {
+          that.articleList = response.data.articleList
+          that.total = response.data.articleListCount
           that.loadingData = false
         } else {
           that.$message.warning(response.data.message)
@@ -513,7 +546,7 @@ export default {
       const that = this
       that.loadingData = true
       let data = new URLSearchParams();
-      data.append("pageIndex", "1")
+      data.append("pageNow", "1")
       data.append("pageSize", "10")
       data.append("key", this.keyValue)
       data.append("userId", this.articleUser.userId)
@@ -534,7 +567,7 @@ export default {
       const that = this
       that.loadingData = true
       let data = new URLSearchParams();
-      data.append("pageIndex", "1")
+      data.append("pageNow", "1")
       data.append("pageSize", "10")
       data.append("key", this.keyValue)
       this.$axios.post('/article/selectArticleBaseInfoByKey', data).then(response => {

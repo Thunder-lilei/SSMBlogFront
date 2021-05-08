@@ -2,7 +2,7 @@
   <div>
     <div v-show="userNameLoginShow">
       <h1>账号登录</h1>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm formBox">
         <el-form-item label="用户名" prop="userName">
           <el-input v-model="ruleForm.userName"></el-input>
         </el-form-item>
@@ -117,5 +117,9 @@ export default {
 <style scoped>
 .endBox {
   margin: 5% 0 0 10%;
+}
+.formBox {
+  width: 50%;
+  margin: 0 auto;
 }
 </style>
