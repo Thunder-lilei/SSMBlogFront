@@ -79,7 +79,7 @@ export default {
 .backGround {
   background: url('../assets/back.jpeg') center top no-repeat;
   background-size: 100% 100%;
-  min-height: 947px;
+  min-height: 979px;
 }
 </style>
 <style scoped>
